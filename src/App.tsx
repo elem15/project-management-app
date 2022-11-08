@@ -2,6 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
+import { Button } from 'antd';
+
 
 function App() {
   return (
@@ -9,6 +11,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
+        <Button type="primary">Button</Button>
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
