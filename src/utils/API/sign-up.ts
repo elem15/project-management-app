@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { host } from '../const/host';
+import { HOST } from '../const/host';
 
 type User = {
   name: string;
@@ -9,7 +9,7 @@ type User = {
 
 export const signUp = createAsyncThunk('data/signUp', async (user: User, { rejectWithValue }) => {
   try {
-    const response = await fetch(`${host}/auth/signup`, {
+    const response = await fetch(`${HOST}/auth/signup`, {
       method: 'POST',
       body: JSON.stringify(user),
       headers: {

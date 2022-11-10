@@ -1,22 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { routes } from 'utils/const/routes';
+import { ROUTES } from 'utils/const/routes';
 import './Header.scss';
 
 function Header() {
   return (
     <header className="header-container">
       <div className="page-name-container">
-        <Link to={routes.homePage} className="page-name">
+        <Link to={ROUTES.HOME_PAGE} className="page-name">
           Home
         </Link>
-        <Link to={routes.signUpPage} className="page-name">
+        <Link to={ROUTES.SIGN_UP_PAGE} className="page-name">
           SignUp
         </Link>
-        <Link to={routes.signInPage} className="page-name">
+        <Link to={ROUTES.SIGN_IN_PAGE} className="page-name">
           SignIn
         </Link>
-        <Link to={routes.notFoundPage} className="page-name">
+        <Link to={ROUTES.NOT_FOUND_PAGE} className="page-name">
           404
         </Link>
       </div>
