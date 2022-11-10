@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { FAILED, IDLE, LOADING } from '../../helpers/constants/status';
-import { AUTH_SIGNIN, AUTH_SIGNUP, BASE_URL, USERS } from '../../helpers/constants/urls';
+import { AUTH_SIGNIN, AUTH_SIGNUP, BASE_URL } from '../../helpers/constants/urls';
 
 export interface IAuthState {
   name: string;

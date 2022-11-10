@@ -2,7 +2,6 @@ import React, { FormEvent } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { addLogin, addName, addPassword, signIn, signUp } from './authSlice';
-import styles from './Counter.module.css';
 
 export default function Auth() {
   const appDispatch = useAppDispatch();
