@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { RootState } from '../../app/store';
 import { FAILED, IDLE, LOADING } from '../../helpers/constants/status';
-import { AUTH_SIGNUP, BASE_URL } from '../../helpers/constants/urls';
+import { AUTH_SIGNIN, AUTH_SIGNUP, BASE_URL } from '../../helpers/constants/urls';
 
 export interface IAuthState {
   name: string;
@@ -30,14 +29,21 @@ export const signUp = createAsyncThunk(
     const state = getState() as RootState;
     const { name, login, password } = state.auth;
     try {   
-      const response = await axios.post(BASE_URL + AUTH_SIGNUP,
-        {
+      const response = await fetch(BASE_URL + AUTH_SIGNUP, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           name,
           login,
           password,
-        });
-      const data = await response.data;
-      if (response.status !== 200) {
+        })
+      });
+      console.log(await response)
+      const data = await response.json();
+      console.log(data)
+      if (!response.ok) {
         throw new Error(data.message);
       }
       dispatch(addUserId(data._id))
@@ -49,8 +55,31 @@ export const signUp = createAsyncThunk(
 );
 export const signIn = createAsyncThunk(
   'auth/signIn',
-  async () => {
-
+  async (_, { rejectWithValue, dispatch, getState }) => {
+    const state = getState() as RootState;
+    const { login, password } = state.auth;
+    try {    
+      const response = await fetch(BASE_URL + AUTH_SIGNIN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          login,
+          password,
+        })
+      });
+      console.log(await response)
+      const data = await response.json();
+      console.log(data)
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      dispatch(addToken(data.token))
+    } catch (e) {
+      const error = e as Error;
+      return rejectWithValue(error.message);
+    }
   }
 );
 export type IAction = PayloadAction<
@@ -107,7 +136,10 @@ export const authSlice = createSlice({
     builder
       .addCase(signUp.pending, loaderHandler)
       .addCase(signUp.fulfilled, dataHandler)
-      .addCase(signUp.rejected, errorHandler);
+      .addCase(signUp.rejected, errorHandler)
+      .addCase(signIn.pending, loaderHandler)
+      .addCase(signIn.fulfilled, dataHandler)
+      .addCase(signIn.rejected, errorHandler);
   },
 });
 
