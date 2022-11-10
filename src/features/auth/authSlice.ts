@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { FAILED, IDLE, LOADING } from '../../helpers/constants/status';
-import { AUTH_SIGNIN, AUTH_SIGNUP, BASE_URL } from '../../helpers/constants/urls';
+import { AUTH_SIGNIN, AUTH_SIGNUP, BASE_URL, USERS } from '../../helpers/constants/urls';
 
 export interface IAuthState {
   name: string;
@@ -75,7 +75,10 @@ export const signIn = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message);
       }
-      dispatch(addToken(data.token))
+      dispatch(addToken('Bearer ' + data.token));
+      // const userResponse = await fetch(BASE_URL + USERS + data._id);
+      // const { name } = await userResponse.json();
+      // dispatch(addName(name));
     } catch (e) {
       const error = e as Error;
       return rejectWithValue(error.message);
