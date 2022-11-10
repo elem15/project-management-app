@@ -7,6 +7,7 @@ import './App.css';
 import Page404 from 'pages/Page404/Page404';
 import SignUp from 'pages/SignUp/SignUp';
 import Home from 'pages/Home/Home';
+import SignIn from 'pages/SignIn/SignIn';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Header />
       <Routes>
         <Route path={routes.homePage} element={<Home />} />
+        <Route path={routes.signInPage} element={<SignIn />} />
         <Route path={routes.signUpPage} element={<SignUp />} />
         <Route path={routes.notFoundPage} element={<Page404 />} />
         <Route path={routes.anyPage} element={<Navigate to={routes.notFoundPage} replace />} />

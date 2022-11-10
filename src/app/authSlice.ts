@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { signIn } from 'utils/API/sign-in';
 import { signUp } from 'utils/API/sign-up';
 
 const initialState = { error: '' };
@@ -15,10 +16,19 @@ export const authSlice = createSlice({
     [signUp.fulfilled.type]: (state) => {
       state.error = '';
     },
+    [signIn.fulfilled.type]: (state) => {
+      state.error = '';
+    },
     [signUp.pending.type]: (state) => {
       state.error = '';
     },
+    [signIn.pending.type]: (state) => {
+      state.error = '';
+    },
     [signUp.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.error = action.payload;
+    },
+    [signIn.rejected.type]: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
   },

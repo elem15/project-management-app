@@ -13,6 +13,9 @@ function Header() {
         <Link to={routes.signUpPage} className="page-name">
           SignUp
         </Link>
+        <Link to={routes.signInPage} className="page-name">
+          SignIn
+        </Link>
         <Link to={routes.notFoundPage} className="page-name">
           404
         </Link>
