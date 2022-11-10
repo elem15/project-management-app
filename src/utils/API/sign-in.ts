@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { host } from '../const/const';
+import { host } from '../const/host';
 
 type User = {
   login: string;
