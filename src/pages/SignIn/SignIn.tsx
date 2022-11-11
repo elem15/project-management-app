@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SignIn.scss';
 import { Button, Form, Input, Row } from 'antd';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { signIn } from 'utils/API/sign-in';
+import { ROUTES } from 'utils/const/routes';
+import { Link, useNavigate } from 'react-router-dom';
 
 export type UserIn = {
   login: string;
@@ -11,11 +13,14 @@ export type UserIn = {
 
 const SignIn: React.FC = () => {
   const dispatch = useAppDispatch();
-
-  const onFinish = (values: UserIn) => {
-    dispatch(signIn(values));
+  const navigate = useNavigate();
+  const state = useAppSelector((state) => state.auth);
+  const onFinish = async (values: UserIn) => {
+    await dispatch(signIn(values));
   };
-
+  useEffect(() => {
+    state.token && navigate(ROUTES.HOME_PAGE);
+  }, [navigate, state.token]);
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
@@ -50,6 +55,12 @@ const SignIn: React.FC = () => {
             </Button>
           </Form.Item>
         </Row>
+        <div>
+          You are not registered yet?{' '}
+          <Link to={ROUTES.SIGN_UP_PAGE} className="page-name">
+            SignUp
+          </Link>
+        </div>
       </Form>
     </Row>
   );

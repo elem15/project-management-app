@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addLogin, addUserId } from 'features/auth/authSlice';
+import { addLogin, addName, addUserId } from 'app/reducers/authSlice';
 import { UserUp } from 'pages/SignUp/SignUp';
 import { AUTH_SIGNUP, BASE_URL } from 'utils/const/urls';
 
@@ -25,7 +25,8 @@ export const signUp = createAsyncThunk(
       if (!response.ok) {
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
-      dispatch(addLogin(login));
+      dispatch(addLogin(data.login));
+      dispatch(addName(data.name));
       dispatch(addUserId(data._id));
     } catch (error) {
       if (error instanceof Error) {

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addLogin, addToken } from 'features/auth/authSlice';
+import { addLogin, addToken } from 'app/reducers/authSlice';
 import { UserIn } from 'pages/SignIn/SignIn';
 import { AUTH_SIGNIN, BASE_URL } from 'utils/const/urls';
 

@@ -6,17 +6,32 @@ function Footer() {
     <div className="footer">
       <footer className="footer-container">
         <div>
-          <a className="footer-github" href="https://github.com/elem15">
+          <a
+            className="footer-github"
+            target="_blank"
+            href="https://github.com/elem15"
+            rel="noreferrer"
+          >
             elem15
           </a>
         </div>
         <div>
-          <a className="footer-github" href="https://github.com/dab10">
+          <a
+            className="footer-github"
+            target="_blank"
+            href="https://github.com/dab10"
+            rel="noreferrer"
+          >
             dab10
           </a>
         </div>
         <div>
-          <a className="footer-github" href="https://github.com/labatsevich">
+          <a
+            className="footer-github"
+            target="_blank"
+            href="https://github.com/labatsevich"
+            rel="noreferrer"
+          >
             labatsevich
           </a>
         </div>

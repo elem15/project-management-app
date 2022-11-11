@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './SignUp.scss';
 import { Button, Form, Input, Row } from 'antd';
 import { signUp } from 'utils/API/sign-up';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from 'utils/const/routes';
 
 export type UserUp = {
   name: string;
@@ -12,11 +14,14 @@ export type UserUp = {
 
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
-
+  const navigate = useNavigate();
+  const { name } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
     dispatch(signUp(values));
   };
-
+  useEffect(() => {
+    name && navigate(ROUTES.SIGN_IN_PAGE);
+  }, [navigate, name]);
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
