@@ -15,13 +15,16 @@ export type UserUp = {
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name } = useAppSelector((state) => state.auth);
+  const { name, token } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
     dispatch(signUp(values));
   };
   useEffect(() => {
     name && navigate(ROUTES.SIGN_IN_PAGE);
   }, [navigate, name]);
+  useEffect(() => {
+    token && navigate(ROUTES.HOME_PAGE);
+  }, [navigate, token]);
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
