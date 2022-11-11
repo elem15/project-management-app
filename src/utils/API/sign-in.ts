@@ -1,37 +1,42 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { HOST } from '../const/host';
+import { addLogin, addToken } from 'features/auth/authSlice';
+import { UserIn } from 'pages/SignIn/SignIn';
+import { AUTH_SIGNIN, BASE_URL } from 'utils/const/urls';
 
-type User = {
-  login: string;
-  password: string;
-};
-
-export const signIn = createAsyncThunk('data/signIn', async (user: User, { rejectWithValue }) => {
-  try {
-    const response = await fetch(`${HOST}/auth/signin`, {
-      method: 'POST',
-      body: JSON.stringify(user),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      throw new Error(`Error! Status: ${result.statusCode}. Message: ${result.message}`);
-    }
-    localStorage.setItem('token', JSON.stringify(result.token));
-
-    return result;
-  } catch (error) {
-    if (error instanceof Error) {
-      console.log('Error message: ', error.message);
-      return rejectWithValue(error.message);
-    } else {
-      console.log('Unexpected error: ', error);
-      return rejectWithValue('An unexpected error occurred');
+export const signIn = createAsyncThunk(
+  'auth/signIn',
+  async (user: UserIn, { rejectWithValue, dispatch }) => {
+    const { login, password } = user;
+    try {
+      const response = await fetch(BASE_URL + AUTH_SIGNIN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login,
+          password,
+        }),
+      });
+      console.log(await response);
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
+      }
+      dispatch(addLogin(login));
+      dispatch(addToken('Bearer ' + data.token));
+      // const userResponse = await fetch(BASE_URL + USERS + data._id);
+      // const { name } = await userResponse.json();
+      // dispatch(addName(name));
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log('Error message: ', error.message);
+        return rejectWithValue(error.message);
+      } else {
+        console.log('Unexpected error: ', error);
+        return rejectWithValue('An unexpected error occurred');
+      }
     }
   }
-});
+);

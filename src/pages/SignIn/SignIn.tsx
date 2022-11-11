@@ -4,7 +4,7 @@ import { Button, Form, Input, Row } from 'antd';
 import { useAppDispatch } from 'app/hooks';
 import { signIn } from 'utils/API/sign-in';
 
-type User = {
+export type UserIn = {
   login: string;
   password: string;
 };
@@ -12,7 +12,7 @@ type User = {
 const SignIn: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const onFinish = (values: User) => {
+  const onFinish = (values: UserIn) => {
     dispatch(signIn(values));
   };
 

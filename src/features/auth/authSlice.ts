@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, SerializedError } from '@reduxjs/toolkit';
+import { signIn } from 'utils/API/sign-in';
+import { signUp } from 'utils/API/sign-up';
 import { RootState } from '../../app/store';
-import { FAILED, IDLE, LOADING } from '../../helpers/constants/status';
-import { AUTH_SIGNIN, AUTH_SIGNUP, BASE_URL } from '../../helpers/constants/urls';
+import { FAILED, IDLE, LOADING } from '../../utils/const/status';
 
 export interface IAuthState {
   name: string;
@@ -23,68 +24,6 @@ const initialState: IAuthState = {
   errorMessage: '',
 };
 
-export const signUp = createAsyncThunk(
-  'auth/signUp',
-  async (_, { rejectWithValue, dispatch, getState }) => {
-    const state = getState() as RootState;
-    const { name, login, password } = state.auth;
-    try {   
-      const response = await fetch(BASE_URL + AUTH_SIGNUP, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name,
-          login,
-          password,
-        })
-      });
-      console.log(await response)
-      const data = await response.json();
-      console.log(data)
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      dispatch(addUserId(data._id))
-    } catch (e) {
-      const error = e as Error;
-      return rejectWithValue(error.message);
-    }
-  }
-);
-export const signIn = createAsyncThunk(
-  'auth/signIn',
-  async (_, { rejectWithValue, dispatch, getState }) => {
-    const state = getState() as RootState;
-    const { login, password } = state.auth;
-    try {    
-      const response = await fetch(BASE_URL + AUTH_SIGNIN, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          login,
-          password,
-        })
-      });
-      console.log(await response)
-      const data = await response.json();
-      console.log(data)
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      dispatch(addToken('Bearer ' + data.token));
-      // const userResponse = await fetch(BASE_URL + USERS + data._id);
-      // const { name } = await userResponse.json();
-      // dispatch(addName(name));
-    } catch (e) {
-      const error = e as Error;
-      return rejectWithValue(error.message);
-    }
-  }
-);
 export type IAction = PayloadAction<
   unknown,
   string,
@@ -96,14 +35,14 @@ export type IAction = PayloadAction<
     condition: boolean;
   } & (
     | {
-      rejectedWithValue: true;
-    }
+        rejectedWithValue: true;
+      }
     | ({
-      rejectedWithValue: false;
-    } & Record<string, unknown>)
+        rejectedWithValue: false;
+      } & Record<string, unknown>)
   ),
   SerializedError
-  >;
+>;
 const errorHandler = (state: IAuthState, action: IAction) => {
   state.status = FAILED;
   state.errorMessage = action.payload as string;
@@ -112,7 +51,7 @@ const loaderHandler = (state: IAuthState) => {
   state.status = LOADING;
 };
 const dataHandler = (state: IAuthState) => {
-  state.status = IDLE;  
+  state.status = IDLE;
 };
 export const authSlice = createSlice({
   name: 'auth',
@@ -133,16 +72,14 @@ export const authSlice = createSlice({
     addUserId: (state, action: PayloadAction<string>) => {
       state.userId = action.payload;
     },
-
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(signUp.pending, loaderHandler)
-      .addCase(signUp.fulfilled, dataHandler)
-      .addCase(signUp.rejected, errorHandler)
-      .addCase(signIn.pending, loaderHandler)
-      .addCase(signIn.fulfilled, dataHandler)
-      .addCase(signIn.rejected, errorHandler);
+  extraReducers: {
+    [signUp.fulfilled.type]: dataHandler,
+    [signUp.pending.type]: loaderHandler,
+    [signUp.rejected.type]: errorHandler,
+    [signIn.fulfilled.type]: dataHandler,
+    [signIn.pending.type]: loaderHandler,
+    [signIn.rejected.type]: errorHandler,
   },
 });
 
