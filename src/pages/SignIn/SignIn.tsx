@@ -14,13 +14,13 @@ export type UserIn = {
 const SignIn: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const state = useAppSelector((state) => state.auth);
+  const { token, errorMessage } = useAppSelector((state) => state.auth);
   const onFinish = async (values: UserIn) => {
     await dispatch(signIn(values));
   };
   useEffect(() => {
-    state.token && navigate(ROUTES.HOME_PAGE);
-  }, [navigate, state.token]);
+    token && navigate(ROUTES.HOME_PAGE);
+  }, [navigate, token]);
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
@@ -35,6 +35,10 @@ const SignIn: React.FC = () => {
           <Input />
         </Form.Item>
         <Form.Item
+          {...(errorMessage && {
+            help: errorMessage,
+            validateStatus: 'error',
+          })}
           label="Password"
           name="password"
           rules={[

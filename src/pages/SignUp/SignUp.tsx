@@ -15,7 +15,7 @@ export type UserUp = {
 const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, token } = useAppSelector((state) => state.auth);
+  const { name, token, errorMessage } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
     dispatch(signUp(values));
   };
@@ -49,6 +49,10 @@ const SignUp: React.FC = () => {
           <Input />
         </Form.Item>
         <Form.Item
+          {...(errorMessage && {
+            help: errorMessage,
+            validateStatus: 'error',
+          })}
           label="Password"
           name="password"
           rules={[
