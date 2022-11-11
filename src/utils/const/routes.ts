@@ -4,4 +4,5 @@ export const ROUTES = {
   SIGN_IN_PAGE: '/signIn',
   NOT_FOUND_PAGE: '/notFoundPage',
   ANY_PAGE: '*',
+  TEMPORARY_BOARD: '/tempBoard',
 };

@@ -30,6 +30,9 @@ function Header() {
             SignIn
           </Link>
         )}
+        <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
+          Board
+        </Link>
       </div>
     </header>
   );
