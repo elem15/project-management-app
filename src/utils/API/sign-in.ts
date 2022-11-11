@@ -24,11 +24,11 @@ export const signIn = createAsyncThunk(
       if (!response.ok) {
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
+      const token = 'Bearer ' + data.token;
       dispatch(addLogin(login));
-      dispatch(addToken('Bearer ' + data.token));
-      // const userResponse = await fetch(BASE_URL + USERS + data._id);
-      // const { name } = await userResponse.json();
-      // dispatch(addName(name));
+      dispatch(addToken(token));
+      localStorage.setItem('login', login);
+      localStorage.setItem('token', token);
     } catch (error) {
       if (error instanceof Error) {
         console.log('Error message: ', error.message);

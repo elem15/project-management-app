@@ -3,6 +3,7 @@ import { signIn } from 'utils/API/sign-in';
 import { signUp } from 'utils/API/sign-up';
 import { RootState } from '../store';
 import { FAILED, IDLE, LOADING } from '../../utils/const/status';
+import { getUsers } from 'utils/API/get-users';
 
 export interface IAuthState {
   name: string;
@@ -16,10 +17,10 @@ export interface IAuthState {
 
 const initialState: IAuthState = {
   name: '',
-  login: '',
+  login: localStorage.getItem('login') || '',
   password: '',
   userId: '',
-  token: '',
+  token: localStorage.getItem('token') || '',
   status: '',
   errorMessage: '',
 };
@@ -49,6 +50,7 @@ const errorHandler = (state: IAuthState, action: IAction) => {
 };
 const loaderHandler = (state: IAuthState) => {
   state.status = LOADING;
+  state.errorMessage = '';
 };
 const dataHandler = (state: IAuthState) => {
   state.status = IDLE;
@@ -78,6 +80,7 @@ export const authSlice = createSlice({
       state.login = '';
       state.name = '';
       state.token = '';
+      localStorage.clear();
     },
   },
   extraReducers: {
@@ -87,6 +90,7 @@ export const authSlice = createSlice({
     [signIn.fulfilled.type]: dataHandler,
     [signIn.pending.type]: loaderHandler,
     [signIn.rejected.type]: errorHandler,
+    [getUsers.pending.type]: loaderHandler,
   },
 });
 
