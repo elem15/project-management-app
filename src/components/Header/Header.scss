@@ -1,0 +1,28 @@
+.header-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-name-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: black;
+  width: 100%;
+}
+
+.page-name {
+  color: white;
+  text-decoration: none;
+  transition: 0.5s;
+    &:hover {
+      color:darkcyan
+    } 
+}
+
+.current-position {
+  padding: 10px 0;
+  text-align: center;
+}

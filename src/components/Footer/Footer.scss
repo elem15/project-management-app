@@ -1,0 +1,28 @@
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content:space-around;
+  background-color: black;
+  width: 100%;
+}
+.footer-container {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  background-color: black;
+  width: 100%;
+}
+
+.footer-year {
+  color: white;
+}
+
+.footer-github {
+  text-decoration: none;
+  color: white;
+  transition: 0.5s;
+
+  &:hover {
+    color:darkcyan
+  } 
+}
