@@ -1,14 +1,15 @@
 import React from 'react';
-import { Button, Form, Input, Modal, Row } from 'antd';
+import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createBoard } from 'utils/API/create-board';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
 
 type Values = {
-  [key: string]: string;
-  // columnTitle: string;
-  // boardTitle: string;
+  // [key: string]: string;
+  usersTeam: string[];
+  columnTitle: string;
+  boardTitle: string;
 };
 
 type PropsCreateBoardForm = {
@@ -17,25 +18,35 @@ type PropsCreateBoardForm = {
   onCancel: () => void;
 };
 
+type Option = {
+  value: string | number;
+  label: string;
+  children?: Option[];
+};
+
 export const AddModalForm = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { usersTeam } = useAppSelector((state) => state.board);
+  const usersTeamFilter = usersTeam.map((item) => {
+    return { label: item.name, value: item.login };
+  });
 
   const onFinish = async (values: Values) => {
     form.resetFields();
     if (props.objField === 'boardTitle') {
-      dispatch(createBoard({ title: values[props.objField], owner: login, users: [] }));
+      dispatch(
+        createBoard({ title: values[props.objField], owner: login, users: values.usersTeam.flat() })
+      );
       props.onCancel();
       navigate(ROUTES.YOUR_BOARDS);
     }
-    console.log('Success:', values[props.objField]);
+    console.log('Success:', values.usersTeam.flat());
   };
 
-  // const onFinishFailed = (errorInfo: any) => {
-  //   console.log('Failed:', errorInfo);
-  // };
+  const options: Option[] = usersTeamFilter;
 
   return (
     <Form
@@ -43,7 +54,6 @@ export const AddModalForm = (props: PropsCreateBoardForm) => {
       name="basic"
       initialValues={{ remember: true }}
       onFinish={onFinish}
-      // onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
       <Form.Item
@@ -58,7 +68,9 @@ export const AddModalForm = (props: PropsCreateBoardForm) => {
       >
         <Input />
       </Form.Item>
-
+      <Form.Item label="Choose teammates" name="usersTeam">
+        <Cascader options={options} multiple />
+      </Form.Item>
       <Row justify="center">
         <Form.Item>
           <Button type="primary" htmlType="submit">

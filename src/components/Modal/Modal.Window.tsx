@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
 import { AddModalForm } from './Modal.Form';
+import { useAppDispatch } from 'app/hooks';
+import { getUsersBoard } from 'utils/API/get-users-board';
 
 type PropsModal = {
   typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
@@ -13,8 +15,10 @@ type PropsModal = {
 
 export const AddModal = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const showModal = () => {
+  const showModal = async () => {
+    await dispatch(getUsersBoard());
     setOpen(true);
   };
 
