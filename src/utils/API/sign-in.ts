@@ -1,0 +1,38 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { addLogin, addToken } from 'app/reducers/authSlice';
+import { UserIn } from 'pages/SignIn/SignIn';
+import { AUTH_SIGNIN, BASE_URL } from 'utils/const/urls';
+
+export const signIn = createAsyncThunk(
+  'auth/signIn',
+  async (user: UserIn, { rejectWithValue, dispatch }) => {
+    const { login, password } = user;
+    try {
+      const response = await fetch(BASE_URL + AUTH_SIGNIN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          login,
+          password,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
+      }
+      const token = 'Bearer ' + data.token;
+      dispatch(addLogin(login));
+      dispatch(addToken(token));
+      localStorage.setItem('login', login);
+      localStorage.setItem('token', token);
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue('An unexpected error occurred');
+      }
+    }
+  }
+);
