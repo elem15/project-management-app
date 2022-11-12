@@ -1,60 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
-import { Button } from 'antd';
-
+import { ROUTES } from 'utils/const/routes';
+import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
+import './App.css';
+import Page404 from 'pages/Page404/Page404';
+import SignUp from 'pages/SignUp/SignUp';
+import Home from 'pages/Home/Home';
+import SignIn from 'pages/SignIn/SignIn';
+import Layout from 'components/Layout/Layout';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <Button type="primary">Button</Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <HashRouter>
+      <Routes>
+        <Route path={ROUTES.HOME_PAGE} element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path={ROUTES.SIGN_IN_PAGE} element={<SignIn />} />
+          <Route path={ROUTES.SIGN_UP_PAGE} element={<SignUp />} />
+          <Route path={ROUTES.NOT_FOUND_PAGE} element={<Page404 />} />
+          <Route path={ROUTES.ANY_PAGE} element={<Navigate to={ROUTES.NOT_FOUND_PAGE} replace />} />
+        </Route>
+      </Routes>
+    </HashRouter>
   );
 }
 
