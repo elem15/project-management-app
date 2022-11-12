@@ -19,9 +19,7 @@ export const signUp = createAsyncThunk(
           password,
         }),
       });
-      console.log(await response);
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
@@ -30,10 +28,8 @@ export const signUp = createAsyncThunk(
       dispatch(addUserId(data._id));
     } catch (error) {
       if (error instanceof Error) {
-        console.log('Error message: ', error.message);
         return rejectWithValue(error.message);
       } else {
-        console.log('Unexpected error: ', error);
         return rejectWithValue('An unexpected error occurred');
       }
     }
