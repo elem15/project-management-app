@@ -1,5 +1,9 @@
 import React from 'react';
-import { Button, Form, Input, Row } from 'antd';
+import { Button, Form, Input, Modal, Row } from 'antd';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { createBoard } from 'utils/API/create-board';
+import { ROUTES } from 'utils/const/routes';
+import { useNavigate } from 'react-router-dom';
 
 type Values = {
   [key: string]: string;
@@ -10,13 +14,22 @@ type Values = {
 type PropsCreateBoardForm = {
   titleForm: string;
   objField: string;
+  onCancel: () => void;
 };
 
 export const AddModalForm = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
+  const { login } = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const onFinish = (values: Values) => {
+  const onFinish = async (values: Values) => {
     form.resetFields();
+    if (props.objField === 'boardTitle') {
+      dispatch(createBoard({ title: values[props.objField], owner: login, users: [] }));
+      props.onCancel();
+      navigate(ROUTES.YOUR_BOARDS);
+    }
     console.log('Success:', values[props.objField]);
   };
 

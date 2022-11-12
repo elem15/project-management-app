@@ -28,13 +28,14 @@ export const AddModal = (props: PropsModal) => {
         {props.titleTextButton}
       </Button>
       <Modal
+        destroyOnClose={true}
         title={props.titleTextModal}
         open={open}
         onOk={hideModal}
         onCancel={hideModal}
         footer={null}
       >
-        <AddModalForm titleForm={props.titleForm} objField={props.objField} />
+        <AddModalForm titleForm={props.titleForm} objField={props.objField} onCancel={hideModal} />
       </Modal>
     </>
   );
