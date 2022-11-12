@@ -16,17 +16,14 @@ export const getUsers = createAsyncThunk(
         },
       });
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         dispatch(signOut());
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.log('Error message: ', error.message);
         return rejectWithValue(error.message);
       } else {
-        console.log('Unexpected error: ', error);
         return rejectWithValue('An unexpected error occurred');
       }
     }
