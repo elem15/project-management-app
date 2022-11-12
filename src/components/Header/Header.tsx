@@ -5,6 +5,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import './Header.scss';
+import { AddModal } from 'components/Modal/Modal.Window';
 
 function Header() {
   const { login, token } = useAppSelector((state) => state.auth);
@@ -33,6 +34,16 @@ function Header() {
         <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
           Board
         </Link>
+        <Link to={ROUTES.YOUR_BOARDS} className="page-name">
+          BoardList
+        </Link>
+        <AddModal
+          typeButton={'primary'}
+          titleTextButton={'New board'}
+          titleTextModal={'Create Board'}
+          titleForm={'Board title'}
+          objField={'boardTitle'}
+        />
       </div>
     </header>
   );

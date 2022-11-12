@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { AddColumnForm } from './Modal.Form';
+import { AddModalForm } from './Modal.Form';
 
-export const AddColumnModal = () => {
+type PropsModal = {
+  typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
+  titleTextButton: string;
+  titleTextModal: string;
+  titleForm: string;
+  objField: string;
+};
+
+export const AddModal = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
 
   const showModal = () => {
@@ -16,11 +24,17 @@ export const AddColumnModal = () => {
 
   return (
     <>
-      <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
-        Add column
+      <Button type={props.typeButton} icon={<PlusOutlined />} onClick={showModal}>
+        {props.titleTextButton}
       </Button>
-      <Modal title="Add column" open={open} onOk={hideModal} onCancel={hideModal} footer={null}>
-        <AddColumnForm />
+      <Modal
+        title={props.titleTextModal}
+        open={open}
+        onOk={hideModal}
+        onCancel={hideModal}
+        footer={null}
+      >
+        <AddModalForm titleForm={props.titleForm} objField={props.objField} />
       </Modal>
     </>
   );

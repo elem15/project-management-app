@@ -1,13 +1,23 @@
 import React from 'react';
 import { Button, Form, Input, Row } from 'antd';
 
-type ColumnTitle = {
-  columnTitle: string;
+type Values = {
+  [key: string]: string;
+  // columnTitle: string;
+  // boardTitle: string;
 };
 
-export const AddColumnForm: React.FC = () => {
-  const onFinish = (values: ColumnTitle) => {
-    console.log('Success:', values.columnTitle);
+type PropsCreateBoardForm = {
+  titleForm: string;
+  objField: string;
+};
+
+export const AddModalForm = (props: PropsCreateBoardForm) => {
+  const [form] = Form.useForm();
+
+  const onFinish = (values: Values) => {
+    form.resetFields();
+    console.log('Success:', values[props.objField]);
   };
 
   // const onFinishFailed = (errorInfo: any) => {
@@ -16,6 +26,7 @@ export const AddColumnForm: React.FC = () => {
 
   return (
     <Form
+      form={form}
       name="basic"
       initialValues={{ remember: true }}
       onFinish={onFinish}
@@ -23,9 +34,14 @@ export const AddColumnForm: React.FC = () => {
       autoComplete="off"
     >
       <Form.Item
-        label="Column title"
-        name="columnTitle"
-        rules={[{ required: true, message: 'Please input column title!' }]}
+        label={props.titleForm}
+        name={props.objField}
+        rules={[
+          {
+            required: true,
+            message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(1)}!`,
+          },
+        ]}
       >
         <Input />
       </Form.Item>
