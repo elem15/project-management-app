@@ -8,7 +8,7 @@ import SignUp from 'pages/SignUp/SignUp';
 import Home from 'pages/Home/Home';
 import SignIn from 'pages/SignIn/SignIn';
 import Layout from 'components/Layout/Layout';
-import { Board } from 'pages/Board/Board';
+import Board from 'pages/Board/Board';
 
 function App() {
   return (
