@@ -1,0 +1,8 @@
+.homepage-link {
+  color: black;
+  text-decoration: none;
+  transition: 0.5s;
+    &:hover {
+      color:darkcyan
+    } 
+}

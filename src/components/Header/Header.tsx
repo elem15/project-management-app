@@ -22,14 +22,23 @@ function Header() {
           Home
         </Link>
         {token ? (
-          <span>
+          <div>
+            <Link to={ROUTES.HOME_PAGE} className="page-name">
+              Go to Main Page &#160;
+            </Link>
             {login} &#160;
             <Button onClick={handleSignOut}>Sign Out</Button>
-          </span>
+          </div>
         ) : (
-          <Link to={ROUTES.SIGN_IN_PAGE} className="page-name">
-            SignIn
-          </Link>
+          <div>
+            <Link to={ROUTES.SIGN_IN_PAGE} className="page-name">
+              Sign In
+            </Link>
+            &#160;&#160;&#160;
+            <Link to={ROUTES.SIGN_UP_PAGE} className="page-name">
+              Sign Up
+            </Link>
+          </div>
         )}
         <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
           Board
