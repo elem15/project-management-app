@@ -63,8 +63,6 @@ const BoardList = () => {
     </div>
   ));
 
-  console.log(boards);
-
   return (
     <>
       <h2>Your Boards</h2>

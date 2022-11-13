@@ -55,7 +55,6 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
       props.onCancel();
       navigate(ROUTES.YOUR_BOARDS);
     }
-    console.log('Success:', values.usersTeam ? values.usersTeam.flat() : []);
   };
 
   return (

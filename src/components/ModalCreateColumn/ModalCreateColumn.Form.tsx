@@ -23,7 +23,6 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  console.log(props.boardId);
 
   const { isLoading } = useAppSelector((state) => state.board);
 
@@ -37,7 +36,6 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
       props.onCancel();
       navigate(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
     }
-    console.log('Success:', values);
   };
 
   return (

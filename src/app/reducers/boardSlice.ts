@@ -47,19 +47,10 @@ const initialState: BoardType = {
   teammates: [],
 };
 
-// const addUsersTeam = (state: Popup, action: PayloadAction<User[]>) => {
-//   state.isError = '';
-//   state.usersTeam = action.payload;
-// };
-
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    // togglePopup: (state) => {
-    //   state.isPopup = !state.isPopup;
-    //   document.body.classList.toggle('stop-scrolling');
-    // },
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;
     },
