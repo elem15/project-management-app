@@ -6,3 +6,71 @@
       color:darkcyan
     } 
 }
+
+.section{
+  &__intro{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    & .section__title{
+      padding-top: 10rem;
+    }
+  }
+
+  &__team{
+    padding: 0 0 2rem;
+
+    & .section__title{
+      padding-top: 2rem;
+    }
+  }
+
+  &__title{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+
+    &_heading{
+      padding: 1rem 0 .5rem;
+    }
+    &_subheading{
+      font-size: 1rem;
+      padding: 0 0 1rem;
+    }
+
+  h2{
+    text-transform: uppercase;
+    width: 100%;
+    color: #595959;
+    font-weight: 700;
+    text-align: left;
+  }
+
+  }
+  &__image{
+      background: url(../../media/board.png) no-repeat center;
+      background-size: contain;
+      height: 600px;
+      width: 100%;
+    }
+}
+
+.teammates{
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+
+  &__item{
+    max-width: 240px;
+    width: 100%;
+
+    img{
+      border-radius: 50%;
+      overflow: hidden;
+    }
+  }
+}
+
+
+@media screen and (max-width: 768px){
+
+}
