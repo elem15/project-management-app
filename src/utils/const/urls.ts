@@ -4,3 +4,4 @@ export const AUTH_SIGNUP = 'auth/signup';
 export const AUTH_SIGNIN = 'auth/signin';
 export const USERS = 'users/';
 export const BOARDS = 'boards/';
+export const COLUMNS = 'columns/';

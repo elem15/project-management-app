@@ -5,7 +5,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import './Header.scss';
-import { AddModal } from 'components/Modal/Modal.Window';
+import { AddModalCreateBoard } from 'components/ModalCreateBoard/ModalCreateBoard.Window';
 
 function Header() {
   const { login, token } = useAppSelector((state) => state.auth);
@@ -46,7 +46,7 @@ function Header() {
         <Link to={ROUTES.YOUR_BOARDS} className="page-name">
           BoardList
         </Link>
-        <AddModal
+        <AddModalCreateBoard
           typeButton={'primary'}
           titleTextButton={'New board'}
           titleTextModal={'Create Board'}

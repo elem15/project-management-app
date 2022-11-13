@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { AddModalForm } from './Modal.Form';
+import { AddModalFormColumn } from './ModalCreateColumn.Form';
 
 type PropsModal = {
   typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
@@ -9,12 +9,13 @@ type PropsModal = {
   titleTextModal: string;
   titleForm: string;
   objField: string;
+  boardId: string;
 };
 
-export const AddModal = (props: PropsModal) => {
+export const AddModalCreateColumn = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
 
-  const showModal = async () => {
+  const showModal = () => {
     setOpen(true);
   };
 
@@ -35,7 +36,12 @@ export const AddModal = (props: PropsModal) => {
         onCancel={hideModal}
         footer={null}
       >
-        <AddModalForm titleForm={props.titleForm} objField={props.objField} onCancel={hideModal} />
+        <AddModalFormColumn
+          titleForm={props.titleForm}
+          objField={props.objField}
+          onCancel={hideModal}
+          boardId={props.boardId}
+        />
       </Modal>
     </>
   );
