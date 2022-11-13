@@ -3,7 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
 import { AddModalForm } from './Modal.Form';
 import { useAppDispatch } from 'app/hooks';
-import { getUsersBoard } from 'utils/API/get-users-board';
+import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 
 type PropsModal = {
   typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
@@ -18,7 +18,7 @@ export const AddModal = (props: PropsModal) => {
   const dispatch = useAppDispatch();
 
   const showModal = async () => {
-    await dispatch(getUsersBoard());
+    await dispatch(getUsersBoardSlice());
     setOpen(true);
   };
 

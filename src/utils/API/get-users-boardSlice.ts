@@ -11,13 +11,13 @@ type User = {
   message?: string;
 };
 
-export const getUsersBoard = createAsyncThunk(
-  'board/getUsersBoard',
+export const getUsersBoardSlice = createAsyncThunk(
+  'board/getUsersBoardSlice',
   async (_, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
     try {
-      const response = await fetch(BASE_URL + USERS, {
+      const response: Response = await fetch(BASE_URL + USERS, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: state.auth.token,

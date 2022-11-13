@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createBoard } from 'utils/API/create-board';
-import { getUsersBoard } from 'utils/API/get-users-board';
+import { getBoards } from 'utils/API/get-boards';
+import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 
 type User = {
   login: string;
@@ -8,16 +9,25 @@ type User = {
   _id: string;
 };
 
-type Popup = {
+type Boards = {
+  _id: string;
+  title: string;
+  owner: string;
+  users: string[];
+};
+
+type BoardType = {
   isPopup: boolean;
   isError: string;
   usersTeam: User[];
+  boards: Boards[];
 };
 
-const initialState: Popup = {
+const initialState: BoardType = {
   isPopup: false,
   isError: '',
   usersTeam: [],
+  boards: [],
 };
 
 // const addUsersTeam = (state: Popup, action: PayloadAction<User[]>) => {
@@ -33,9 +43,9 @@ export const boardSlice = createSlice({
       state.isPopup = !state.isPopup;
       document.body.classList.toggle('stop-scrolling');
     },
-    // addUsers: (state, action: PayloadAction<User[]>) => {
-    //   state.usersTeam = action.payload;
-    // },
+    addBoards: (state, action: PayloadAction<Boards[]>) => {
+      state.boards = action.payload;
+    },
   },
   extraReducers: {
     [createBoard.fulfilled.type]: (state) => {
@@ -47,19 +57,29 @@ export const boardSlice = createSlice({
     [createBoard.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isError = action.payload;
     },
-    [getUsersBoard.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
+    [getUsersBoardSlice.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
       state.isError = '';
       state.usersTeam = action.payload;
     },
-    [getUsersBoard.pending.type]: (state) => {
+    [getUsersBoardSlice.pending.type]: (state) => {
       state.isError = '';
     },
-    [getUsersBoard.rejected.type]: (state, action: PayloadAction<string>) => {
+    [getUsersBoardSlice.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isError = action.payload;
+    },
+    // [getBoards.fulfilled.type]: (state, action: PayloadAction<Boards[]>) => {
+    //   state.isError = '';
+    //   state.boards = action.payload;
+    // },
+    [getBoards.pending.type]: (state) => {
+      state.isError = '';
+    },
+    [getBoards.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isError = action.payload;
     },
   },
 });
 
-export const { togglePopup } = boardSlice.actions;
+export const { togglePopup, addBoards } = boardSlice.actions;
 
 export default boardSlice.reducer;
