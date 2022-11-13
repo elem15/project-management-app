@@ -27,6 +27,19 @@ function Header() {
               Go to Main Page &#160;
             </Link>
             {login} &#160;
+            <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
+              Board
+            </Link>
+            <Link to={ROUTES.YOUR_BOARDS} className="page-name">
+              BoardList
+            </Link>
+            <AddModalCreateBoard
+              typeButton={'primary'}
+              titleTextButton={'New board'}
+              titleTextModal={'Create Board'}
+              titleForm={'Board title'}
+              objField={'boardTitle'}
+            />
             <Button onClick={handleSignOut}>Sign Out</Button>
           </div>
         ) : (
@@ -40,19 +53,6 @@ function Header() {
             </Link>
           </div>
         )}
-        <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
-          Board
-        </Link>
-        <Link to={ROUTES.YOUR_BOARDS} className="page-name">
-          BoardList
-        </Link>
-        <AddModalCreateBoard
-          typeButton={'primary'}
-          titleTextButton={'New board'}
-          titleTextModal={'Create Board'}
-          titleForm={'Board title'}
-          objField={'boardTitle'}
-        />
       </div>
     </header>
   );
