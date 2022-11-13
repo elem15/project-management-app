@@ -17,14 +17,16 @@ type Boards = {
 };
 
 type BoardType = {
-  isPopup: boolean;
+  isLoadingBoardsPage: boolean;
+  isLoading: boolean;
   isError: string;
   usersTeam: User[];
   boards: Boards[];
 };
 
 const initialState: BoardType = {
-  isPopup: false,
+  isLoadingBoardsPage: false,
+  isLoading: false,
   isError: '',
   usersTeam: [],
   boards: [],
@@ -39,47 +41,59 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    togglePopup: (state) => {
-      state.isPopup = !state.isPopup;
-      document.body.classList.toggle('stop-scrolling');
-    },
+    // togglePopup: (state) => {
+    //   state.isPopup = !state.isPopup;
+    //   document.body.classList.toggle('stop-scrolling');
+    // },
     addBoards: (state, action: PayloadAction<Boards[]>) => {
       state.boards = action.payload;
     },
   },
   extraReducers: {
     [createBoard.fulfilled.type]: (state) => {
+      state.isLoading = false;
       state.isError = '';
     },
     [createBoard.pending.type]: (state) => {
+      state.isLoading = true;
       state.isError = '';
     },
     [createBoard.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
       state.isError = action.payload;
     },
     [getUsersBoardSlice.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
+      state.isLoading = false;
       state.isError = '';
       state.usersTeam = action.payload;
     },
     [getUsersBoardSlice.pending.type]: (state) => {
+      state.isLoading = true;
       state.isError = '';
     },
     [getUsersBoardSlice.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoading = false;
       state.isError = action.payload;
     },
-    // [getBoards.fulfilled.type]: (state, action: PayloadAction<Boards[]>) => {
-    //   state.isError = '';
-    //   state.boards = action.payload;
-    // },
+    [getBoards.fulfilled.type]: (state, action: PayloadAction<Boards[]>) => {
+      state.isLoadingBoardsPage = false;
+      state.isLoading = false;
+      state.isError = '';
+      state.boards = action.payload;
+    },
     [getBoards.pending.type]: (state) => {
+      state.isLoadingBoardsPage = true;
+      state.isLoading = true;
       state.isError = '';
     },
     [getBoards.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoadingBoardsPage = false;
+      state.isLoading = false;
       state.isError = action.payload;
     },
   },
 });
 
-export const { togglePopup, addBoards } = boardSlice.actions;
+export const { addBoards } = boardSlice.actions;
 
 export default boardSlice.reducer;

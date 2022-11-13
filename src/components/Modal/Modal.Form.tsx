@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createBoard } from 'utils/API/create-board';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
+import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 
 type Values = {
   // [key: string]: string;
@@ -29,7 +30,10 @@ export const AddModalForm = (props: PropsCreateBoardForm) => {
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { usersTeam } = useAppSelector((state) => state.board);
+  useEffect(() => {
+    dispatch(getUsersBoardSlice());
+  }, [dispatch]);
+  const { usersTeam, isLoading } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
     return { label: item.name, value: item.login };
   });
@@ -49,35 +53,43 @@ export const AddModalForm = (props: PropsCreateBoardForm) => {
   const options: Option[] = usersTeamFilter;
 
   return (
-    <Form
-      form={form}
-      name="basic"
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      autoComplete="off"
-    >
-      <Form.Item
-        label={props.titleForm}
-        name={props.objField}
-        rules={[
-          {
-            required: true,
-            message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(1)}!`,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item label="Choose teammates" name="usersTeam">
-        <Cascader options={options} multiple />
-      </Form.Item>
-      <Row justify="center">
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Row>
-    </Form>
+    <>
+      {isLoading ? (
+        <h2>Loading...</h2>
+      ) : (
+        <Form
+          form={form}
+          name="basic"
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          autoComplete="off"
+        >
+          <Form.Item
+            label={props.titleForm}
+            name={props.objField}
+            rules={[
+              {
+                required: true,
+                message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
+                  1
+                )}!`,
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item label="Choose teammates" name="usersTeam">
+            <Cascader options={options} multiple />
+          </Form.Item>
+          <Row justify="center">
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Row>
+        </Form>
+      )}
+    </>
   );
 };

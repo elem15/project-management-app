@@ -36,7 +36,7 @@ export const getBoards = createAsyncThunk(
           }`
         );
       }
-      // return data;
+      return data;
     } catch (error) {
       if (error instanceof Error) {
         console.log('Error message: ', error.message);

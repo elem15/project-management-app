@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoards } from 'app/reducers/boardSlice';
 import React, { useEffect } from 'react';
 import { getBoards } from 'utils/API/get-boards';
+import keyCreator from 'utils/keyCreator/keyCreator';
 
 type Boards = {
   _id: string;
@@ -15,24 +16,18 @@ const BoardList = () => {
   // await dispatch(getUsersBoard());
   const dispatch = useAppDispatch();
 
-  const fetchData = async () => {
-    await dispatch(getBoards());
-  };
-
   useEffect(() => {
-    (async () => {
-      await dispatch(getBoards())
-        .then((res) => res as Boards[])
-        .then((res) => dispatch(addBoards(res)));
-    })();
+    dispatch(getBoards());
   }, [dispatch]);
 
-  const { boards } = useAppSelector((state) => state.board);
+  const { boards, isLoadingBoardsPage } = useAppSelector((state) => state.board);
+  const boa = boards.map((item) => <div key={keyCreator()}>{item.owner}</div>);
   console.log(boards);
   return (
     <>
       <h2>Your Boards</h2>
       <h2>Your Boards</h2>
+      {isLoadingBoardsPage ? <h2>Loading...</h2> : <div>{boa}</div>}
     </>
   );
 };
