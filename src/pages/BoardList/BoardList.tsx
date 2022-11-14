@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { addBoardId } from 'app/reducers/boardSlice';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { quantityTeammates } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
@@ -20,7 +20,7 @@ const BoardList = () => {
 
   const handleClickOpen = async (_id: string) => {
     if (_id) {
-      await dispatch(getBoardColumns(_id));
+      dispatch(addBoardId(_id));
       router(`${ROUTES.YOUR_BOARDS}/${_id}`);
     } else {
       router(`${ROUTES.HOME_PAGE}`);

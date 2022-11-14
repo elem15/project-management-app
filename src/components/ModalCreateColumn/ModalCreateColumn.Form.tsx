@@ -5,6 +5,8 @@ import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
 import { createColumn } from 'utils/API/create-column';
 import { getBoardColumns } from 'utils/API/get-board-columns';
+import { addBoardId } from 'app/reducers/boardSlice';
+import keyCreator from 'utils/keyCreator/keyCreator';
 
 type Values = {
   usersTeam: string[];
@@ -22,19 +24,22 @@ type PropsCreateColumnForm = {
 export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
+  const router = useNavigate();
   const { isLoading } = useAppSelector((state) => state.board);
 
   const onFinish = async (values: Values) => {
     form.resetFields();
     if (props.objField === 'columnTitle') {
       await dispatch(
-        createColumn({ title: values[props.objField], order: '1', boardId: props.boardId })
+        createColumn({
+          title: values[props.objField],
+          order: String(keyCreator()),
+          boardId: props.boardId,
+        })
       );
-      await dispatch(getBoardColumns(props.boardId));
+      dispatch(addBoardId(props.boardId));
       props.onCancel();
-      navigate(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
+      router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
     }
   };
 

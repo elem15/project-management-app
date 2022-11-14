@@ -1,22 +1,37 @@
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { addBoardId } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
 import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getBoardColumns } from 'utils/API/get-board-columns';
+import { boardIdLength } from 'utils/const/other';
+import { ROUTES } from 'utils/const/routes';
 
 const Board: React.FC = () => {
-  const { columns, isLoadingBoardPage } = useAppSelector((state) => state.board);
+  const { token } = useAppSelector((state) => state.auth);
+  const { columns, isLoadingBoardPage, boardId } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
+  const router = useNavigate();
+  const location = useLocation();
 
-  let boardId: string;
-  if (columns[0]) {
-    boardId = columns[0].boardId;
+  const boardIdFromUrl =
+    document.location.href.split('/')[document.location.href.split('/').length - 1];
+  let boardIdCurrent = '';
+
+  useEffect(() => {
+    token && boardIdFromUrl.length !== boardIdLength && router(ROUTES.NOT_FOUND_PAGE);
+  }, [boardIdFromUrl.length, router, token]);
+
+  if (boardId) {
+    boardIdCurrent = boardId;
   } else {
-    boardId = document.location.href.split('/')[document.location.href.split('/').length - 1];
+    boardIdCurrent = boardIdFromUrl;
+    dispatch(addBoardId(boardIdCurrent));
   }
 
   useEffect(() => {
-    dispatch(getBoardColumns(boardId));
-  }, []);
+    dispatch(getBoardColumns(boardIdCurrent));
+  }, [location]);
 
   const columnsList = columns.map((item) => (
     <div key={item._id} className="card-item">

@@ -34,6 +34,7 @@ type BoardType = {
   boards: Board[];
   columns: Column[];
   teammates: string[];
+  boardId: string;
 };
 
 const initialState: BoardType = {
@@ -45,6 +46,7 @@ const initialState: BoardType = {
   boards: [],
   columns: [],
   teammates: [],
+  boardId: '',
 };
 
 const loaderHandler = (state: BoardType) => {
@@ -63,6 +65,9 @@ export const boardSlice = createSlice({
   reducers: {
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;
+    },
+    addBoardId: (state, action: PayloadAction<string>) => {
+      state.boardId = action.payload;
     },
   },
   extraReducers: {
@@ -117,6 +122,6 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { addBoards } = boardSlice.actions;
+export const { addBoards, addBoardId } = boardSlice.actions;
 
 export default boardSlice.reducer;
