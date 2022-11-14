@@ -9,8 +9,7 @@ const Layout = () => {
   const appDispatch = useAppDispatch();
   useEffect(() => {
     appDispatch(getUsers());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [appDispatch]);
   return (
     <div>
       <Header />

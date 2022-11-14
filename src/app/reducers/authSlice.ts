@@ -5,6 +5,11 @@ import { RootState } from '../store';
 import { FAILED, IDLE, LOADING } from '../../utils/const/status';
 import { getUsers } from 'utils/API/get-users';
 
+export interface User {
+  name: string;
+  login: string;
+  _id: string;
+}
 export interface IAuthState {
   name: string;
   login: string;
@@ -13,6 +18,7 @@ export interface IAuthState {
   status: string;
   errorMessage: string;
   userId: string;
+  users: User[];
 }
 
 const initialState: IAuthState = {
@@ -23,6 +29,7 @@ const initialState: IAuthState = {
   token: localStorage.getItem('token') || '',
   status: '',
   errorMessage: '',
+  users: [],
 };
 
 export type IAction = PayloadAction<
@@ -75,11 +82,24 @@ export const authSlice = createSlice({
     addUserId: (state, action: PayloadAction<string>) => {
       state.userId = action.payload;
     },
+    addAllUsers: (state, action: PayloadAction<User[]>) => {
+      state.users = action.payload;
+    },
+    setUser: (state, action: PayloadAction<User[]>) => {
+      const users = action.payload;
+      const user = users.find((user) => user.login === state.login);
+      if (user) {
+        state.name = user.name;
+        state.userId = user._id;
+      }
+    },
     signOut: (state) => {
       state.userId = '';
       state.login = '';
       state.name = '';
       state.token = '';
+      state.status = '';
+      state.users = [];
       localStorage.clear();
     },
   },
@@ -90,11 +110,22 @@ export const authSlice = createSlice({
     [signIn.fulfilled.type]: dataHandler,
     [signIn.pending.type]: loaderHandler,
     [signIn.rejected.type]: errorHandler,
+    [getUsers.fulfilled.type]: dataHandler,
     [getUsers.pending.type]: loaderHandler,
+    [getUsers.rejected.type]: errorHandler,
   },
 });
 
-export const { addLogin, addName, addPassword, addToken, addUserId, signOut } = authSlice.actions;
+export const {
+  addLogin,
+  addName,
+  addPassword,
+  addToken,
+  addUserId,
+  signOut,
+  addAllUsers,
+  setUser,
+} = authSlice.actions;
 
 export const selectToken = (state: RootState) => state.auth.token;
 

@@ -24,6 +24,7 @@ const SignIn: React.FC = () => {
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
+        <h2>Sing in</h2>
         <Form.Item
           label="Login"
           name="login"

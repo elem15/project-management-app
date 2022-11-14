@@ -9,6 +9,7 @@ import Home from 'pages/Home/Home';
 import SignIn from 'pages/SignIn/SignIn';
 import Layout from 'components/Layout/Layout';
 import Welcome from 'pages/Welcome/Welcome';
+import UserProfile from 'pages/UserProfile/UserProfile';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path={ROUTES.WELCOME_PAGE} element={<Welcome />} />
           <Route path={ROUTES.SIGN_IN_PAGE} element={<SignIn />} />
           <Route path={ROUTES.SIGN_UP_PAGE} element={<SignUp />} />
+          <Route path={ROUTES.PROFILE} element={<UserProfile />} />
           <Route path={ROUTES.NOT_FOUND_PAGE} element={<Page404 />} />
           <Route path={ROUTES.ANY_PAGE} element={<Navigate to={ROUTES.NOT_FOUND_PAGE} replace />} />
         </Route>

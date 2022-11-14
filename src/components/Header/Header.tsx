@@ -7,7 +7,7 @@ import { ROUTES } from 'utils/const/routes';
 import './Header.scss';
 
 function Header() {
-  const { login, token } = useAppSelector((state) => state.auth);
+  const { name, token } = useAppSelector((state) => state.auth);
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleSignOut = async () => {
@@ -25,7 +25,9 @@ function Header() {
             <Link to={ROUTES.HOME_PAGE} className="page-name">
               Go to Main Page &#160;
             </Link>
-            {login} &#160;
+            <Link to={ROUTES.PROFILE} className="page-name">
+              {name} &#160;
+            </Link>
             <Button onClick={handleSignOut}>Sign Out</Button>
           </div>
         ) : (

@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addLogin, addToken } from 'app/reducers/authSlice';
 import { UserIn } from 'pages/SignIn/SignIn';
 import { AUTH_SIGNIN, BASE_URL } from 'utils/const/urls';
+import { getUsers } from './get-users';
 
 export const signIn = createAsyncThunk(
   'auth/signIn',
@@ -27,11 +28,14 @@ export const signIn = createAsyncThunk(
       dispatch(addToken(token));
       localStorage.setItem('login', login);
       localStorage.setItem('token', token);
+      await dispatch(await getUsers());
     } catch (error) {
       if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
+        if (error.message.startsWith('Error!')) {
+          return rejectWithValue(error.message);
+        } else {
+          return rejectWithValue('An unexpected error occurred');
+        }
       }
     }
   }

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import './SignUp.scss';
+import React, { useEffect, useState } from 'react';
+import './UserProfile.scss';
 import { Button, Form, Input, Row } from 'antd';
-import { signUp } from 'utils/API/sign-up';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
+import { updateUser } from 'utils/API/update-user';
 
 export type UserUp = {
   name: string;
@@ -12,23 +12,22 @@ export type UserUp = {
   password: string;
 };
 
-const SignUp: React.FC = () => {
+const UserProfile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, token, errorMessage } = useAppSelector((state) => state.auth);
+  const { name, login, errorMessage } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
-    dispatch(signUp(values));
+    dispatch(updateUser(values));
   };
+  const [prevName] = useState(name);
+  const [prevLogin] = useState(login);
   useEffect(() => {
-    name && navigate(ROUTES.SIGN_IN_PAGE);
-  }, [navigate, name]);
-  useEffect(() => {
-    token && navigate(ROUTES.HOME_PAGE);
-  }, [navigate, token]);
+    (name !== prevName || login !== prevLogin) && navigate(ROUTES.HOME_PAGE);
+  }, [name, navigate, prevName, login, prevLogin]);
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
-        <h2>Sign up</h2>
+        <h2>Edit Profile</h2>
         <Form.Item
           label="Name"
           name="name"
@@ -37,7 +36,7 @@ const SignUp: React.FC = () => {
             { type: 'string', min: 3, message: 'Name must be at least 3 characters' },
           ]}
         >
-          <Input />
+          <Input placeholder={name} />
         </Form.Item>
         <Form.Item
           label="Login"
@@ -47,7 +46,7 @@ const SignUp: React.FC = () => {
             { type: 'string', min: 3, message: 'Login must be at least 3 characters' },
           ]}
         >
-          <Input />
+          <Input placeholder={login} />
         </Form.Item>
         <Form.Item
           {...(errorMessage && {
@@ -79,4 +78,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default UserProfile;

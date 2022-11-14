@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { signOut } from 'app/reducers/authSlice';
+import { addAllUsers, setUser, signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, USERS } from 'utils/const/urls';
 
@@ -20,11 +20,15 @@ export const getUsers = createAsyncThunk(
         dispatch(signOut());
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
+      dispatch(addAllUsers(await data));
+      dispatch(setUser(await data));
     } catch (error) {
       if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
+        if (error.message.startsWith('Error!')) {
+          return rejectWithValue(error.message);
+        } else {
+          return rejectWithValue('An unexpected error occurred');
+        }
       }
     }
   }
