@@ -38,13 +38,8 @@ export const getBoards = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      if (error instanceof Error) {
-        console.log('Error message: ', error.message);
-        return rejectWithValue(error.message);
-      } else {
-        console.log('Unexpected error: ', error);
-        return rejectWithValue('An unexpected error occurred');
-      }
+      console.log('Error message: ', (error as Error).message);
+      return rejectWithValue((error as Error).message);
     }
   }
 );
