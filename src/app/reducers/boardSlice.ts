@@ -47,6 +47,16 @@ const initialState: BoardType = {
   teammates: [],
 };
 
+const loaderHandler = (state: BoardType) => {
+  state.isLoading = true;
+  state.isError = '';
+};
+
+const errorHandler = (state: BoardType, action: PayloadAction<string>) => {
+  state.isLoading = false;
+  state.isError = action.payload;
+};
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
@@ -60,27 +70,15 @@ export const boardSlice = createSlice({
       state.isLoading = false;
       state.isError = '';
     },
-    [createBoard.pending.type]: (state) => {
-      state.isLoading = true;
-      state.isError = '';
-    },
-    [createBoard.rejected.type]: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.isError = action.payload;
-    },
+    [createBoard.pending.type]: loaderHandler,
+    [createBoard.rejected.type]: errorHandler,
     [getUsersBoardSlice.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
       state.isLoading = false;
       state.isError = '';
       state.usersTeam = action.payload;
     },
-    [getUsersBoardSlice.pending.type]: (state) => {
-      state.isLoading = true;
-      state.isError = '';
-    },
-    [getUsersBoardSlice.rejected.type]: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.isError = action.payload;
-    },
+    [getUsersBoardSlice.pending.type]: loaderHandler,
+    [getUsersBoardSlice.rejected.type]: errorHandler,
     [getBoards.fulfilled.type]: (state, action: PayloadAction<Board[]>) => {
       state.isLoadingBoardsPage = false;
       state.isLoading = false;
@@ -89,13 +87,11 @@ export const boardSlice = createSlice({
     },
     [getBoards.pending.type]: (state) => {
       state.isLoadingBoardsPage = true;
-      state.isLoading = true;
-      state.isError = '';
+      loaderHandler(state);
     },
     [getBoards.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoadingBoardsPage = false;
-      state.isLoading = false;
-      state.isError = action.payload;
+      errorHandler(state, action);
     },
     [getBoardColumns.fulfilled.type]: (state, action: PayloadAction<Column[]>) => {
       state.isLoadingBoardPage = false;
@@ -105,27 +101,19 @@ export const boardSlice = createSlice({
     },
     [getBoardColumns.pending.type]: (state) => {
       state.isLoadingBoardPage = true;
-      state.isLoading = true;
-      state.isError = '';
+      loaderHandler(state);
     },
     [getBoardColumns.rejected.type]: (state, action: PayloadAction<string>) => {
       state.isLoadingBoardPage = false;
-      state.isLoading = false;
-      state.isError = action.payload;
+      errorHandler(state, action);
     },
     [getTeammatesByBoardId.fulfilled.type]: (state, action: PayloadAction<string[]>) => {
       state.isLoading = false;
       state.isError = '';
       state.teammates = action.payload;
     },
-    [getTeammatesByBoardId.pending.type]: (state) => {
-      state.isLoading = true;
-      state.isError = '';
-    },
-    [getTeammatesByBoardId.rejected.type]: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.isError = action.payload;
-    },
+    [getTeammatesByBoardId.pending.type]: loaderHandler,
+    [getTeammatesByBoardId.rejected.type]: errorHandler,
   },
 });
 
