@@ -1,3 +1,5 @@
+import { Button } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoardId } from 'app/reducers/boardSlice';
 import React, { useEffect } from 'react';
@@ -7,6 +9,7 @@ import { quantityTeammates } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
 import keyCreator from 'utils/keyCreator/keyCreator';
 import './BoardList.scss';
+import { deleteBoard } from 'utils/API/delete-board';
 
 const BoardList = () => {
   const dispatch = useAppDispatch();
@@ -48,18 +51,31 @@ const BoardList = () => {
     }
   };
 
+  const handleClickDeleteBoard = async (boardId: string) => {
+    await dispatch(deleteBoard(boardId));
+    await dispatch(getBoards());
+  };
+
   const boardList = boards.map((item) => (
-    <div key={item._id} className="card-item" onClick={() => handleClickOpen(item._id)}>
-      <h3>Board title:</h3>
-      <div>{item.title}</div>
-      <h3>Created by:</h3>
-      <div>{item.owner}</div>
-      {item.users.length !== 0 && (
-        <>
-          <h3>Teammates:</h3>
-          <div>{createTeammatesList(item.users)}</div>
-        </>
-      )}
+    <div key={item._id} className="card-item">
+      <div onClick={() => handleClickOpen(item._id)}>
+        <h3>Board title:</h3>
+        <div>{item.title}</div>
+        <h3>Created by:</h3>
+        <div>{item.owner}</div>
+        {item.users.length !== 0 && (
+          <>
+            <h3>Teammates:</h3>
+            <div>{createTeammatesList(item.users)}</div>
+          </>
+        )}
+      </div>
+      <Button
+        shape="circle"
+        icon={<DeleteOutlined />}
+        danger
+        onClick={() => handleClickDeleteBoard(item._id)}
+      ></Button>
     </div>
   ));
 

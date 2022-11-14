@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createBoard } from 'utils/API/create-board';
+import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
@@ -128,6 +129,9 @@ export const boardSlice = createSlice({
     [deleteBoardColumn.fulfilled.type]: dataHandler,
     [deleteBoardColumn.pending.type]: loaderHandler,
     [deleteBoardColumn.rejected.type]: errorHandler,
+    [deleteBoard.fulfilled.type]: dataHandler,
+    [deleteBoard.pending.type]: loaderHandler,
+    [deleteBoard.rejected.type]: errorHandler,
   },
 });
 

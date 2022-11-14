@@ -12,9 +12,7 @@ import { deleteBoardColumn } from 'utils/API/delete-board-column';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
-  const { columns, isLoadingBoardPage, boardId, isLoading } = useAppSelector(
-    (state) => state.board
-  );
+  const { columns, isLoadingBoardPage, boardId } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
