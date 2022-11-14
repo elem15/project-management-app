@@ -1,8 +1,9 @@
-import { Image, Button, Card, Row, Typography } from 'antd';
-import Col from 'antd/es/grid/col';
+import { Button, Card, Typography } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { EN, RU } from 'utils/const/app';
+import { ROUTES } from '../../utils/const/routes';
 import './Welcome.scss';
 
 function Welcome() {
@@ -15,7 +16,11 @@ function Welcome() {
             {RU.app_title}
           </Title>
           <p className="section__title_subheading">{RU.app_subtitle}</p>
-          <Button type="primary">На главную</Button>
+          <Link to={ROUTES.HOME_PAGE}>
+            <Button type="primary" className="to__main">
+              На главную
+            </Button>
+          </Link>
         </div>
         <div className="section__image"></div>
       </section>
@@ -42,7 +47,7 @@ function Welcome() {
             <div className="teammate__item_img">
               <img src="yuri.jpg" />
             </div>
-            <Meta title={RU.teammate3} />
+            <h4 className="teammate__item_name">{RU.teammate3}</h4>
           </Card>
         </div>
       </section>
