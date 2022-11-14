@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createBoard } from 'utils/API/create-board';
+import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
@@ -47,6 +48,11 @@ const initialState: BoardType = {
   columns: [],
   teammates: [],
   boardId: '',
+};
+
+const dataHandler = (state: BoardType) => {
+  state.isLoading = false;
+  state.isError = '';
 };
 
 const loaderHandler = (state: BoardType) => {
@@ -119,6 +125,9 @@ export const boardSlice = createSlice({
     },
     [getTeammatesByBoardId.pending.type]: loaderHandler,
     [getTeammatesByBoardId.rejected.type]: errorHandler,
+    [deleteBoardColumn.fulfilled.type]: dataHandler,
+    [deleteBoardColumn.pending.type]: loaderHandler,
+    [deleteBoardColumn.rejected.type]: errorHandler,
   },
 });
 

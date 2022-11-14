@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
 import { createColumn } from 'utils/API/create-column';
-import { getBoardColumns } from 'utils/API/get-board-columns';
 import { addBoardId } from 'app/reducers/boardSlice';
 import keyCreator from 'utils/keyCreator/keyCreator';
 
