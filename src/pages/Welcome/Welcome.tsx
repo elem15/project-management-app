@@ -31,37 +31,45 @@ function Welcome() {
         </div>
         <div className="teammates">
           <div className="teammates__item">
-            <a
-              href="http://github.com/dab10"
-              className="teammates__item_github"
-              target="__blank"
-            ></a>
-            <div className="teammate__item_img">
-              <img src="denis.jpg" />
-            </div>
-            <h4 className="teammates__item_name">{RU.teammate1}</h4>
+            <h4 className="teammates__item_name">
+              {RU.teammate1}
+              <a
+                href="http://github.com/dab10"
+                className="teammates__item_github"
+                target="__blank"
+              ></a>
+            </h4>
+            <ul>
+              <li>Канбан-доска</li>
+              <li>Взаимодействие с api</li>
+            </ul>
           </div>
           <div className="teammates__item">
-            <a
-              href="http://github.com/elem15"
-              className="teammates__item_github"
-              target="__blank"
-            ></a>
-            <div className="teammate__item_img">
-              <img src="mikhail.jpg" />
-            </div>
-            <h4 className="teammates__item_name">{RU.teammate2}</h4>
+            <h4 className="teammates__item_name">
+              {RU.teammate2}
+              <a
+                href="http://github.com/elem15"
+                className="teammates__item_github"
+                target="__blank"
+              ></a>
+            </h4>
+            <ul>
+              <li>Регистрация/авторизация</li>
+              <li>Взаимодействие с api</li>
+            </ul>
           </div>
           <div className="teammates__item">
-            <a
-              href="http://github.com/labatsevich"
-              className="teammates__item_github"
-              target="__blank"
-            ></a>
-            <div className="teammate__item_img">
-              <img src="yuri.jpg" />
-            </div>
-            <h4 className="teammates__item_name">{RU.teammate3}</h4>
+            <h4 className="teammates__item_name">
+              {RU.teammate3}
+              <a
+                href="http://github.com/labatsevich"
+                className="teammates__item_github"
+                target="__blank"
+              ></a>
+            </h4>
+            <ul>
+              <li>Страницы - главная</li>
+            </ul>
           </div>
         </div>
       </section>
