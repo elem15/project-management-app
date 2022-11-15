@@ -26,11 +26,16 @@
 .nav{
   display: flex;
    margin: 0;
+   align-items: center;
 
   &__link{
     color: whitesmoke;
     font-weight: 500;
     padding: 1rem .5rem;
+
+    &_user{
+      color: violet;
+    }
   }
 }
 

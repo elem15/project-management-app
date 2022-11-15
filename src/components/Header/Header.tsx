@@ -56,15 +56,17 @@ function Header() {
           Home
         </Link>
         {token ? (
-          <div>
+          <ul className="nav">
             <Link to={ROUTES.HOME_PAGE} className="nav__link">
               Go to Main Page
             </Link>
-            {login}
-            <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
+            <Link to="/profile" className="nav__link nav__link_user">
+              {login}
+            </Link>
+            <Link to={ROUTES.TEMPORARY_BOARD} className="nav__link">
               Board
             </Link>
-            <Link to={ROUTES.YOUR_BOARDS} className="page-name">
+            <Link to={ROUTES.YOUR_BOARDS} className="nav__link">
               BoardList
             </Link>
             <AddModalCreateBoard
@@ -75,7 +77,7 @@ function Header() {
               objField={'boardTitle'}
             />
             <Button onClick={handleSignOut}>Sign Out</Button>
-          </div>
+          </ul>
         ) : (
           <ul className="nav">
             <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">

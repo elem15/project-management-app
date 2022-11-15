@@ -8,7 +8,7 @@ import './Welcome.scss';
 function Welcome() {
   const { Title } = Typography;
   return (
-    <main>
+    <>
       <section className="section section__intro">
         <div className="section__title">
           <Title level={2} className="section__title_heading">
@@ -73,7 +73,7 @@ function Welcome() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }
 
