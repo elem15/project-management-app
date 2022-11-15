@@ -1,5 +1,4 @@
-import { Button, Card, Typography } from 'antd';
-import Meta from 'antd/lib/card/Meta';
+import { Button, Typography } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { EN, RU } from 'utils/const/app';
@@ -9,7 +8,7 @@ import './Welcome.scss';
 function Welcome() {
   const { Title } = Typography;
   return (
-    <>
+    <main>
       <section className="section section__intro">
         <div className="section__title">
           <Title level={2} className="section__title_heading">
@@ -31,27 +30,42 @@ function Welcome() {
           </Title>
         </div>
         <div className="teammates">
-          <Card hoverable bordered={false} className="teammates__item">
+          <div className="teammates__item">
+            <a
+              href="http://github.com/dab10"
+              className="teammates__item_github"
+              target="__blank"
+            ></a>
             <div className="teammate__item_img">
               <img src="denis.jpg" />
             </div>
-            <Meta title={RU.teammate1} />
-          </Card>
-          <Card hoverable bordered={false} className="teammates__item">
+            <h4 className="teammates__item_name">{RU.teammate1}</h4>
+          </div>
+          <div className="teammates__item">
+            <a
+              href="http://github.com/elem15"
+              className="teammates__item_github"
+              target="__blank"
+            ></a>
             <div className="teammate__item_img">
               <img src="mikhail.jpg" />
             </div>
-            <Meta title={RU.teammate2} />
-          </Card>
-          <Card hoverable bordered={false} className="teammates__item">
+            <h4 className="teammates__item_name">{RU.teammate2}</h4>
+          </div>
+          <div className="teammates__item">
+            <a
+              href="http://github.com/labatsevich"
+              className="teammates__item_github"
+              target="__blank"
+            ></a>
             <div className="teammate__item_img">
               <img src="yuri.jpg" />
             </div>
-            <h4 className="teammate__item_name">{RU.teammate3}</h4>
-          </Card>
+            <h4 className="teammates__item_name">{RU.teammate3}</h4>
+          </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }
 

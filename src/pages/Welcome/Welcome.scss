@@ -2,75 +2,146 @@
   color: black;
   text-decoration: none;
   transition: 0.5s;
-    &:hover {
-      color:darkcyan
-    } 
+
+  &:hover {
+    color: darkcyan
+  }
 }
 
-.section{
-  &__intro{
+.section {
+  max-width: 1920px;
+  width: 100%;
+  margin: 0 auto;
+
+  &:first-of-type {
+    padding-top: 3rem;
+  }
+
+  &__intro {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    & .section__title{
+    padding: 0 1rem;
+
+    & .section__title {
       padding-top: 10rem;
     }
   }
 
-  &__team{
+  &__team {
     padding: 0 0 2rem;
 
-    & .section__title{
+    & .section__title {
       padding-top: 2rem;
     }
   }
 
-  &__title{
+  &__title {
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
 
-    &_heading{
+    &_heading {
       padding: 1rem 0 .5rem;
     }
-    &_subheading{
+
+    &_subheading {
       font-size: 1rem;
       padding: 0 0 1rem;
     }
 
-  h2{
-    text-transform: uppercase;
-    width: 100%;
-    color: #595959;
-    font-weight: 700;
-    text-align: left;
-  }
+    h2 {
+      text-transform: uppercase;
+      width: 100%;
+      color: #595959;
+      font-weight: 700;
+      text-align: left;
+    }
 
   }
-  &__image{
-      background: url(../../media/board.png) no-repeat center;
-      background-size: contain;
-      height: 600px;
-      width: 100%;
-    }
+
+  &__image {
+    background: url(../../media/board.png) no-repeat center;
+    background-size: contain;
+    height: 600px;
+    width: 100%;
+  }
 }
 
-.teammates{
+.teammates {
   display: flex;
+  padding-top: 2rem;
   justify-content: center;
   gap: 3rem;
 
-  &__item{
+  &__item {
+    display: flex;
+    position: relative;
+    flex-flow: column nowrap;
+    align-items: center;
     max-width: 240px;
     width: 100%;
+    transition: all .2s ease-in-out;
+    padding: 1rem 0;
 
-    img{
+    &:hover img {
+      transform: scale(1.025);
+    }
+
+    &_github {
+      position: absolute;
+      top: 1rem;
+      right: .25rem;
+      width: 2rem;
+      height: 2rem;
+      background: url("../../media/github.svg");
+      background-position: center;
+      background-size: cover;
+      opacity: .5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &_name {
+      font-size: 1rem;
+      color: #002960;
+      font-weight: 500;
+      padding-top: .5rem;
+    }
+
+    img {
+      display: block;
       border-radius: 50%;
+      border: 2px solid #eaeaea;
       overflow: hidden;
+      max-width: 170px;
+      margin: 0 auto;
+      transition: all .2s ease-in-out;
     }
   }
 }
 
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
 
+  .section__intro {
+    grid-template-columns: 1fr;
+
+    & .section__title {
+      order: 2;
+      padding-top: 1rem;
+    }
+
+    & .section__image{
+      height: 400px;
+    }
+  }
+
+
+
+  .teammates {
+    flex-flow: column nowrap;
+    align-items: center;
+  }
 }
