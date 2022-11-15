@@ -5,3 +5,4 @@ export const AUTH_SIGNIN = 'auth/signin';
 export const USERS = 'users/';
 export const BOARDS = 'boards/';
 export const COLUMNS = 'columns/';
+export const TASKS = 'tasks/';

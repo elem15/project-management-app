@@ -9,6 +9,7 @@ import { getBoardColumns } from 'utils/API/get-board-columns';
 import { boardIdLength } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
+import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
@@ -55,6 +56,15 @@ const Board: React.FC = () => {
         danger
         onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
       ></Button>
+      <AddModalCreateTask
+        typeButton={'primary'}
+        titleTextButton={'Add task'}
+        titleTextModal={'Add task'}
+        titleForm={'Task title'}
+        objField={'taskTitle'}
+        boardId={item.boardId}
+        columnId={item._id}
+      />
     </div>
   ));
 

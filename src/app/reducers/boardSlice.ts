@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createBoard } from 'utils/API/create-board';
+import { createTask } from 'utils/API/create-task';
 import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
+import { getTasks } from 'utils/API/get-tasks';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
 import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 
@@ -27,6 +29,17 @@ type Column = {
   boardId: string;
 };
 
+type Task = {
+  _id: string;
+  title: string;
+  order: string;
+  boardId: string;
+  columnId: string;
+  description: string;
+  userId: string;
+  users: string[];
+};
+
 type BoardType = {
   isLoadingBoardsPage: boolean;
   isLoadingBoardPage: boolean;
@@ -37,6 +50,7 @@ type BoardType = {
   columns: Column[];
   teammates: string[];
   boardId: string;
+  tasks: Task[][];
 };
 
 const initialState: BoardType = {
@@ -49,6 +63,7 @@ const initialState: BoardType = {
   columns: [],
   teammates: [],
   boardId: '',
+  tasks: [],
 };
 
 const dataHandler = (state: BoardType) => {
@@ -132,6 +147,16 @@ export const boardSlice = createSlice({
     [deleteBoard.fulfilled.type]: dataHandler,
     [deleteBoard.pending.type]: loaderHandler,
     [deleteBoard.rejected.type]: errorHandler,
+    [createTask.fulfilled.type]: dataHandler,
+    [createTask.pending.type]: loaderHandler,
+    [createTask.rejected.type]: errorHandler,
+    [getTasks.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+      state.isLoading = false;
+      state.isError = '';
+      state.tasks.push(action.payload);
+    },
+    [getTasks.pending.type]: loaderHandler,
+    [getTasks.rejected.type]: errorHandler,
   },
 });
 

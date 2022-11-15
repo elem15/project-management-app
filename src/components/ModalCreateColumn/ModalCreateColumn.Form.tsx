@@ -32,7 +32,7 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
       await dispatch(
         createColumn({
           title: values[props.objField],
-          order: String(keyCreator()),
+          order: '1',
           boardId: props.boardId,
         })
       );
