@@ -12,11 +12,6 @@ type StickyType = {
   offset: number;
 };
 
-type StickyType = {
-  sticky: boolean;
-  offset: number;
-};
-
 function Header() {
   const { login, token } = useAppSelector((state) => state.auth);
   const headerRef = useRef(null);
