@@ -29,7 +29,6 @@ export const getTeammatesByBoardId = createAsyncThunk(
       });
       const data: Board | BoardError = await response.json();
       if (!response.ok) {
-        dispatch(signOut());
         throw new Error(
           `Error! Status: ${(data as BoardError).statusCode}. Message: ${
             (data as BoardError).message

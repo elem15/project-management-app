@@ -25,7 +25,6 @@ export const getUsersBoardSlice = createAsyncThunk(
       });
       const data: User = await response.json();
       if (!response.ok) {
-        dispatch(signOut());
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
       return data;
