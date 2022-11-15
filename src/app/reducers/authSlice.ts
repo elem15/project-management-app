@@ -51,6 +51,7 @@ export type IAction = PayloadAction<
   ),
   SerializedError
 >;
+
 const errorHandler = (state: IAuthState, action: IAction) => {
   state.status = FAILED;
   state.errorMessage = action.payload as string;
@@ -84,6 +85,10 @@ export const authSlice = createSlice({
     },
     addAllUsers: (state, action: PayloadAction<User[]>) => {
       state.users = action.payload;
+    },
+    clearErrors: (state) => {
+      state.status = IDLE;
+      state.errorMessage = '';
     },
     setUser: (state, action: PayloadAction<User[]>) => {
       const users = action.payload;
@@ -125,6 +130,7 @@ export const {
   signOut,
   addAllUsers,
   setUser,
+  clearErrors,
 } = authSlice.actions;
 
 export const selectToken = (state: RootState) => state.auth.token;

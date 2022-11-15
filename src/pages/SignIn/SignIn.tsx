@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { signIn } from 'utils/API/sign-in';
 import { ROUTES } from 'utils/const/routes';
 import { Link, useNavigate } from 'react-router-dom';
+import { clearErrors } from 'app/reducers/authSlice';
 
 export type UserIn = {
   login: string;
@@ -21,6 +22,13 @@ const SignIn: React.FC = () => {
   useEffect(() => {
     token && navigate(ROUTES.HOME_PAGE);
   }, [navigate, token]);
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        dispatch(clearErrors());
+      }, 3000);
+    }
+  }, [errorMessage, dispatch]);
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
@@ -61,10 +69,7 @@ const SignIn: React.FC = () => {
           </Form.Item>
         </Row>
         <div>
-          You are not registered yet?{' '}
-          <Link to={ROUTES.SIGN_UP_PAGE} className="page-name">
-            SignUp
-          </Link>
+          You are not registered yet? <Link to={ROUTES.SIGN_UP_PAGE}>SignUp</Link>
         </div>
       </Form>
     </Row>

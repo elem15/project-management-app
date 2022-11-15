@@ -5,6 +5,7 @@ import { signUp } from 'utils/API/sign-up';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
+import { clearErrors } from 'app/reducers/authSlice';
 
 export type UserUp = {
   name: string;
@@ -25,6 +26,13 @@ const SignUp: React.FC = () => {
   useEffect(() => {
     token && navigate(ROUTES.HOME_PAGE);
   }, [navigate, token]);
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        dispatch(clearErrors());
+      }, 3000);
+    }
+  }, [errorMessage, dispatch]);
   return (
     <Row justify="center">
       <Form name="basic" onFinish={onFinish} autoComplete="off">
