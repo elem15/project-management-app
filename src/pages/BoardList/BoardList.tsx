@@ -1,3 +1,4 @@
+import { Card, Space, Spin } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -49,24 +50,36 @@ const BoardList = () => {
   };
 
   const boardList = boards.map((item) => (
-    <div key={item._id} className="card-item" onClick={() => handleClickOpen(item._id)}>
-      <h3>Board title:</h3>
-      <div>{item.title}</div>
+    <Card
+      key={item._id}
+      onClick={() => handleClickOpen(item._id)}
+      title={`Board title: ${item.title}`}
+      className="boards__item"
+      bordered
+    >
       <h3>Created by:</h3>
       <div>{item.owner}</div>
-      {item.users.length !== 0 && (
+      {item.users.length && (
         <>
           <h3>Teammates:</h3>
           <div>{createTeammatesList(item.users)}</div>
         </>
       )}
-    </div>
+    </Card>
   ));
 
   return (
     <>
       <h2>Your Boards</h2>
-      {isLoadingBoardsPage ? <h2>Loading...</h2> : <div className="list">{boardList}</div>}
+      <div className="boards">
+        {isLoadingBoardsPage ? (
+          <Space size="middle">
+            <Spin size="default" />
+          </Space>
+        ) : (
+          boardList
+        )}
+      </div>
     </>
   );
 };
