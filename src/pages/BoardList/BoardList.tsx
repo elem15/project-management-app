@@ -1,4 +1,4 @@
-import { Card, Space, Spin } from 'antd';
+import { Card } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Preloader } from 'components/Preloader/Preloader';
 import React, { useEffect } from 'react';
