@@ -1,5 +1,6 @@
 import { Card, Space, Spin } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { Preloader } from 'components/Preloader/Preloader';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBoardColumns } from 'utils/API/get-board-columns';
@@ -76,15 +77,7 @@ const BoardList = () => {
       >
         Your Boards
       </h2>
-      <div className="boards">
-        {isLoadingBoardsPage ? (
-          <Space size="middle">
-            <Spin size="default" />
-          </Space>
-        ) : (
-          boardList
-        )}
-      </div>
+      <div className="boards">{isLoadingBoardsPage ? <Preloader /> : boardList}</div>
     </>
   );
 };

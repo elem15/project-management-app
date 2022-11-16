@@ -3,23 +3,36 @@
   display: flex;
   flex: 0 0 auto;
   height: 4rem;
-  align-items: center;
   justify-content:space-around;
   background-color: #292A2D;
   width: 100%;
-}
-.footer-container {
-  display: flex;
-  justify-content: center;
-  gap: 5rem;
-  width: 100%;
+
+  &__container {
+    max-width: 1920px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 5rem;
+    width: 100%;
+  }
+
+  &__logo {
+    display: block;
+    background: url('../../media/rss_logo.svg') no-repeat;
+    background-size: contain;
+    width: 100px;
+    max-height: 100px;
+    height: 100%;
+  }
+
 }
 
-.footer-year {
+
+.footer__year {
   color: white;
 }
 
-.footer-github {
+.footer__github {
   text-decoration: none;
   color: white;
   transition: 0.5s;

@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
+import { Preloader } from 'components/Preloader/Preloader';
 import React, { useEffect } from 'react';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 
@@ -33,7 +34,7 @@ const Board: React.FC = () => {
     <>
       <h2>Board</h2>
       {isLoadingBoardPage ? (
-        <h2>Loading...</h2>
+        <Preloader />
       ) : (
         <div className="list">
           {columnsList}{' '}

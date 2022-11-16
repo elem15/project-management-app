@@ -5,6 +5,7 @@ import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
 import { createColumn } from 'utils/API/create-column';
 import { getBoardColumns } from 'utils/API/get-board-columns';
+import { Preloader } from 'components/Preloader/Preloader';
 
 type Values = {
   usersTeam: string[];
@@ -41,7 +42,7 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Preloader />
       ) : (
         <Form
           form={form}

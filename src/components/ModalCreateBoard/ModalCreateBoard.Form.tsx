@@ -6,6 +6,7 @@ import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
 import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 import { getBoards } from 'utils/API/get-boards';
+import { Preloader } from 'components/Preloader/Preloader';
 
 type Values = {
   usersTeam: string[];
@@ -60,7 +61,7 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Preloader />
       ) : (
         <Form
           form={form}
