@@ -11,7 +11,6 @@ import { ROUTES } from 'utils/const/routes';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
-import keyCreator from 'utils/keyCreator/keyCreator';
 import TaskList from 'pages/TaskList/TasksList';
 
 const Board: React.FC = () => {
