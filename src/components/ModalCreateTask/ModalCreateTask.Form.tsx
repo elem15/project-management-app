@@ -4,9 +4,9 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
-import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 import { createTask } from 'utils/API/create-task';
-import { getTasks } from 'utils/API/get-tasks';
+import { getTasks } from 'utils/API/get-tasks-by-board-id';
+import { addBoardId } from 'app/reducers/boardSlice';
 
 type Values = {
   teammates: string[][];
@@ -36,7 +36,6 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
 
   useEffect(() => {
     dispatch(getTeammatesByBoardId(props.boardId));
-    dispatch(getUsersBoardSlice());
   }, [dispatch, props.boardId]);
 
   const { teammates, isLoading } = useAppSelector((state) => state.board);
@@ -48,29 +47,20 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
 
   const onFinish = async (values: Values) => {
     form.resetFields();
-    const teammates = values.teammates.map((item) => item[0]);
     if (props.objField === 'taskTitle') {
-      console.log({
-        title: values[props.objField],
-        order: '1',
-        description: values.description ? values.description : '',
-        userId: login,
-        users: teammates ? teammates : [],
-        boardId: props.boardId,
-        columnId: props.columnId,
-      });
       dispatch(
         createTask({
           title: values[props.objField],
           order: 1,
-          description: values.description ? values.description : '',
+          description: values.description ? values.description : ' ',
           userId: login,
-          users: teammates ? teammates : [],
+          users: values.teammates ? values.teammates.flat() : [],
           boardId: props.boardId,
           columnId: props.columnId,
         })
       );
-      // await dispatch(getTasks({ boardId: props.boardId, columnId: props.columnId }));
+      // dispatch(addBoardId(props.boardId));
+      // await dispatch(getTasks(props.boardId));
       props.onCancel();
       router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
     }

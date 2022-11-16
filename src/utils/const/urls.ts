@@ -6,3 +6,4 @@ export const USERS = 'users/';
 export const BOARDS = 'boards/';
 export const COLUMNS = 'columns/';
 export const TASKS = 'tasks/';
+export const TASKS_SET = 'tasksSet/';

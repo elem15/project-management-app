@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
-import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
+import { BASE_URL, BOARDS, COLUMNS, TASKS, TASKS_SET } from 'utils/const/urls';
 
 type Task = {
   _id: string;
@@ -14,11 +14,6 @@ type Task = {
   users: string[];
 };
 
-type TaskId = {
-  boardId: string;
-  columnId: string;
-};
-
 type TaskError = {
   statusCode: string;
   message: string;
@@ -26,20 +21,16 @@ type TaskError = {
 
 export const getTasks = createAsyncThunk(
   'board/getTasks',
-  async (taskId: TaskId, { rejectWithValue, dispatch, getState }) => {
-    const { boardId, columnId } = taskId;
+  async (boardId: string, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
     try {
-      const response: Response = await fetch(
-        BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/` + TASKS,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: state.auth.token,
-          },
-        }
-      );
+      const response: Response = await fetch(BASE_URL + TASKS_SET + `${boardId}/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: state.auth.token,
+        },
+      });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
         dispatch(signOut());

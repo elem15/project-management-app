@@ -10,10 +10,12 @@ import { boardIdLength } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
+import { getTasks } from 'utils/API/get-tasks-by-board-id';
+import keyCreator from 'utils/keyCreator/keyCreator';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
-  const { columns, isLoadingBoardPage, boardId } = useAppSelector((state) => state.board);
+  const { columns, isLoadingBoardPage, boardId, tasks } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
@@ -35,11 +37,21 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBoardColumns(boardIdCurrent));
+    dispatch(getTasks(boardIdCurrent));
   }, [location]);
 
   const handleClickDeleteColumn = async (columnId: string, boardId: string) => {
     await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
     await dispatch(getBoardColumns(boardId));
+  };
+
+  const createTaskList = (taskId: string) => {
+    const tasksList = tasks.map((task) => {
+      if (task.columnId === taskId) {
+        return <div key={keyCreator()}>{task.title}</div>;
+      }
+    });
+    return <div>{tasksList}</div>;
   };
 
   const columnsList = columns.map((item) => (
@@ -56,6 +68,7 @@ const Board: React.FC = () => {
         danger
         onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
       ></Button>
+      <div>{createTaskList(item._id)}</div>
       <AddModalCreateTask
         typeButton={'primary'}
         titleTextButton={'Add task'}
