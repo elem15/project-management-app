@@ -12,6 +12,7 @@ import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import keyCreator from 'utils/keyCreator/keyCreator';
+import TaskList from 'pages/TaskList/TasksList';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
@@ -45,15 +46,6 @@ const Board: React.FC = () => {
     await dispatch(getBoardColumns(boardId));
   };
 
-  const createTaskList = (taskId: string) => {
-    const tasksList = tasks.map((task) => {
-      if (task.columnId === taskId) {
-        return <div key={keyCreator()}>{task.title}</div>;
-      }
-    });
-    return <div>{tasksList}</div>;
-  };
-
   const columnsList = columns.map((item) => (
     <div key={item._id} className="card-item">
       <h3>Column title:</h3>
@@ -68,7 +60,7 @@ const Board: React.FC = () => {
         danger
         onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
       ></Button>
-      <div>{createTaskList(item._id)}</div>
+      <TaskList tasks={tasks} columnId={item._id} />
       <AddModalCreateTask
         typeButton={'primary'}
         titleTextButton={'Add task'}
