@@ -9,7 +9,7 @@ import { createTask } from 'utils/API/create-task';
 import { getTasks } from 'utils/API/get-tasks';
 
 type Values = {
-  teammates: string[];
+  teammates: string[][];
   taskTitle: string;
   description: string;
 };
@@ -48,23 +48,24 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
 
   const onFinish = async (values: Values) => {
     form.resetFields();
+    const teammates = values.teammates.map((item) => item[0]);
     if (props.objField === 'taskTitle') {
       console.log({
         title: values[props.objField],
         order: '1',
         description: values.description ? values.description : '',
         userId: login,
-        users: values.teammates ? values.teammates : [],
+        users: teammates ? teammates : [],
         boardId: props.boardId,
         columnId: props.columnId,
       });
       dispatch(
         createTask({
           title: values[props.objField],
-          order: '1',
+          order: 1,
           description: values.description ? values.description : '',
           userId: login,
-          users: values.teammates ? values.teammates : [],
+          users: teammates ? teammates : [],
           boardId: props.boardId,
           columnId: props.columnId,
         })

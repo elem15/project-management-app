@@ -4,7 +4,7 @@ import { BOARDS, BASE_URL, COLUMNS, TASKS } from 'utils/const/urls';
 
 type Task = {
   title: string;
-  order: string;
+  order: number;
   description: string;
   userId: string;
   users: string[];
@@ -21,7 +21,6 @@ export const createTask = createAsyncThunk(
       const response = await fetch(
         BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/` + TASKS,
         {
-          mode: 'no-cors',
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
