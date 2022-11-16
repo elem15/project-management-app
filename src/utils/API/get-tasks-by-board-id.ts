@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
-import { BASE_URL, BOARDS, COLUMNS, TASKS, TASKS_SET } from 'utils/const/urls';
+import { BASE_URL, TASKS_SET } from 'utils/const/urls';
 
 type Task = {
   _id: string;
@@ -19,8 +19,8 @@ type TaskError = {
   message: string;
 };
 
-export const getTasks = createAsyncThunk(
-  'board/getTasks',
+export const getTasksByBoardId = createAsyncThunk(
+  'board/getTasksByBoardId',
   async (boardId: string, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;

@@ -5,7 +5,7 @@ import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
-import { getTasks } from 'utils/API/get-tasks-by-board-id';
+import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
 import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 
@@ -150,13 +150,13 @@ export const boardSlice = createSlice({
     [createTask.fulfilled.type]: dataHandler,
     [createTask.pending.type]: loaderHandler,
     [createTask.rejected.type]: errorHandler,
-    [getTasks.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+    [getTasksByBoardId.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
       state.isLoading = false;
       state.isError = '';
       state.tasks = action.payload;
     },
-    [getTasks.pending.type]: loaderHandler,
-    [getTasks.rejected.type]: errorHandler,
+    [getTasksByBoardId.pending.type]: loaderHandler,
+    [getTasksByBoardId.rejected.type]: errorHandler,
   },
 });
 

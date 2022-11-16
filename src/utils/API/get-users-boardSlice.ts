@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, USERS } from 'utils/const/urls';
 
@@ -13,7 +12,7 @@ type User = {
 
 export const getUsersBoardSlice = createAsyncThunk(
   'board/getUsersBoardSlice',
-  async (_, { rejectWithValue, dispatch, getState }) => {
+  async (_, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
     try {

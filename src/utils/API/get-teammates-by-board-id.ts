@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, BOARDS } from 'utils/const/urls';
 
@@ -17,7 +16,7 @@ type BoardError = {
 
 export const getTeammatesByBoardId = createAsyncThunk(
   'board/getTeammatesByBoardId',
-  async (boardId: string, { rejectWithValue, dispatch, getState }) => {
+  async (boardId: string, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
     try {

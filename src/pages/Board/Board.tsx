@@ -10,7 +10,7 @@ import { boardIdLength } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
-import { getTasks } from 'utils/API/get-tasks-by-board-id';
+import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import keyCreator from 'utils/keyCreator/keyCreator';
 
 const Board: React.FC = () => {
@@ -37,7 +37,7 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBoardColumns(boardIdCurrent));
-    dispatch(getTasks(boardIdCurrent));
+    dispatch(getTasksByBoardId(boardIdCurrent));
   }, [location]);
 
   const handleClickDeleteColumn = async (columnId: string, boardId: string) => {

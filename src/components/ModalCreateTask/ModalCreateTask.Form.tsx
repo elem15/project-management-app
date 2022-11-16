@@ -5,7 +5,6 @@ import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
 import { createTask } from 'utils/API/create-task';
-import { getTasks } from 'utils/API/get-tasks-by-board-id';
 import { addBoardId } from 'app/reducers/boardSlice';
 
 type Values = {
@@ -48,7 +47,7 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const onFinish = async (values: Values) => {
     form.resetFields();
     if (props.objField === 'taskTitle') {
-      dispatch(
+      await dispatch(
         createTask({
           title: values[props.objField],
           order: 1,
@@ -59,8 +58,7 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
           columnId: props.columnId,
         })
       );
-      // dispatch(addBoardId(props.boardId));
-      // await dispatch(getTasks(props.boardId));
+      dispatch(addBoardId(props.boardId));
       props.onCancel();
       router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
     }
