@@ -5,5 +5,7 @@ export const ROUTES = {
   SIGN_IN_PAGE: '/signIn',
   PROFILE: '/profile',
   NOT_FOUND_PAGE: '/notFoundPage',
+  YOUR_BOARDS: '/boards',
   ANY_PAGE: '*',
+  TEMPORARY_BOARD: '/tempBoard',
 };

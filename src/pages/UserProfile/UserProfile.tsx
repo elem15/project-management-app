@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './UserProfile.scss';
-import { Button, Form, Input, Modal, Row } from 'antd';
+import { Button, Form, Input, Modal, Row, Typography } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
@@ -35,70 +35,72 @@ const UserProfile: React.FC = () => {
     }
   }, [errorMessage, dispatch]);
   return (
-    <Row justify="center">
-      <Form name="basic" onFinish={onFinish} autoComplete="off">
-        <h2>Edit Profile</h2>
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[
-            { required: true, message: 'Please input your name!' },
-            { type: 'string', min: 3, message: 'Name must be at least 3 characters' },
-          ]}
-        >
-          <Input placeholder={name} />
-        </Form.Item>
-        <Form.Item
-          label="Login"
-          name="login"
-          rules={[
-            { required: true, message: 'Please input your login!' },
-            { type: 'string', min: 3, message: 'Login must be at least 3 characters' },
-          ]}
-        >
-          <Input placeholder={login} />
-        </Form.Item>
-        <Form.Item
-          {...(errorMessage && {
-            help: errorMessage,
-            validateStatus: 'error',
-          })}
-          label="Password"
-          name="password"
-          rules={[
-            { required: true, message: 'Please input your password!' },
-            { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
-            {
-              message: 'Only numbers and english characters without space can be entered',
-              pattern: /^[A-Za-z0-9_]+$/,
-            },
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-        <Row justify="center">
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
+    <main>
+      <Row justify="center">
+        <Form name="basic" onFinish={onFinish} autoComplete="off">
+          <Typography.Title level={2}>Edit Profile</Typography.Title>
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[
+              { required: true, message: 'Please input your name!' },
+              { type: 'string', min: 3, message: 'Name must be at least 3 characters' },
+            ]}
+          >
+            <Input placeholder={name} />
           </Form.Item>
-        </Row>
-        <Row justify="center">
-          <Button type="primary" danger onClick={() => setDeleteModal(true)}>
-            Delete account
-          </Button>
-        </Row>
-      </Form>
-      <Modal title="Account will be permanently deleted!" open={deleteModal} footer={null}>
-        <p>Are you sure?</p>
-        <Row justify="end">
-          <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
-          <Button type="primary" danger onClick={() => dispatch(deleteUser())}>
-            Delete account
-          </Button>
-        </Row>
-      </Modal>
-    </Row>
+          <Form.Item
+            label="Login"
+            name="login"
+            rules={[
+              { required: true, message: 'Please input your login!' },
+              { type: 'string', min: 3, message: 'Login must be at least 3 characters' },
+            ]}
+          >
+            <Input placeholder={login} />
+          </Form.Item>
+          <Form.Item
+            {...(errorMessage && {
+              help: errorMessage,
+              validateStatus: 'error',
+            })}
+            label="Password"
+            name="password"
+            rules={[
+              { required: true, message: 'Please input your password!' },
+              { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+              {
+                message: 'Only numbers and english characters without space can be entered',
+                pattern: /^[A-Za-z0-9_]+$/,
+              },
+            ]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Row justify="center">
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Row>
+          <Row justify="center">
+            <Button type="primary" danger onClick={() => setDeleteModal(true)}>
+              Delete account
+            </Button>
+          </Row>
+        </Form>
+        <Modal title="Account will be permanently deleted!" open={deleteModal} footer={null}>
+          <p>Are you sure?</p>
+          <Row justify="end">
+            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+            <Button type="primary" danger onClick={() => dispatch(deleteUser())}>
+              Delete account
+            </Button>
+          </Row>
+        </Modal>
+      </Row>
+    </main>
   );
 };
 
