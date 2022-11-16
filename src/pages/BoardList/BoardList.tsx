@@ -57,8 +57,7 @@ const BoardList = () => {
       className="boards__item"
       bordered
     >
-      <h3>Created by:</h3>
-      <div>{item.owner}</div>
+      <h3>Created by: {item.owner}</h3>
       {item.users.length && (
         <>
           <h3>Teammates:</h3>
@@ -70,7 +69,13 @@ const BoardList = () => {
 
   return (
     <>
-      <h2>Your Boards</h2>
+      <h2
+        style={{
+          padding: '1rem',
+        }}
+      >
+        Your Boards
+      </h2>
       <div className="boards">
         {isLoadingBoardsPage ? (
           <Space size="middle">
