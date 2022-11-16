@@ -27,9 +27,6 @@ function Header() {
               Go to Main Page &#160;
             </Link>
             {login} &#160;
-            <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
-              Board
-            </Link>
             <Link to={ROUTES.YOUR_BOARDS} className="page-name">
               BoardList
             </Link>
