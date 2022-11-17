@@ -4,14 +4,14 @@ import './Page404.scss';
 
 function Page404() {
   return (
-    <div>
+    <main>
       <h2>
         Page not found (404). Go to{' '}
         <Link to="/" className="homepage-link">
           Homepage
         </Link>
       </h2>
-    </div>
+    </main>
   );
 }
 
