@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
-import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
+import { BASE_URL, BOARDS } from 'utils/const/urls';
 
 type BoardError = {
   statusCode: string;

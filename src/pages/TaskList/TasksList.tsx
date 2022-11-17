@@ -2,6 +2,9 @@ import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
 import keyCreator from 'utils/keyCreator/keyCreator';
 import { DeleteOutlined } from '@ant-design/icons';
+import { useAppDispatch } from 'app/hooks';
+import { deleteColumnTask } from 'utils/API/delete-column-task';
+import { deleteTaskById } from 'app/reducers/boardSlice';
 
 type Task = {
   _id: string;
@@ -17,10 +20,12 @@ type Task = {
 type TaskListProps = {
   tasks: Task[];
   columnId: string;
+  boardId: string;
 };
 
 function TaskList(props: TaskListProps) {
   const [open, setOpen] = useState(false);
+  const dispatch = useAppDispatch();
 
   const showModal = () => {
     setOpen(true);
@@ -28,6 +33,11 @@ function TaskList(props: TaskListProps) {
 
   const hideModal = () => {
     setOpen(false);
+  };
+
+  const handleClickDeleteTask = async (taskId: string, columnId: string, boardId: string) => {
+    await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
+    dispatch(deleteTaskById(taskId));
   };
 
   const createTaskList = (taskId: string) => {
@@ -48,7 +58,11 @@ function TaskList(props: TaskListProps) {
               <p>Some contents...</p>
               <p>Some contents...</p>
             </Modal>
-            <Button icon={<DeleteOutlined />} danger></Button>
+            <Button
+              icon={<DeleteOutlined />}
+              onClick={() => handleClickDeleteTask(task._id, props.columnId, props.boardId)}
+              danger
+            ></Button>
           </div>
         );
       }

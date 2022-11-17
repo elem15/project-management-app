@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { addBoardId } from 'app/reducers/boardSlice';
+import { addBoardId, deleteColumnById } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -42,7 +42,7 @@ const Board: React.FC = () => {
 
   const handleClickDeleteColumn = async (columnId: string, boardId: string) => {
     await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
-    await dispatch(getBoardColumns(boardId));
+    dispatch(deleteColumnById(columnId));
   };
 
   const columnsList = columns.map((item) => (
@@ -59,7 +59,7 @@ const Board: React.FC = () => {
         danger
         onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
       ></Button>
-      <TaskList tasks={tasks} columnId={item._id} />
+      <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
       <AddModalCreateTask
         typeButton={'primary'}
         titleTextButton={'Add task'}

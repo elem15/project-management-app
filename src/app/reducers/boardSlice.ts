@@ -91,6 +91,18 @@ export const boardSlice = createSlice({
     addBoardId: (state, action: PayloadAction<string>) => {
       state.boardId = action.payload;
     },
+    deleteBoardById: (state, action: PayloadAction<string>) => {
+      const newBoards = state.boards.filter((item) => item._id !== action.payload);
+      state.boards = newBoards;
+    },
+    deleteColumnById: (state, action: PayloadAction<string>) => {
+      const newColumns = state.columns.filter((item) => item._id !== action.payload);
+      state.columns = newColumns;
+    },
+    deleteTaskById: (state, action: PayloadAction<string>) => {
+      const newTasks = state.tasks.filter((item) => item._id !== action.payload);
+      state.tasks = newTasks;
+    },
   },
   extraReducers: {
     [createBoard.fulfilled.type]: (state) => {
@@ -160,6 +172,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { addBoards, addBoardId } = boardSlice.actions;
+export const { addBoards, addBoardId, deleteBoardById, deleteColumnById, deleteTaskById } =
+  boardSlice.actions;
 
 export default boardSlice.reducer;

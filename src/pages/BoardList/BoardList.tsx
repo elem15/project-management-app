@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { addBoardId } from 'app/reducers/boardSlice';
+import { addBoardId, deleteBoardById } from 'app/reducers/boardSlice';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBoards } from 'utils/API/get-boards';
@@ -53,7 +53,7 @@ const BoardList = () => {
 
   const handleClickDeleteBoard = async (boardId: string) => {
     await dispatch(deleteBoard(boardId));
-    await dispatch(getBoards());
+    dispatch(deleteBoardById(boardId));
   };
 
   const boardList = boards.map((item) => (
