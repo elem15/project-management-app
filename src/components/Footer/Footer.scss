@@ -41,3 +41,22 @@
     color:darkcyan
   } 
 }
+
+@media screen and (max-width: 567px) {
+
+  .footer{
+    height: auto;
+
+    &__container{
+      padding-top: .5rem;
+      gap: 1rem;
+      flex-direction: column;
+    }
+
+    &__logo{
+      height: 50px;
+    }
+
+  }
+  
+}
