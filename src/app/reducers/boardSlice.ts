@@ -8,6 +8,7 @@ import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
 import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
+import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 
 type User = {
   login: string;
@@ -169,6 +170,9 @@ export const boardSlice = createSlice({
     },
     [getTasksByBoardId.pending.type]: loaderHandler,
     [getTasksByBoardId.rejected.type]: errorHandler,
+    [updateBoardColumnTitle.fulfilled.type]: dataHandler,
+    [updateBoardColumnTitle.pending.type]: loaderHandler,
+    [updateBoardColumnTitle.rejected.type]: errorHandler,
   },
 });
 
