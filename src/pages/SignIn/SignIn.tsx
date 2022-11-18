@@ -6,6 +6,7 @@ import { signIn } from 'utils/API/sign-in';
 import { ROUTES } from 'utils/const/routes';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearErrors } from 'app/reducers/authSlice';
+import { useTranslation } from 'react-i18next';
 
 export type UserIn = {
   login: string;
@@ -13,6 +14,7 @@ export type UserIn = {
 };
 
 const SignIn: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { token, errorMessage } = useAppSelector((state) => state.auth);
@@ -33,9 +35,9 @@ const SignIn: React.FC = () => {
     <main>
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
-          <Typography.Title level={2}>Sign in</Typography.Title>
+          <Typography.Title level={2}>{t('header.signIn')}</Typography.Title>
           <Form.Item
-            label="Login"
+            label={t('sign.login')}
             name="login"
             rules={[
               { required: true, message: 'Please input your login!' },
@@ -49,7 +51,7 @@ const SignIn: React.FC = () => {
               help: errorMessage,
               validateStatus: 'error',
             })}
-            label="Password"
+            label={t('sign.password')}
             name="password"
             rules={[
               { required: true, message: 'Please input your password!' },
@@ -65,12 +67,12 @@ const SignIn: React.FC = () => {
           <Row justify="center">
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                {t('sign.submit')}
               </Button>
             </Form.Item>
           </Row>
           <div>
-            You are not registered yet? <Link to={ROUTES.SIGN_UP_PAGE}>SignUp</Link>
+            {t('sign.regQuestion')} <Link to={ROUTES.SIGN_UP_PAGE}>{t('header.signUp')}</Link>
           </div>
         </Form>
       </Row>
