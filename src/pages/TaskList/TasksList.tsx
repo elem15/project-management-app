@@ -5,6 +5,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch } from 'app/hooks';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { deleteTaskById } from 'app/reducers/boardSlice';
+import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Form';
 
 type Task = {
   _id: string;
@@ -48,15 +49,22 @@ function TaskList(props: TaskListProps) {
             <Button onClick={showModal}>{task.title}</Button>
             <Modal
               destroyOnClose={true}
-              title="Example"
+              title="Task"
               open={open}
               onOk={hideModal}
               onCancel={hideModal}
               footer={null}
             >
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p>
+              <AddModalEditTask
+                titleForm={'Task title'}
+                objField={'taskTitle'}
+                onCancel={hideModal}
+                boardId={props.boardId}
+                columnId={props.columnId}
+                taskId={task._id}
+                title={task.title}
+                description={task.description}
+              />
             </Modal>
             <Button
               icon={<DeleteOutlined />}
