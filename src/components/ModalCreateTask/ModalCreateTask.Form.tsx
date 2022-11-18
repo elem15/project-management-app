@@ -33,13 +33,13 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
 
-  useEffect(() => {
-    dispatch(getTeammatesByBoardId(props.boardId));
-  }, [dispatch, props.boardId]);
+  // useEffect(() => {
+  //   dispatch(getTeammatesByBoardId(props.boardId));
+  // }, [dispatch, props.boardId]);
 
-  const { teammates, isLoading } = useAppSelector((state) => state.board);
-  const usersTeamFilter = teammates.map((item) => {
-    return { label: item, value: item };
+  const { usersTeam, isLoading } = useAppSelector((state) => state.board);
+  const usersTeamFilter = usersTeam.map((item) => {
+    return { label: item.login, value: item.login };
   });
 
   const options: Option[] = usersTeamFilter;

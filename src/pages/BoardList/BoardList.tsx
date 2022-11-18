@@ -5,9 +5,7 @@ import { addBoardId, deleteBoardById } from 'app/reducers/boardSlice';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBoards } from 'utils/API/get-boards';
-import { quantityTeammates } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
-import keyCreator from 'utils/keyCreator/keyCreator';
 import './BoardList.scss';
 import { deleteBoard } from 'utils/API/delete-board';
 
@@ -30,27 +28,6 @@ const BoardList = () => {
     }
   };
 
-  // const createTeammatesList = (users: string[]) => {
-  //   if (users.length > quantityTeammates) {
-  //     const partUsers = users
-  //       .slice(0, quantityTeammates)
-  //       .map((item: string) => <div key={keyCreator()}>{item}</div>);
-  //     return (
-  //       <>
-  //         <div>{partUsers}</div>
-  //         <div>and other</div>
-  //       </>
-  //     );
-  //   } else {
-  //     const allUsers = users.map((item: string) => <div key={keyCreator()}>{item}</div>);
-  //     return (
-  //       <>
-  //         <div>{allUsers}</div>
-  //       </>
-  //     );
-  //   }
-  // };
-
   const handleClickDeleteBoard = async (boardId: string) => {
     await dispatch(deleteBoard(boardId));
     dispatch(deleteBoardById(boardId));
@@ -65,12 +42,6 @@ const BoardList = () => {
         <div>{JSON.parse(item.title).description}</div>
         <h3>Created by:</h3>
         <div>{item.owner}</div>
-        {/* {item.users.length !== 0 && (
-          <>
-            <h3>Teammates:</h3>
-            <div>{createTeammatesList(item.users)}</div>
-          </>
-        )} */}
       </div>
       <Button
         shape="circle"

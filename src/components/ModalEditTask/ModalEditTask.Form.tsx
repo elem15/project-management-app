@@ -35,7 +35,7 @@ export const AddModalEditTask = (props: PropsCreateBoardForm) => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
 
-  const { usersTeam, isLoading } = useAppSelector((state) => state.board);
+  const { usersTeam, isLoading, tasks } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
     return { label: item.name, value: item.login };
   });
@@ -43,7 +43,6 @@ export const AddModalEditTask = (props: PropsCreateBoardForm) => {
   const options: Option[] = usersTeamFilter;
 
   const onFinish = async (values: Values) => {
-    console.log(values);
     form.resetFields();
     if (props.objField === 'taskTitle') {
       await dispatch(

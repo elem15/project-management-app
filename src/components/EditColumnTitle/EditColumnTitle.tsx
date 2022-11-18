@@ -24,7 +24,6 @@ export const EditColumnTitle = (props: Props) => {
 
   const titleInitial = title;
   const handleOnClickSubmit = (values: Values) => {
-    console.log(values);
     dispatch(
       updateBoardColumnTitle({
         title: values.title,
