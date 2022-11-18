@@ -10,6 +10,7 @@ import { getBoards } from 'utils/API/get-boards';
 type Values = {
   usersTeam: string[];
   boardTitle: string;
+  description: string;
 };
 
 type PropsCreateBoardForm = {
@@ -30,23 +31,23 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(getUsersBoardSlice());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getUsersBoardSlice());
+  // }, [dispatch]);
 
-  const { usersTeam, isLoading } = useAppSelector((state) => state.board);
-  const usersTeamFilter = usersTeam.map((item) => {
-    return { label: item.name, value: item.login };
-  });
+  const { isLoading } = useAppSelector((state) => state.board);
+  // const usersTeamFilter = usersTeam.map((item) => {
+  //   return { label: item.name, value: item.login };
+  // });
 
-  const options: Option[] = usersTeamFilter;
+  // const options: Option[] = usersTeamFilter;
 
   const onFinish = async (values: Values) => {
     form.resetFields();
     if (props.objField === 'boardTitle') {
       await dispatch(
         createBoard({
-          title: values[props.objField],
+          title: JSON.stringify({ title: values[props.objField], description: values.description }),
           owner: login,
           users: values.usersTeam ? values.usersTeam.flat() : [],
         })
@@ -83,9 +84,12 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Choose teammates" name="usersTeam">
-            <Cascader options={options} multiple />
+          <Form.Item label="Description" name="description">
+            <Input />
           </Form.Item>
+          {/* <Form.Item label="Choose teammates" name="usersTeam">
+            <Cascader options={options} multiple />
+          </Form.Item> */}
           <Row justify="center">
             <Form.Item>
               <Button type="primary" htmlType="submit">

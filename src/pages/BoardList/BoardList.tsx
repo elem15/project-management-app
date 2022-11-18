@@ -30,26 +30,26 @@ const BoardList = () => {
     }
   };
 
-  const createTeammatesList = (users: string[]) => {
-    if (users.length > quantityTeammates) {
-      const partUsers = users
-        .slice(0, quantityTeammates)
-        .map((item: string) => <div key={keyCreator()}>{item}</div>);
-      return (
-        <>
-          <div>{partUsers}</div>
-          <div>and other</div>
-        </>
-      );
-    } else {
-      const allUsers = users.map((item: string) => <div key={keyCreator()}>{item}</div>);
-      return (
-        <>
-          <div>{allUsers}</div>
-        </>
-      );
-    }
-  };
+  // const createTeammatesList = (users: string[]) => {
+  //   if (users.length > quantityTeammates) {
+  //     const partUsers = users
+  //       .slice(0, quantityTeammates)
+  //       .map((item: string) => <div key={keyCreator()}>{item}</div>);
+  //     return (
+  //       <>
+  //         <div>{partUsers}</div>
+  //         <div>and other</div>
+  //       </>
+  //     );
+  //   } else {
+  //     const allUsers = users.map((item: string) => <div key={keyCreator()}>{item}</div>);
+  //     return (
+  //       <>
+  //         <div>{allUsers}</div>
+  //       </>
+  //     );
+  //   }
+  // };
 
   const handleClickDeleteBoard = async (boardId: string) => {
     await dispatch(deleteBoard(boardId));
@@ -60,15 +60,17 @@ const BoardList = () => {
     <div key={item._id} className="card-item">
       <div onClick={() => handleClickOpen(item._id)}>
         <h3>Board title:</h3>
-        <div>{item.title}</div>
+        <div>{JSON.parse(item.title).title}</div>
+        <h3>Board description:</h3>
+        <div>{JSON.parse(item.title).description}</div>
         <h3>Created by:</h3>
         <div>{item.owner}</div>
-        {item.users.length !== 0 && (
+        {/* {item.users.length !== 0 && (
           <>
             <h3>Teammates:</h3>
             <div>{createTeammatesList(item.users)}</div>
           </>
-        )}
+        )} */}
       </div>
       <Button
         shape="circle"
