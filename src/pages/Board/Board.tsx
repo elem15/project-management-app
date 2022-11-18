@@ -48,8 +48,6 @@ const Board: React.FC = () => {
 
   const columnsList = columns.map((item) => (
     <div key={item._id} className="card-item">
-      <h3>Column title:</h3>
-      <div>{item.title}</div>
       <EditColumnTitle title={item.title} order={0} columnId={item._id} boardId={item.boardId} />
       <h3>Column order:</h3>
       <div>{item.order}</div>

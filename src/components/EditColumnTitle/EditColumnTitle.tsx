@@ -1,4 +1,5 @@
 import { Button, Form, Input } from 'antd';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useAppDispatch } from 'app/hooks';
 import React, { useState } from 'react';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
@@ -17,10 +18,11 @@ type Values = {
 
 export const EditColumnTitle = (props: Props) => {
   const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState(props.title);
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 
-  let titleInitial = props.title;
+  const titleInitial = title;
   const handleOnClickSubmit = (values: Values) => {
     console.log(values);
     dispatch(
@@ -31,7 +33,7 @@ export const EditColumnTitle = (props: Props) => {
         boardId: props.boardId,
       })
     );
-    titleInitial = values.title;
+    setTitle(values.title);
     setOpen(false);
   };
   const handleOnClickReject = () => {
@@ -41,32 +43,37 @@ export const EditColumnTitle = (props: Props) => {
 
   const buttons = (
     <Form.Item>
-      <Button type="primary" htmlType="submit">
-        V
-      </Button>
-      <Button type="primary" onClick={handleOnClickReject}>
-        X
-      </Button>
+      <Button htmlType="submit" icon={<CheckOutlined />} className="submit-button"></Button>
+      <Button onClick={handleOnClickReject} icon={<CloseOutlined />} danger></Button>
     </Form.Item>
   );
 
   const handleOnFocus = () => setOpen(true);
-  // const handleOnBlur = () => {
-  //   setOpen(false);
-  //   form.setFieldValue('title', titleInitial);
-  // };
+  const handleOnClick = () => setOpen(true);
 
   return (
-    <Form
-      form={form}
-      name="basic"
-      initialValues={{ title: props.title }}
-      onFinish={handleOnClickSubmit}
-    >
-      <Form.Item name="title">
-        <Input className="input-text" onFocus={handleOnFocus} />
-      </Form.Item>
-      {open && buttons}
-    </Form>
+    <>
+      <h3>Column title:</h3>
+      {!open && (
+        <>
+          <h3 onClick={handleOnClick}>{title}</h3>
+        </>
+      )}
+
+      {open && (
+        <Form
+          form={form}
+          name="basic"
+          initialValues={{ title }}
+          onFinish={handleOnClickSubmit}
+          className="name-column"
+        >
+          <Form.Item name="title">
+            <Input className="input-text" onFocus={handleOnFocus} />
+          </Form.Item>
+          {buttons}
+        </Form>
+      )}
+    </>
   );
 };
