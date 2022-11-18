@@ -8,7 +8,6 @@ import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
 import { getUsers } from 'utils/API/get-users';
-import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 
 type User = {
@@ -113,18 +112,13 @@ export const boardSlice = createSlice({
     },
     [createBoard.pending.type]: loaderHandler,
     [createBoard.rejected.type]: errorHandler,
-    [getUsersBoardSlice.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
-      state.isLoading = false;
-      state.isError = '';
-      state.usersTeam = action.payload;
-    },
     [getUsers.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
       state.isLoading = false;
       state.isError = '';
       state.usersTeam = action.payload;
     },
-    [getUsersBoardSlice.pending.type]: loaderHandler,
-    [getUsersBoardSlice.rejected.type]: errorHandler,
+    [getUsers.pending.type]: loaderHandler,
+    [getUsers.rejected.type]: errorHandler,
     [getBoards.fulfilled.type]: (state, action: PayloadAction<Board[]>) => {
       state.isLoadingBoardsPage = false;
       state.isLoading = false;

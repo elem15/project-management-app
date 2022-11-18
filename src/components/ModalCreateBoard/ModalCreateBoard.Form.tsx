@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createBoard } from 'utils/API/create-board';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
-import { getUsersBoardSlice } from 'utils/API/get-users-boardSlice';
 import { getBoards } from 'utils/API/get-boards';
 
 type Values = {
