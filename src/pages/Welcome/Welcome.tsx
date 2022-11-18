@@ -1,23 +1,25 @@
 import { Button, Typography } from 'antd';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { EN, RU } from 'utils/const/app';
 import { ROUTES } from '../../utils/const/routes';
 import './Welcome.scss';
 
 function Welcome() {
+  const { t } = useTranslation();
   const { Title } = Typography;
   return (
     <main>
       <section className="section section__intro">
         <div className="section__title">
           <Title level={2} className="section__title_heading">
-            {RU.app_title}
+            {t('welcome.appTitle')}
           </Title>
-          <p className="section__title_subheading">{RU.app_subtitle}</p>
+          <p className="section__title_subheading">{t('welcome.appSubtitle')}</p>
           <Link to={ROUTES.HOME_PAGE}>
             <Button type="primary" className="to__main">
-              На главную
+              {t('header.main')}
             </Button>
           </Link>
         </div>
@@ -26,13 +28,13 @@ function Welcome() {
       <section className="section section__team">
         <div className="section__title">
           <Title level={2} className="section__title_heading" style={{ textAlign: 'center' }}>
-            {RU.team}
+            {t('welcome.team')}
           </Title>
         </div>
         <div className="teammates">
           <div className="teammates__item">
             <h4 className="teammates__item_name">
-              {RU.teammate1}
+              {t('welcome.teammate1')}
               <a
                 href="http://github.com/dab10"
                 className="teammates__item_github"
@@ -40,13 +42,13 @@ function Welcome() {
               ></a>
             </h4>
             <ul>
-              <li>Канбан-доска</li>
-              <li>Взаимодействие с api</li>
+              <li>{t('welcome.appTitle')}</li>
+              <li>{t('welcome.api')}</li>
             </ul>
           </div>
           <div className="teammates__item">
             <h4 className="teammates__item_name">
-              {RU.teammate2}
+              {t('welcome.teammate2')}
               <a
                 href="http://github.com/elem15"
                 className="teammates__item_github"
@@ -54,13 +56,13 @@ function Welcome() {
               ></a>
             </h4>
             <ul>
-              <li>Регистрация/авторизация</li>
-              <li>Взаимодействие с api</li>
+              <li>{t('welcome.auth')}</li>
+              <li>{t('welcome.api')}</li>
             </ul>
           </div>
           <div className="teammates__item">
             <h4 className="teammates__item_name">
-              {RU.teammate3}
+              {t('welcome.teammate3')}
               <a
                 href="http://github.com/labatsevich"
                 className="teammates__item_github"
@@ -68,7 +70,7 @@ function Welcome() {
               ></a>
             </h4>
             <ul>
-              <li>Страницы - главная</li>
+              <li>{t('welcome.main')}</li>
             </ul>
           </div>
         </div>

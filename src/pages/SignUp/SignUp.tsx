@@ -44,8 +44,8 @@ const SignUp: React.FC = () => {
             label={t('sign.name')}
             name="name"
             rules={[
-              { required: true, message: 'Please input your name!' },
-              { type: 'string', min: 3, message: 'Name must be at least 3 characters' },
+              { required: true, message: `${t('formRules.nameRequired')}` },
+              { type: 'string', min: 3, message: `${t('formRules.nameLength')}` },
             ]}
           >
             <Input />
@@ -54,8 +54,8 @@ const SignUp: React.FC = () => {
             label={t('sign.login')}
             name="login"
             rules={[
-              { required: true, message: 'Please input your login!' },
-              { type: 'string', min: 3, message: 'Login must be at least 3 characters' },
+              { required: true, message: `${t('formRules.loginRequired')}` },
+              { type: 'string', min: 3, message: `${t('formRules.loginLength')}` },
             ]}
           >
             <Input />
@@ -68,10 +68,10 @@ const SignUp: React.FC = () => {
             label={t('sign.password')}
             name="password"
             rules={[
-              { required: true, message: 'Please input your password!' },
-              { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+              { required: true, message: `${t('formRules.passwordRequired')}` },
+              { type: 'string', min: 8, message: `${t('formRules.passwordLength')}` },
               {
-                message: 'Only numbers and english characters without space can be entered',
+                message: `${t('formRules.passwordPattern')}`,
                 pattern: /^[A-Za-z0-9_]+$/,
               },
             ]}
