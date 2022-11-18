@@ -1,9 +1,9 @@
-import { Button, Form, Input } from 'antd';
+import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoardId, deleteColumnById } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { boardIdLength } from 'utils/const/other';
