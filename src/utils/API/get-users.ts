@@ -3,6 +3,14 @@ import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, USERS } from 'utils/const/urls';
 
+type User = {
+  login?: string;
+  name?: string;
+  _id?: string;
+  statusCode?: string;
+  message?: string;
+};
+
 export const getUsers = createAsyncThunk(
   'auth/getUsers',
   async (_, { rejectWithValue, dispatch, getState }) => {
@@ -15,11 +23,12 @@ export const getUsers = createAsyncThunk(
           Authorization: state.auth.token,
         },
       });
-      const data = await response.json();
+      const data: User = await response.json();
       if (!response.ok) {
         dispatch(signOut());
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
+      return data;
     } catch (error) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);

@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
-import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
-import { createTask } from 'utils/API/create-task';
 import { addBoardId } from 'app/reducers/boardSlice';
+import { updateTask } from 'utils/API/update-task';
 
 type Values = {
   teammates: string[][];
@@ -36,13 +35,9 @@ export const AddModalEditTask = (props: PropsCreateBoardForm) => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
 
-  // useEffect(() => {
-  //   dispatch(getTeammatesByBoardId(props.boardId));
-  // }, []);
-
-  const { teammates, isLoading, tasks } = useAppSelector((state) => state.board);
-  const usersTeamFilter = teammates.map((item) => {
-    return { label: item, value: item };
+  const { usersTeam, isLoading } = useAppSelector((state) => state.board);
+  const usersTeamFilter = usersTeam.map((item) => {
+    return { label: item.name, value: item.login };
   });
 
   const options: Option[] = usersTeamFilter;
@@ -50,22 +45,23 @@ export const AddModalEditTask = (props: PropsCreateBoardForm) => {
   const onFinish = async (values: Values) => {
     console.log(values);
     form.resetFields();
-    // if (props.objField === 'taskTitle') {
-    //   await dispatch(
-    //     createTask({
-    //       title: values[props.objField],
-    //       order: 1,
-    //       description: values.description ? values.description : ' ',
-    //       userId: login,
-    //       users: values.teammates ? values.teammates.flat() : [],
-    //       boardId: props.boardId,
-    //       columnId: props.columnId,
-    //     })
-    //   );
-    //   dispatch(addBoardId(props.boardId));
-    //   props.onCancel();
-    //   router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
-    // }
+    if (props.objField === 'taskTitle') {
+      await dispatch(
+        updateTask({
+          title: values[props.objField],
+          order: 1,
+          description: values.description ? values.description : ' ',
+          boardId: props.boardId,
+          columnId: props.columnId,
+          taskId: props.taskId,
+          userId: login,
+          users: values.teammates ? values.teammates.flat() : [],
+        })
+      );
+      dispatch(addBoardId(props.boardId));
+      props.onCancel();
+      router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
+    }
   };
 
   return (
