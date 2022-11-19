@@ -10,8 +10,6 @@
   text-overflow: ellipsis;
 }
 
-.ant-btn-dangerous>span {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.button-delete-task>span {
+  font-size: 27px;
 }

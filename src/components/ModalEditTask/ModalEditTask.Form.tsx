@@ -53,7 +53,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
     if (props.objField === 'taskTitle') {
       await dispatch(
         updateTask({
-          title: values[props.objField],
+          title: values[props.objField] ? values[props.objField] : ' ',
           order: 1,
           description: values.description ? values.description : ' ',
           boardId: props.boardId,

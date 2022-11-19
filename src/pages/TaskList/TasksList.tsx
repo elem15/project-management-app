@@ -50,6 +50,7 @@ function TaskList(props: TaskListProps) {
               usersTeammates={task.users}
             />
             <Button
+              className="button-delete-task"
               icon={<DeleteOutlined />}
               onClick={() => handleClickDeleteTask(task._id, props.columnId, props.boardId)}
               danger
