@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { ROUTES } from 'utils/const/routes';
-import { useNavigate } from 'react-router-dom';
 import { createColumn } from 'utils/API/create-column';
 import { addBoardId } from 'app/reducers/boardSlice';
 
@@ -22,7 +20,6 @@ type PropsCreateColumnForm = {
 export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
-  const router = useNavigate();
   const { isLoading } = useAppSelector((state) => state.board);
 
   const onFinish = async (values: Values) => {
@@ -37,7 +34,6 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
       );
       dispatch(addBoardId(props.boardId));
       props.onCancel();
-      router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
     }
   };
 

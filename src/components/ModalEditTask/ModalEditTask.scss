@@ -5,6 +5,12 @@
 
 .button-edit-task>span {
   width: 150px;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ant-btn-dangerous>span {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -26,7 +26,7 @@ type TaskListProps = {
 
 function TaskList(props: TaskListProps) {
   const dispatch = useAppDispatch();
-  const { isLoading } = useAppSelector((state) => state.board);
+  const { isLoadingBoardPage } = useAppSelector((state) => state.board);
 
   const handleClickDeleteTask = async (taskId: string, columnId: string, boardId: string) => {
     await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
@@ -62,7 +62,7 @@ function TaskList(props: TaskListProps) {
     return <div>{tasksList}</div>;
   };
 
-  return isLoading ? (
+  return isLoadingBoardPage ? (
     <div>Loading...</div>
   ) : (
     <div className="task-container">{createTaskList(props.columnId)}</div>

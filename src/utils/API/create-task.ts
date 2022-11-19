@@ -12,13 +12,18 @@ type Task = {
   columnId: string;
 };
 
+type TaskError = {
+  statusCode: string;
+  message: string;
+};
+
 export const createTask = createAsyncThunk(
   'board/createTask',
   async (task: Task, { rejectWithValue, getState }) => {
     const { title, order, description, userId, users, boardId, columnId } = task;
     const state = getState() as RootState;
     try {
-      const response = await fetch(
+      const response: Response = await fetch(
         BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/` + TASKS,
         {
           method: 'POST',
@@ -35,10 +40,15 @@ export const createTask = createAsyncThunk(
           }),
         }
       );
-      const data = await response.json();
+      const data: Task | TaskError = await response.json();
       if (!response.ok) {
-        throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
+        throw new Error(
+          `Error! Status: ${(data as TaskError).statusCode}. Message: ${
+            (data as TaskError).message
+          }`
+        );
       }
+      return data;
     } catch (error) {
       console.log('Error message: ', (error as Error).message);
       return rejectWithValue((error as Error).message);

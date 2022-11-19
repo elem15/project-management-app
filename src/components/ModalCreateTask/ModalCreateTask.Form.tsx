@@ -1,8 +1,6 @@
 import React from 'react';
 import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { ROUTES } from 'utils/const/routes';
-import { useNavigate } from 'react-router-dom';
 import { createTask } from 'utils/API/create-task';
 import { addBoardId } from 'app/reducers/boardSlice';
 
@@ -30,7 +28,6 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const router = useNavigate();
 
   const { usersTeam, isLoading } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
@@ -55,7 +52,6 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
       );
       dispatch(addBoardId(props.boardId));
       props.onCancel();
-      router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
     }
   };
 

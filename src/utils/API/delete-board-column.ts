@@ -4,6 +4,8 @@ import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
 
 type Column = {
   columnId: string;
+  title?: string;
+  order?: number;
   boardId: string;
 };
 
@@ -37,6 +39,7 @@ export const deleteBoardColumn = createAsyncThunk(
           }`
         );
       }
+      return data;
     } catch (error) {
       console.log('Error message: ', (error as Error).message);
       return rejectWithValue((error as Error).message);

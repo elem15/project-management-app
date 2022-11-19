@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createBoard } from 'utils/API/create-board';
+import { createColumn } from 'utils/API/create-column';
 import { createTask } from 'utils/API/create-task';
 import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
@@ -96,10 +97,6 @@ export const boardSlice = createSlice({
       const newBoards = state.boards.filter((item) => item._id !== action.payload);
       state.boards = newBoards;
     },
-    deleteColumnById: (state, action: PayloadAction<string>) => {
-      const newColumns = state.columns.filter((item) => item._id !== action.payload);
-      state.columns = newColumns;
-    },
     deleteTaskById: (state, action: PayloadAction<string>) => {
       const newTasks = state.tasks.filter((item) => item._id !== action.payload);
       state.tasks = newTasks;
@@ -154,9 +151,26 @@ export const boardSlice = createSlice({
     },
     [getTeammatesByBoardId.pending.type]: loaderHandler,
     [getTeammatesByBoardId.rejected.type]: errorHandler,
-    [deleteBoardColumn.fulfilled.type]: dataHandler,
-    [deleteBoardColumn.pending.type]: loaderHandler,
-    [deleteBoardColumn.rejected.type]: errorHandler,
+    [deleteBoardColumn.fulfilled.type]: (state, action: PayloadAction<Column>) => {
+      const newStateColumnsAfterDelete = state.columns.filter(
+        (item) => item._id !== action.payload._id
+      );
+      const newStateTasksAfterDelete = state.tasks.filter(
+        (item) => item.columnId !== action.payload._id
+      );
+      state.isLoadingBoardPage = false;
+      state.columns = newStateColumnsAfterDelete;
+      state.tasks = newStateTasksAfterDelete;
+      dataHandler(state);
+    },
+    [deleteBoardColumn.pending.type]: (state) => {
+      state.isLoadingBoardPage = true;
+      loaderHandler(state);
+    },
+    [deleteBoardColumn.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoadingBoardPage = false;
+      errorHandler(state, action);
+    },
     [deleteBoard.fulfilled.type]: (state) => {
       state.isLoadingBoardsPage = false;
       dataHandler(state);
@@ -169,9 +183,21 @@ export const boardSlice = createSlice({
       state.isLoadingBoardsPage = false;
       errorHandler(state, action);
     },
-    [createTask.fulfilled.type]: dataHandler,
+    [createTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
+      state.isLoading = false;
+      state.isError = '';
+      state.tasks = [...state.tasks, action.payload];
+    },
     [createTask.pending.type]: loaderHandler,
     [createTask.rejected.type]: errorHandler,
+    [createColumn.fulfilled.type]: (state, action: PayloadAction<Column>) => {
+      state.isLoadingBoardPage = false;
+      state.isLoading = false;
+      state.isError = '';
+      state.columns = [...state.columns, action.payload];
+    },
+    [createColumn.pending.type]: loaderHandler,
+    [createColumn.rejected.type]: errorHandler,
     [getTasksByBoardId.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
       state.isLoading = false;
       state.isError = '';
@@ -185,7 +211,6 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { addBoards, addBoardId, deleteBoardById, deleteColumnById, deleteTaskById } =
-  boardSlice.actions;
+export const { addBoards, addBoardId, deleteBoardById, deleteTaskById } = boardSlice.actions;
 
 export default boardSlice.reducer;

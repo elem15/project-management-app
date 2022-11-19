@@ -10,12 +10,14 @@
 .task-container::-webkit-scrollbar {
   width: 5px;
 }
+
 .task-container::-webkit-scrollbar-track {
-  background: #1890ff;
-  border-radius: 20px;
-}
-.task-container::-webkit-scrollbar-thumb {
   background-color: #1890ff;
   border-radius: 20px;
   border: 2px solid rgba(255,255,255,0.7);
+}
+
+.task-container::-webkit-scrollbar-thumb {
+  background: #1890ff;
+  border-radius: 20px;
 }

@@ -25,7 +25,6 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const { isLoading } = useAppSelector((state) => state.board);
 
   const onFinish = async (values: Values) => {
-    form.resetFields();
     if (props.objField === 'boardTitle') {
       await dispatch(
         createBoard({
@@ -34,6 +33,7 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
           users: [],
         })
       );
+      form.resetFields();
       props.onCancel();
       navigate(ROUTES.YOUR_BOARDS);
     }

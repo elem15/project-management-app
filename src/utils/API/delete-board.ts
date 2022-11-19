@@ -8,7 +8,7 @@ type BoardError = {
 };
 
 export const deleteBoard = createAsyncThunk(
-  'board/deleteBoardColumn',
+  'board/deleteBoard',
   async (boardId: string, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
