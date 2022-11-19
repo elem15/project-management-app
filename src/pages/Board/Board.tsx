@@ -13,6 +13,7 @@ import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.W
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import TaskList from 'pages/TaskList/TasksList';
 import { EditColumnTitle } from 'components/EditColumnTitle/EditColumnTitle';
+import './Board.scss';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
@@ -47,28 +48,41 @@ const Board: React.FC = () => {
   };
 
   const columnsList = columns.map((item) => (
-    <div key={item._id} className="card-item">
-      <EditColumnTitle title={item.title} order={0} columnId={item._id} boardId={item.boardId} />
-      <h3>Column order:</h3>
-      <div>{item.order}</div>
-      <h3>boardId:</h3>
-      <div>{item.boardId}</div>
-      <Button
-        shape="circle"
-        icon={<DeleteOutlined />}
-        danger
-        onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
-      ></Button>
-      <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
-      <AddModalCreateTask
-        typeButton={'primary'}
-        titleTextButton={'Add task'}
-        titleTextModal={'Add task'}
-        titleForm={'Task title'}
-        objField={'taskTitle'}
-        boardId={item.boardId}
-        columnId={item._id}
-      />
+    <div key={item._id} className="column-item">
+      <div>
+        <div className="column-item-header">
+          <div>
+            <EditColumnTitle
+              title={item.title}
+              order={0}
+              columnId={item._id}
+              boardId={item.boardId}
+            />
+            <h3>Column order:</h3>
+            <div className="text-cut">{item.order}</div>
+            <h3>boardId:</h3>
+            <div className="text-cut">{item.boardId}</div>
+          </div>
+          <Button
+            shape="circle"
+            icon={<DeleteOutlined />}
+            danger
+            onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
+          ></Button>
+        </div>
+        <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
+      </div>
+      <div>
+        <AddModalCreateTask
+          typeButton={'primary'}
+          titleTextButton={'Add task'}
+          titleTextModal={'Add task'}
+          titleForm={'Task title'}
+          objField={'taskTitle'}
+          boardId={item.boardId}
+          columnId={item._id}
+        />
+      </div>
     </div>
   ));
 
@@ -78,7 +92,7 @@ const Board: React.FC = () => {
       {isLoadingBoardPage ? (
         <h2>Loading...</h2>
       ) : (
-        <div className="list">
+        <div className="column-list">
           {columnsList}{' '}
           <AddModalCreateColumn
             typeButton={'primary'}

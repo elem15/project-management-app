@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { AddModalFormBoard } from './ModalCreateTask.Form';
+import { AddModalFormCreateTask } from './ModalCreateTask.Form';
+import './ModalCreateTask.scss';
 
 type PropsModal = {
   typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
@@ -26,7 +27,12 @@ export const AddModalCreateTask = (props: PropsModal) => {
 
   return (
     <>
-      <Button type={props.typeButton} icon={<PlusOutlined />} onClick={showModal}>
+      <Button
+        className="button-add-task"
+        type={props.typeButton}
+        icon={<PlusOutlined />}
+        onClick={showModal}
+      >
         {props.titleTextButton}
       </Button>
       <Modal
@@ -37,7 +43,7 @@ export const AddModalCreateTask = (props: PropsModal) => {
         onCancel={hideModal}
         footer={null}
       >
-        <AddModalFormBoard
+        <AddModalFormCreateTask
           titleForm={props.titleForm}
           objField={props.objField}
           onCancel={hideModal}

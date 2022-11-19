@@ -26,7 +26,7 @@ type Option = {
   children?: Option[];
 };
 
-export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
+export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
