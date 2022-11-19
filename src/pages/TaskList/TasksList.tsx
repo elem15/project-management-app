@@ -1,12 +1,11 @@
-import { Button, Modal } from 'antd';
-import React, { useState } from 'react';
-import keyCreator from 'utils/keyCreator/keyCreator';
+import { Button } from 'antd';
+import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { deleteTaskById } from 'app/reducers/boardSlice';
-import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Form';
 import './TaskList.scss';
+import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 
 type Task = {
   _id: string;
@@ -26,51 +25,30 @@ type TaskListProps = {
 };
 
 function TaskList(props: TaskListProps) {
-  const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { isLoading } = useAppSelector((state) => state.board);
-
-  const showModal = () => {
-    setOpen(true);
-  };
-
-  const hideModal = () => {
-    setOpen(false);
-  };
 
   const handleClickDeleteTask = async (taskId: string, columnId: string, boardId: string) => {
     await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
     dispatch(deleteTaskById(taskId));
   };
 
-  const createTaskList = (taskId: string) => {
+  const createTaskList = (columnId: string) => {
     const tasksList = props.tasks.map((task) => {
-      if (task.columnId === taskId) {
+      if (task.columnId === columnId) {
         return (
-          <div key={keyCreator()}>
-            <Button className="task-edit-button" onClick={showModal}>
-              {task.title}
-            </Button>
-            <Modal
-              destroyOnClose={true}
-              title="Task"
-              open={open}
-              onOk={hideModal}
-              onCancel={hideModal}
-              footer={null}
-            >
-              <AddModalEditTask
-                titleForm={'Task title'}
-                objField={'taskTitle'}
-                onCancel={hideModal}
-                boardId={props.boardId}
-                columnId={props.columnId}
-                taskId={task._id}
-                title={task.title}
-                description={task.description}
-                usersTeammates={task.users}
-              />
-            </Modal>
+          <div key={task._id}>
+            <AddModalEditTask
+              titleTextButton={task.title}
+              titleTextModal={'Task'}
+              titleForm={'Task title'}
+              objField={'taskTitle'}
+              boardId={task.boardId}
+              columnId={task.columnId}
+              taskId={task._id}
+              description={task.description}
+              usersTeammates={task.users}
+            />
             <Button
               icon={<DeleteOutlined />}
               onClick={() => handleClickDeleteTask(task._id, props.columnId, props.boardId)}
@@ -80,6 +58,7 @@ function TaskList(props: TaskListProps) {
         );
       }
     });
+
     return <div>{tasksList}</div>;
   };
 
