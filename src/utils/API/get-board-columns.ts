@@ -5,7 +5,7 @@ import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
 type Column = {
   _id: string;
   title: string;
-  order: string;
+  order: number;
   boardId: string[];
 };
 

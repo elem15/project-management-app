@@ -10,7 +10,7 @@ import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Form';
 type Task = {
   _id: string;
   title: string;
-  order: string;
+  order: number;
   boardId: string;
   columnId: string;
   description: string;

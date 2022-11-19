@@ -6,7 +6,7 @@ import { BASE_URL, TASKS_SET } from 'utils/const/urls';
 type Task = {
   _id: string;
   title: string;
-  order: string;
+  order: number;
   boardId: string;
   columnId: string;
   description: string;
