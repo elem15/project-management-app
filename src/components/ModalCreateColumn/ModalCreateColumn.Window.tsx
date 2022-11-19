@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
 import { AddModalFormColumn } from './ModalCreateColumn.Form';
+import './ModalCreateColumn.scss';
 
 type PropsModal = {
   typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
@@ -25,7 +26,12 @@ export const AddModalCreateColumn = (props: PropsModal) => {
 
   return (
     <>
-      <Button type={props.typeButton} icon={<PlusOutlined />} onClick={showModal}>
+      <Button
+        className="button-add-column"
+        type={props.typeButton}
+        icon={<PlusOutlined />}
+        onClick={showModal}
+      >
         {props.titleTextButton}
       </Button>
       <Modal

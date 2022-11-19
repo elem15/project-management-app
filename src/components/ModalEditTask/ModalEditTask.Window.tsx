@@ -28,7 +28,7 @@ export const AddModalEditTask = (props: PropsModal) => {
 
   return (
     <>
-      <Button className="task-edit-button" onClick={showModal}>
+      <Button className="button-edit-task" onClick={showModal}>
         {props.titleTextButton}
       </Button>
       <Modal

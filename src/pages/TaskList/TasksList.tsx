@@ -62,7 +62,11 @@ function TaskList(props: TaskListProps) {
     return <div>{tasksList}</div>;
   };
 
-  return isLoading ? <div>Loading...</div> : <div>{createTaskList(props.columnId)}</div>;
+  return isLoading ? (
+    <div>Loading...</div>
+  ) : (
+    <div className="task-container">{createTaskList(props.columnId)}</div>
+  );
 }
 
 export default TaskList;
