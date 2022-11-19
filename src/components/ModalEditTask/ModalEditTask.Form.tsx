@@ -48,8 +48,7 @@ export const AddModalEditTask = (props: PropsCreateBoardForm) => {
     },
     []
   );
-  // const initialTeammates = tasks.map((item) => item.userId);
-  console.log(initialTeammates);
+
   const options: Option[] = usersTeamFilter;
 
   const onFinish = async (values: Values) => {
