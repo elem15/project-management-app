@@ -2,7 +2,6 @@ import { Button, Typography } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { EN, RU } from 'utils/const/app';
 import { ROUTES } from '../../utils/const/routes';
 import './Welcome.scss';
 
