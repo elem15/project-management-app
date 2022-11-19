@@ -53,7 +53,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
     if (props.objField === 'taskTitle') {
       await dispatch(
         updateTask({
-          title: values[props.objField] ? values[props.objField] : ' ',
+          title: values[props.objField],
           order: 1,
           description: values.description ? values.description : ' ',
           boardId: props.boardId,
@@ -83,7 +83,11 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Form.Item label={props.titleForm} name={props.objField}>
+          <Form.Item
+            label={props.titleForm}
+            name={props.objField}
+            rules={[{ required: true, message: 'Please input task title!' }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item label="Description" name="description">
