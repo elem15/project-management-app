@@ -157,9 +157,18 @@ export const boardSlice = createSlice({
     [deleteBoardColumn.fulfilled.type]: dataHandler,
     [deleteBoardColumn.pending.type]: loaderHandler,
     [deleteBoardColumn.rejected.type]: errorHandler,
-    [deleteBoard.fulfilled.type]: dataHandler,
-    [deleteBoard.pending.type]: loaderHandler,
-    [deleteBoard.rejected.type]: errorHandler,
+    [deleteBoard.fulfilled.type]: (state) => {
+      state.isLoadingBoardsPage = false;
+      dataHandler(state);
+    },
+    [deleteBoard.pending.type]: (state) => {
+      state.isLoadingBoardsPage = true;
+      loaderHandler(state);
+    },
+    [deleteBoard.rejected.type]: (state, action: PayloadAction<string>) => {
+      state.isLoadingBoardsPage = false;
+      errorHandler(state, action);
+    },
     [createTask.fulfilled.type]: dataHandler,
     [createTask.pending.type]: loaderHandler,
     [createTask.rejected.type]: errorHandler,
