@@ -4,6 +4,7 @@ import { createColumn } from 'utils/API/create-column';
 import { createTask } from 'utils/API/create-task';
 import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
+import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
@@ -209,6 +210,9 @@ export const boardSlice = createSlice({
     [updateBoardColumnTitle.fulfilled.type]: dataHandler,
     [updateBoardColumnTitle.pending.type]: loaderHandler,
     [updateBoardColumnTitle.rejected.type]: errorHandler,
+    [deleteColumnTask.fulfilled.type]: dataHandler,
+    [deleteColumnTask.pending.type]: loaderHandler,
+    [deleteColumnTask.rejected.type]: errorHandler,
     [updateTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
       const newStateTasksAfterUpdate = state.tasks.map(function (item) {
         return item._id == action.payload._id ? action.payload : item;
