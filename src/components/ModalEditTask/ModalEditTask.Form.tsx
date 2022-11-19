@@ -3,8 +3,6 @@ import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoardId } from 'app/reducers/boardSlice';
 import { updateTask } from 'utils/API/update-task';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from 'utils/const/routes';
 
 type Values = {
   teammates: string[][];
@@ -34,7 +32,6 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const router = useNavigate();
 
   const { usersTeam, isLoading } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
@@ -68,7 +65,6 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
       );
       dispatch(addBoardId(props.boardId));
       props.onCancel();
-      router(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
     }
   };
   return (

@@ -10,6 +10,7 @@ import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
 import { getUsers } from 'utils/API/get-users';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
+import { updateTask } from 'utils/API/update-task';
 
 type User = {
   login: string;
@@ -208,6 +209,16 @@ export const boardSlice = createSlice({
     [updateBoardColumnTitle.fulfilled.type]: dataHandler,
     [updateBoardColumnTitle.pending.type]: loaderHandler,
     [updateBoardColumnTitle.rejected.type]: errorHandler,
+    [updateTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
+      const newStateTasksAfterUpdate = state.tasks.map(function (item) {
+        return item._id == action.payload._id ? action.payload : item;
+      });
+      state.isLoading = false;
+      state.isError = '';
+      state.tasks = newStateTasksAfterUpdate;
+    },
+    [updateTask.pending.type]: loaderHandler,
+    [updateTask.rejected.type]: errorHandler,
   },
 });
 
