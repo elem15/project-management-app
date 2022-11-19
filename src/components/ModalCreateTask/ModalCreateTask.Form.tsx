@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
-import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
 import { createTask } from 'utils/API/create-task';
 import { addBoardId } from 'app/reducers/boardSlice';
 
@@ -32,10 +31,6 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useNavigate();
-
-  // useEffect(() => {
-  //   dispatch(getTeammatesByBoardId(props.boardId));
-  // }, [dispatch, props.boardId]);
 
   const { usersTeam, isLoading } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
