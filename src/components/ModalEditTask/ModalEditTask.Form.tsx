@@ -20,6 +20,7 @@ type PropsCreateBoardForm = {
   taskId: string;
   title: string;
   description: string;
+  usersTeammates: string[];
   onCancel: () => void;
 };
 
@@ -35,11 +36,20 @@ export const AddModalEditTask = (props: PropsCreateBoardForm) => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
 
-  const { usersTeam, isLoading, tasks } = useAppSelector((state) => state.board);
+  const { usersTeam, isLoading } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
     return { label: item.name, value: item.login };
   });
-
+  const initialTeammates = props.usersTeammates.reduce(
+    (matrix: string[][], item: string, index: number) => {
+      matrix.push([]);
+      matrix[index].push(item);
+      return matrix;
+    },
+    []
+  );
+  // const initialTeammates = tasks.map((item) => item.userId);
+  console.log(initialTeammates);
   const options: Option[] = usersTeamFilter;
 
   const onFinish = async (values: Values) => {
@@ -71,14 +81,18 @@ export const AddModalEditTask = (props: PropsCreateBoardForm) => {
         <Form
           form={form}
           name="basic"
-          initialValues={{ remember: true }}
+          initialValues={{
+            taskTitle: props.title,
+            description: props.description,
+            teammates: initialTeammates,
+          }}
           onFinish={onFinish}
           autoComplete="off"
         >
-          <Form.Item label={props.titleForm} name={props.objField} initialValue={props.title}>
+          <Form.Item label={props.titleForm} name={props.objField}>
             <Input />
           </Form.Item>
-          <Form.Item label="Description" name="description" initialValue={props.description}>
+          <Form.Item label="Description" name="description">
             <Input />
           </Form.Item>
           <Form.Item label="Choose teammates" name="teammates">

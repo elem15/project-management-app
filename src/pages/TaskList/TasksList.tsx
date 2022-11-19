@@ -64,6 +64,7 @@ function TaskList(props: TaskListProps) {
                 taskId={task._id}
                 title={task.title}
                 description={task.description}
+                usersTeammates={task.users}
               />
             </Modal>
             <Button
