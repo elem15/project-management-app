@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createBoard } from 'utils/API/create-board';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
-import { getBoards } from 'utils/API/get-boards';
 
 type Values = {
   boardTitle: string;
@@ -35,7 +34,6 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
           users: [],
         })
       );
-      await dispatch(getBoards());
       props.onCancel();
       navigate(ROUTES.YOUR_BOARDS);
     }

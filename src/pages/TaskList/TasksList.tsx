@@ -2,7 +2,7 @@ import { Button, Modal } from 'antd';
 import React, { useState } from 'react';
 import keyCreator from 'utils/keyCreator/keyCreator';
 import { DeleteOutlined } from '@ant-design/icons';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { deleteTaskById } from 'app/reducers/boardSlice';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Form';
@@ -27,6 +27,7 @@ type TaskListProps = {
 function TaskList(props: TaskListProps) {
   const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector((state) => state.board);
 
   const showModal = () => {
     setOpen(true);
@@ -79,7 +80,7 @@ function TaskList(props: TaskListProps) {
     return <div>{tasksList}</div>;
   };
 
-  return <div>{createTaskList(props.columnId)}</div>;
+  return isLoading ? <div>Loading...</div> : <div>{createTaskList(props.columnId)}</div>;
 }
 
 export default TaskList;
