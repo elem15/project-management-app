@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { deleteTaskById } from 'app/reducers/boardSlice';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Form';
+import './TaskList.scss';
 
 type Task = {
   _id: string;
@@ -47,7 +48,9 @@ function TaskList(props: TaskListProps) {
       if (task.columnId === taskId) {
         return (
           <div key={keyCreator()}>
-            <Button onClick={showModal}>{task.title}</Button>
+            <Button className="task-edit-button" onClick={showModal}>
+              {task.title}
+            </Button>
             <Modal
               destroyOnClose={true}
               title="Task"
