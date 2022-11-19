@@ -40,7 +40,7 @@ const Board: React.FC = () => {
   useEffect(() => {
     dispatch(getBoardColumns(boardIdCurrent));
     dispatch(getTasksByBoardId(boardIdCurrent));
-  }, [location]);
+  }, [boardIdCurrent, dispatch, location]);
 
   const handleClickDeleteColumn = async (columnId: string, boardId: string) => {
     await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
