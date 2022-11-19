@@ -2,7 +2,7 @@ import { Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoardId, deleteBoardById } from 'app/reducers/boardSlice';
-import React, { useEffect, MouseEvent } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getBoards } from 'utils/API/get-boards';
 import { ROUTES } from 'utils/const/routes';
