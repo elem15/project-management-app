@@ -1,3 +1,6 @@
+ul {
+  list-style: none;
+}
 .header-container {
   position: fixed;
   left: 0;
@@ -26,6 +29,8 @@
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  column-gap: 15px;
    margin: 0;
    align-items: center;
 
@@ -41,8 +46,6 @@
 }
 
 .page-name {
-  padding-left: 10px;
-  padding-right: 10px;
   color: white;
   text-decoration: none;
   transition: 0.5s;
@@ -58,16 +61,6 @@
 }
 
 .icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url('../../media/edit-profile.svg');
-  background-size: 20px;
-  background-color: aliceblue;
-  vertical-align: middle;
-}
-
-.logout {
   position: relative;
   width: 20px;
   cursor: pointer;
@@ -78,6 +71,6 @@
     box-shadow: 0px 3px 3px brown;
   }
   &:active {
-    transform: translateY(1px);
+    transform: translateY(3px);
   }
 }

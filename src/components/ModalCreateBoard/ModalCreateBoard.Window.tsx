@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
+import { Button, Modal, Tooltip } from 'antd';
 import { AddModalFormBoard } from './ModalCreateBoard.Form';
+import newBoard from '../../media/new-board.svg';
 
 type PropsModal = {
   typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
@@ -24,9 +24,9 @@ export const AddModalCreateBoard = (props: PropsModal) => {
 
   return (
     <>
-      <Button type={props.typeButton} icon={<PlusOutlined />} onClick={showModal}>
-        {props.titleTextButton}
-      </Button>
+      <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={`${props.titleTextButton}`}>
+        <img className="icon" src={newBoard} alt="boards list" onClick={showModal} />
+      </Tooltip>
       <Modal
         destroyOnClose={true}
         title={props.titleTextModal}
