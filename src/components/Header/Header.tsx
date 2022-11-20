@@ -1,4 +1,3 @@
-import { Button } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { signOut } from 'app/reducers/authSlice';
 import React, { useEffect, useRef, useState } from 'react';
@@ -6,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import './Header.scss';
 import { AddModalCreateBoard } from 'components/ModalCreateBoard/ModalCreateBoard.Window';
+import logout from '../../media/logout.png';
 
 type StickyType = {
   sticky: boolean;
@@ -13,7 +13,7 @@ type StickyType = {
 };
 
 function Header() {
-  const { login, token } = useAppSelector((state) => state.auth);
+  const { name, token } = useAppSelector((state) => state.auth);
   const headerRef = useRef(null);
   const [sticky, setSticky] = useState<StickyType>({ sticky: false, offset: 0 });
   const appDispatch = useAppDispatch();
@@ -60,7 +60,6 @@ function Header() {
             <Link to={ROUTES.HOME_PAGE} className="nav__link">
               Go to Main Page
             </Link>
-            {login}
             <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
               Board
             </Link>
@@ -74,7 +73,10 @@ function Header() {
               titleForm={'Board title'}
               objField={'boardTitle'}
             />
-            <Button onClick={handleSignOut}>Sign Out</Button>
+            <Link to={ROUTES.PROFILE} className="page-name" style={{ marginLeft: '15px' }}>
+              <div className="icon" /> {name}
+            </Link>
+            <img className="logout" onClick={handleSignOut} src={logout} alt="logout" />
           </div>
         ) : (
           <ul className="nav">

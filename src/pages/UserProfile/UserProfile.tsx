@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import './SignUp.scss';
-import { Button, Form, Input, Row, Typography } from 'antd';
-import { signUp } from 'utils/API/sign-up';
+import React, { useEffect, useState } from 'react';
+import './UserProfile.scss';
+import { Button, Form, Input, Modal, Row, Typography } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
+import { updateUser } from 'utils/API/update-user';
+import { deleteUser } from 'utils/API/delete-user';
 import { clearErrors } from 'app/reducers/authSlice';
 
 export type UserUp = {
@@ -13,19 +14,19 @@ export type UserUp = {
   password: string;
 };
 
-const SignUp: React.FC = () => {
+const UserProfile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, token, errorMessage } = useAppSelector((state) => state.auth);
+  const { name, login, errorMessage } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
-    dispatch(signUp(values));
+    dispatch(updateUser(values));
   };
+  const [prevName] = useState(name);
+  const [prevLogin] = useState(login);
+  const [deleteModal, setDeleteModal] = useState(false);
   useEffect(() => {
-    name && navigate(ROUTES.SIGN_IN_PAGE);
-  }, [navigate, name]);
-  useEffect(() => {
-    token && navigate(ROUTES.HOME_PAGE);
-  }, [navigate, token]);
+    (name !== prevName || login !== prevLogin) && navigate(ROUTES.HOME_PAGE);
+  }, [name, navigate, prevName, login, prevLogin]);
   useEffect(() => {
     if (errorMessage) {
       setTimeout(() => {
@@ -37,7 +38,7 @@ const SignUp: React.FC = () => {
     <main>
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
-          <Typography.Title level={2}>Sign up</Typography.Title>
+          <Typography.Title level={2}>Edit Profile</Typography.Title>
           <Form.Item
             label="Name"
             name="name"
@@ -46,7 +47,7 @@ const SignUp: React.FC = () => {
               { type: 'string', min: 3, message: 'Name must be at least 3 characters' },
             ]}
           >
-            <Input />
+            <Input placeholder={name} />
           </Form.Item>
           <Form.Item
             label="Login"
@@ -56,7 +57,7 @@ const SignUp: React.FC = () => {
               { type: 'string', min: 3, message: 'Login must be at least 3 characters' },
             ]}
           >
-            <Input />
+            <Input placeholder={login} />
           </Form.Item>
           <Form.Item
             {...(errorMessage && {
@@ -83,10 +84,24 @@ const SignUp: React.FC = () => {
               </Button>
             </Form.Item>
           </Row>
+          <Row justify="center">
+            <Button type="primary" danger onClick={() => setDeleteModal(true)}>
+              Delete account
+            </Button>
+          </Row>
         </Form>
+        <Modal title="Account will be permanently deleted!" open={deleteModal} footer={null}>
+          <p>Are you sure?</p>
+          <Row justify="end">
+            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+            <Button type="primary" danger onClick={() => dispatch(deleteUser())}>
+              Delete account
+            </Button>
+          </Row>
+        </Modal>
       </Row>
     </main>
   );
 };
 
-export default SignUp;
+export default UserProfile;

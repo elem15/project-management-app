@@ -1,20 +1,25 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addLogin, addToken } from 'app/reducers/authSlice';
-import { UserIn } from 'pages/SignIn/SignIn';
-import { AUTH_SIGNIN, BASE_URL } from 'utils/const/urls';
+import { addLogin, addName, addUserId } from 'app/reducers/authSlice';
+import { RootState } from 'app/store';
+import { UserUp } from 'pages/SignUp/SignUp';
+import { BASE_URL, USERS } from 'utils/const/urls';
 import { getUsers } from './get-users';
 
-export const signIn = createAsyncThunk(
-  'auth/signIn',
-  async (user: UserIn, { rejectWithValue, dispatch }) => {
-    const { login, password } = user;
+export const updateUser = createAsyncThunk(
+  'auth/updateUser',
+  async (user: UserUp, { rejectWithValue, dispatch, getState }) => {
+    const state = getState() as RootState;
+    const { userId, token } = state.auth;
+    const { name, login, password } = user;
     try {
-      const response = await fetch(BASE_URL + AUTH_SIGNIN, {
-        method: 'POST',
+      const response = await fetch(BASE_URL + USERS + userId, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token,
         },
         body: JSON.stringify({
+          name,
           login,
           password,
         }),
@@ -23,12 +28,11 @@ export const signIn = createAsyncThunk(
       if (!response.ok) {
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
-      const token = 'Bearer ' + data.token;
-      dispatch(addLogin(login));
-      dispatch(addToken(token));
       localStorage.setItem('login', login);
-      localStorage.setItem('token', token);
-      await dispatch(await getUsers());
+      dispatch(addLogin(data.login));
+      dispatch(addName(data.name));
+      dispatch(addUserId(data._id));
+      dispatch(getUsers());
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {

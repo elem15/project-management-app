@@ -28,9 +28,11 @@ export const signUp = createAsyncThunk(
       dispatch(addUserId(data._id));
     } catch (error) {
       if (error instanceof Error) {
-        return rejectWithValue(error.message);
-      } else {
-        return rejectWithValue('An unexpected error occurred');
+        if (error.message.startsWith('Error!')) {
+          return rejectWithValue(error.message);
+        } else {
+          return rejectWithValue('An unexpected error occurred');
+        }
       }
     }
   }
