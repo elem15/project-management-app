@@ -7,7 +7,8 @@
   flex-direction: column;
   background-color: rgb(0, 86, 216);
   transition: all .2s ease-in;
-  &.sticky{
+
+  &.sticky {
     position: fixed;
     background-color: rgb(3, 39, 94);
   }
@@ -23,11 +24,11 @@
   padding: 0 2rem;
 }
 
-.nav{
+.nav {
   display: flex;
-   margin: 0;
+  margin: 0;
 
-  &__link{
+  &__link {
     color: whitesmoke;
     font-weight: 500;
     padding: 1rem .5rem;
@@ -40,12 +41,38 @@
   color: white;
   text-decoration: none;
   transition: 0.5s;
-    &:hover {
-      color:darkcyan
-    } 
+
+  &:hover {
+    color: darkcyan
+  }
 }
 
 .current-position {
   padding: 10px 0;
   text-align: center;
+}
+
+.icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url('../../media/edit-profile.svg');
+  background-size: 20px;
+  background-color: aliceblue;
+  vertical-align: middle;
+}
+
+.logout {
+  position: relative;
+  width: 20px;
+  cursor: pointer;
+  border-radius: 100%;
+  transition: 0.5s;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0px 3px 3px brown;
+  }
+  &:active {
+    transform: translateY(1px);
+  }
 }

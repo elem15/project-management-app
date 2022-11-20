@@ -11,6 +11,7 @@ import Layout from 'components/Layout/Layout';
 import Board from 'pages/Board/Board';
 import BoardList from 'pages/BoardList/BoardList';
 import Welcome from 'pages/Welcome/Welcome';
+import UserProfile from 'pages/UserProfile/UserProfile';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path={ROUTES.WELCOME_PAGE} element={<Welcome />} />
           <Route path={ROUTES.SIGN_IN_PAGE} element={<SignIn />} />
           <Route path={ROUTES.SIGN_UP_PAGE} element={<SignUp />} />
+          <Route path={ROUTES.PROFILE} element={<UserProfile />} />
           <Route path={ROUTES.NOT_FOUND_PAGE} element={<Page404 />} />
           <Route path={ROUTES.YOUR_BOARDS} element={<BoardList />} />
           <Route path={`${ROUTES.YOUR_BOARDS}/:_id`} element={<Board />} />
