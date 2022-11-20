@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import './SignUp.scss';
-import { Button, Form, Input, Row, Typography } from 'antd';
-import { signUp } from 'utils/API/sign-up';
+import React, { useEffect, useState } from 'react';
+import './UserProfile.scss';
+import { Button, Form, Input, Modal, Row, Typography } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
+import { updateUser } from 'utils/API/update-user';
+import { deleteUser } from 'utils/API/delete-user';
 import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 
@@ -14,20 +15,20 @@ export type UserUp = {
   password: string;
 };
 
-const SignUp: React.FC = () => {
+const UserProfile: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, token, errorMessage } = useAppSelector((state) => state.auth);
+  const { name, login, errorMessage } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
-    dispatch(signUp(values));
+    dispatch(updateUser(values));
   };
+  const [prevName] = useState(name);
+  const [prevLogin] = useState(login);
+  const [deleteModal, setDeleteModal] = useState(false);
   useEffect(() => {
-    name && navigate(ROUTES.SIGN_IN_PAGE);
-  }, [navigate, name]);
-  useEffect(() => {
-    token && navigate(ROUTES.HOME_PAGE);
-  }, [navigate, token]);
+    (name !== prevName || login !== prevLogin) && navigate(ROUTES.HOME_PAGE);
+  }, [name, navigate, prevName, login, prevLogin]);
   useEffect(() => {
     if (errorMessage) {
       setTimeout(() => {
@@ -39,7 +40,7 @@ const SignUp: React.FC = () => {
     <main>
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
-          <Typography.Title level={2}>Sign up</Typography.Title>
+          <Typography.Title level={2}>{t('sign.editProfile')}</Typography.Title>
           <Form.Item
             label={t('sign.name')}
             name="name"
@@ -48,7 +49,7 @@ const SignUp: React.FC = () => {
               { type: 'string', min: 3, message: `${t('formRules.nameLength')}` },
             ]}
           >
-            <Input />
+            <Input placeholder={name} />
           </Form.Item>
           <Form.Item
             label={t('sign.login')}
@@ -58,7 +59,7 @@ const SignUp: React.FC = () => {
               { type: 'string', min: 3, message: `${t('formRules.loginLength')}` },
             ]}
           >
-            <Input />
+            <Input placeholder={login} />
           </Form.Item>
           <Form.Item
             {...(errorMessage && {
@@ -85,13 +86,30 @@ const SignUp: React.FC = () => {
               </Button>
             </Form.Item>
           </Row>
-          <div>
-            {t('sign.signInQuestion')} <Link to={ROUTES.SIGN_IN_PAGE}>{t('header.signIn')}</Link>
-          </div>
+          <Row justify="center">
+            <Button type="primary" danger onClick={() => setDeleteModal(true)}>
+              {t('sign.delete')}
+            </Button>
+          </Row>
         </Form>
+        <Modal
+          title={t('sign.danger')}
+          open={deleteModal}
+          footer={null}
+          onCancel={() => setDeleteModal(false)}
+          maskClosable={true}
+        >
+          <p>{t('sign.question')}</p>
+          <Row justify="end">
+            <Button onClick={() => setDeleteModal(false)}>{t('sign.cancel')}</Button>
+            <Button type="primary" danger onClick={() => dispatch(deleteUser())}>
+              {t('sign.ok')}
+            </Button>
+          </Row>
+        </Modal>
       </Row>
     </main>
   );
 };
 
-export default SignUp;
+export default UserProfile;
