@@ -13,6 +13,7 @@ import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.W
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import TaskList from 'pages/TaskList/TasksList';
 import { EditColumnTitle } from 'components/EditColumnTitle/EditColumnTitle';
+import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import './Board.scss';
 
 const Board: React.FC = () => {
@@ -42,9 +43,9 @@ const Board: React.FC = () => {
     dispatch(getTasksByBoardId(boardIdCurrent));
   }, [boardIdCurrent, dispatch, location]);
 
-  const handleClickDeleteColumn = async (columnId: string, boardId: string) => {
-    await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
-  };
+  // const handleClickDeleteColumn = async (columnId: string, boardId: string) => {
+  //   await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
+  // };
 
   const columnsList = columns.map((item) => (
     <div key={item._id} className="column-item">
@@ -66,7 +67,8 @@ const Board: React.FC = () => {
             shape="circle"
             icon={<DeleteOutlined />}
             danger
-            onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
+            // onClick={() => handleClickDeleteColumn(item._id, item.boardId)}
+            onClick={(e) => showDeleteConfirm(e, dispatch, 'column', item.boardId, item._id)}
           ></Button>
         </div>
         <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
@@ -88,21 +90,18 @@ const Board: React.FC = () => {
   return (
     <>
       <h2>Board</h2>
-      {isLoadingBoardPage ? (
-        <h2>Loading...</h2>
-      ) : (
-        <div className="column-list">
-          {columnsList}{' '}
-          <AddModalCreateColumn
-            typeButton={'primary'}
-            titleTextButton={'Add column'}
-            titleTextModal={'Add column'}
-            titleForm={'Column title'}
-            objField={'columnTitle'}
-            boardId={boardId}
-          />
-        </div>
-      )}
+      {/* {isLoadingBoardPage && <h2>Loading...</h2>} */}
+      <div className="column-list">
+        {columnsList}{' '}
+        <AddModalCreateColumn
+          typeButton={'primary'}
+          titleTextButton={'Add column'}
+          titleTextModal={'Add column'}
+          titleForm={'Column title'}
+          objField={'columnTitle'}
+          boardId={boardId}
+        />
+      </div>
     </>
   );
 };

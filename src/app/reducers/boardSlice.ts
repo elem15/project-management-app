@@ -105,9 +105,10 @@ export const boardSlice = createSlice({
     },
   },
   extraReducers: {
-    [createBoard.fulfilled.type]: (state) => {
+    [createBoard.fulfilled.type]: (state, action: PayloadAction<Board>) => {
       state.isLoading = false;
       state.isError = '';
+      state.boards = [...state.boards, action.payload];
     },
     [createBoard.pending.type]: loaderHandler,
     [createBoard.rejected.type]: errorHandler,

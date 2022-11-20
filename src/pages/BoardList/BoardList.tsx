@@ -3,20 +3,20 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoardId, deleteBoardById } from 'app/reducers/boardSlice';
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getBoards } from 'utils/API/get-boards';
 import { ROUTES } from 'utils/const/routes';
 import './BoardList.scss';
 import { deleteBoard } from 'utils/API/delete-board';
+import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 
 const BoardList = () => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     dispatch(getBoards());
-  }, [dispatch, location]);
+  }, [dispatch]);
 
   const { boards, isLoadingBoardsPage } = useAppSelector((state) => state.board);
 
@@ -29,14 +29,14 @@ const BoardList = () => {
     }
   };
 
-  const handleClickDeleteBoard = async (
-    e: React.MouseEvent<HTMLElement, globalThis.MouseEvent>,
-    boardId: string
-  ) => {
-    e.stopPropagation();
-    await dispatch(deleteBoard(boardId));
-    dispatch(deleteBoardById(boardId));
-  };
+  // const handleClickDeleteBoard = async (
+  //   e: React.MouseEvent<HTMLElement, globalThis.MouseEvent>,
+  //   boardId: string
+  // ) => {
+  //   e.stopPropagation();
+  //   await dispatch(deleteBoard(boardId));
+  //   dispatch(deleteBoardById(boardId));
+  // };
 
   const boardList = boards.map((item) => (
     <div key={item._id}>
@@ -56,7 +56,8 @@ const BoardList = () => {
             shape="circle"
             icon={<DeleteOutlined />}
             danger
-            onClick={(e) => handleClickDeleteBoard(e, item._id)}
+            // onClick={(e) => handleClickDeleteBoard(e, item._id)}
+            onClick={(e) => showDeleteConfirm(e, dispatch, 'board', item._id)}
           ></Button>
         </div>
       </div>
@@ -66,7 +67,8 @@ const BoardList = () => {
   return (
     <>
       <h2>Your Boards</h2>
-      {isLoadingBoardsPage ? <h2>Loading...</h2> : <div className="list">{boardList}</div>}
+      {/* {isLoadingBoardsPage && <h2>Loading...</h2>} */}
+      <div className="list">{boardList}</div>
     </>
   );
 };

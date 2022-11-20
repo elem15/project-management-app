@@ -6,6 +6,7 @@ import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { deleteTaskById } from 'app/reducers/boardSlice';
 import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
+import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 
 type Task = {
   _id: string;
@@ -52,7 +53,10 @@ function TaskList(props: TaskListProps) {
             <Button
               className="button-delete-task"
               icon={<DeleteOutlined />}
-              onClick={() => handleClickDeleteTask(task._id, props.columnId, props.boardId)}
+              // onClick={() => handleClickDeleteTask(task._id, props.columnId, props.boardId)}
+              onClick={(e) =>
+                showDeleteConfirm(e, dispatch, 'task', props.boardId, props.columnId, task._id)
+              }
               danger
             ></Button>
           </div>
@@ -63,11 +67,7 @@ function TaskList(props: TaskListProps) {
     return <div>{tasksList}</div>;
   };
 
-  return isLoadingBoardPage ? (
-    <div>Loading...</div>
-  ) : (
-    <div className="task-container">{createTaskList(props.columnId)}</div>
-  );
+  return <div className="task-container">{createTaskList(props.columnId)}</div>;
 }
 
 export default TaskList;
