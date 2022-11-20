@@ -19,13 +19,16 @@ const UserProfile: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, login, errorMessage } = useAppSelector((state) => state.auth);
+  const { name, login, errorMessage, token } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
     dispatch(updateUser(values));
   };
   const [prevName] = useState(name);
   const [prevLogin] = useState(login);
   const [deleteModal, setDeleteModal] = useState(false);
+  useEffect(() => {
+    !token && navigate(ROUTES.WELCOME_PAGE);
+  }, [token, navigate]);
   useEffect(() => {
     (name !== prevName || login !== prevLogin) && navigate(ROUTES.HOME_PAGE);
   }, [name, navigate, prevName, login, prevLogin]);
