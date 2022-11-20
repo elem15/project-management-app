@@ -26,7 +26,7 @@ type Option = {
 
 export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
-  const { login } = useAppSelector((state) => state.auth);
+  const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const { usersTeam, isLoading } = useAppSelector((state) => state.board);
@@ -44,7 +44,7 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
           title: values[props.objField],
           order: 1,
           description: values.description ? values.description : ' ',
-          userId: login,
+          userId: userId,
           users: values.teammates ? values.teammates.flat() : [],
           boardId: props.boardId,
           columnId: props.columnId,

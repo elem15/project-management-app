@@ -30,7 +30,7 @@ type Option = {
 
 export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
-  const { login } = useAppSelector((state) => state.auth);
+  const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
   const { usersTeam, isLoading } = useAppSelector((state) => state.board);
@@ -59,7 +59,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
           boardId: props.boardId,
           columnId: props.columnId,
           taskId: props.taskId,
-          userId: login,
+          userId: userId,
           users: values.teammates ? values.teammates.flat() : [],
         })
       );
