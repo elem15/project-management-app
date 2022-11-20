@@ -14,8 +14,8 @@ type BoardError = {
   message: string;
 };
 
-export const getTeammatesByBoardId = createAsyncThunk(
-  'board/getTeammatesByBoardId',
+export const getTitleByBoardId = createAsyncThunk(
+  'board/getTitleByBoardId',
   async (boardId: string, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
@@ -34,7 +34,7 @@ export const getTeammatesByBoardId = createAsyncThunk(
           }`
         );
       }
-      return (data as Board).users;
+      return (data as Board).title;
     } catch (error) {
       console.log('Error message: ', (error as Error).message);
       return rejectWithValue((error as Error).message);

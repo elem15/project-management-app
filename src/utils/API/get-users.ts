@@ -3,14 +3,6 @@ import { addAllUsers, setUser, signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, USERS } from 'utils/const/urls';
 
-type User = {
-  login?: string;
-  name?: string;
-  _id?: string;
-  statusCode?: string;
-  message?: string;
-};
-
 export const getUsers = createAsyncThunk(
   'auth/getUsers',
   async (_, { rejectWithValue, dispatch, getState }) => {

@@ -8,7 +8,7 @@ import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
-import { getTeammatesByBoardId } from 'utils/API/get-teammates-by-board-id';
+import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import { getUsers } from 'utils/API/get-users';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { updateTask } from 'utils/API/update-task';
@@ -53,6 +53,7 @@ type BoardType = {
   boards: Board[];
   columns: Column[];
   teammates: string[];
+  title: string;
   boardId: string;
   tasks: Task[];
 };
@@ -66,6 +67,7 @@ const initialState: BoardType = {
   boards: [],
   columns: [],
   teammates: [],
+  title: '',
   boardId: '',
   tasks: [],
 };
@@ -147,13 +149,13 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = false;
       errorHandler(state, action);
     },
-    [getTeammatesByBoardId.fulfilled.type]: (state, action: PayloadAction<string[]>) => {
+    [getTitleByBoardId.fulfilled.type]: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.isError = '';
-      state.teammates = action.payload;
+      state.title = action.payload;
     },
-    [getTeammatesByBoardId.pending.type]: loaderHandler,
-    [getTeammatesByBoardId.rejected.type]: errorHandler,
+    [getTitleByBoardId.pending.type]: loaderHandler,
+    [getTitleByBoardId.rejected.type]: errorHandler,
     [deleteBoardColumn.fulfilled.type]: (state, action: PayloadAction<Column>) => {
       const newStateColumnsAfterDelete = state.columns.filter(
         (item) => item._id !== action.payload._id

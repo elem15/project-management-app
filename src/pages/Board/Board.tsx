@@ -14,10 +14,11 @@ import TaskList from 'pages/TaskList/TasksList';
 import { EditColumnTitle } from 'components/EditColumnTitle/EditColumnTitle';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import './Board.scss';
+import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
-  const { columns, boardId, tasks } = useAppSelector((state) => state.board);
+  const { columns, boardId, tasks, title } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
@@ -39,6 +40,7 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBoardColumns(boardIdCurrent));
+    dispatch(getTitleByBoardId(boardIdCurrent));
     dispatch(getTasksByBoardId(boardIdCurrent));
   }, [boardIdCurrent, dispatch, location]);
 
@@ -82,8 +84,10 @@ const Board: React.FC = () => {
   ));
 
   return (
-    <>
-      <h2>Board</h2>
+    <div className="columns-container">
+      <h2>{title ? JSON.parse(title).title : ''}</h2>
+      <h3>{title ? JSON.parse(title).description : ''}</h3>
+      <Button onClick={() => router(`${ROUTES.YOUR_BOARDS}`)}>Back</Button>
       <div className="column-list">
         {columnsList}{' '}
         <AddModalCreateColumn
@@ -95,7 +99,7 @@ const Board: React.FC = () => {
           boardId={boardId}
         />
       </div>
-    </>
+    </div>
   );
 };
 
