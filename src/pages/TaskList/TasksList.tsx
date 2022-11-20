@@ -1,9 +1,7 @@
 import { Button } from 'antd';
 import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { deleteColumnTask } from 'utils/API/delete-column-task';
-import { deleteTaskById } from 'app/reducers/boardSlice';
+import { useAppDispatch } from 'app/hooks';
 import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
@@ -27,12 +25,6 @@ type TaskListProps = {
 
 function TaskList(props: TaskListProps) {
   const dispatch = useAppDispatch();
-  const { isLoadingBoardPage } = useAppSelector((state) => state.board);
-
-  const handleClickDeleteTask = async (taskId: string, columnId: string, boardId: string) => {
-    await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
-    dispatch(deleteTaskById(taskId));
-  };
 
   const createTaskList = (columnId: string) => {
     const tasksList = props.tasks.map((task) => {
@@ -53,7 +45,6 @@ function TaskList(props: TaskListProps) {
             <Button
               className="button-delete-task"
               icon={<DeleteOutlined />}
-              // onClick={() => handleClickDeleteTask(task._id, props.columnId, props.boardId)}
               onClick={(e) =>
                 showDeleteConfirm(e, dispatch, 'task', props.boardId, props.columnId, task._id)
               }
