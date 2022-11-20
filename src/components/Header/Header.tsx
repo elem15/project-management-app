@@ -6,6 +6,8 @@ import { ROUTES } from 'utils/const/routes';
 import './Header.scss';
 import { AddModalCreateBoard } from 'components/ModalCreateBoard/ModalCreateBoard.Window';
 import logout from '../../media/logout.png';
+import Localize from 'components/Localize/Localize';
+import { useTranslation } from 'react-i18next';
 
 type StickyType = {
   sticky: boolean;
@@ -13,6 +15,8 @@ type StickyType = {
 };
 
 function Header() {
+  const { t } = useTranslation();
+
   const { name, token } = useAppSelector((state) => state.auth);
   const headerRef = useRef(null);
   const [sticky, setSticky] = useState<StickyType>({ sticky: false, offset: 0 });
@@ -52,23 +56,20 @@ function Header() {
       ref={headerRef}
     >
       <div className="page-name-container">
-        <Link to={ROUTES.HOME_PAGE} className="page-name">
-          Home
+        <Link to={ROUTES.HOME_PAGE} className="nav__link">
+          {t('header.main')}
         </Link>
         {token ? (
           <div>
-            <Link to={ROUTES.HOME_PAGE} className="nav__link">
-              Go to Main Page
-            </Link>
             <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
-              Board
+              {t('header.board')}
             </Link>
             <Link to={ROUTES.YOUR_BOARDS} className="page-name">
-              BoardList
+              {t('header.boardList')}
             </Link>
             <AddModalCreateBoard
               typeButton={'primary'}
-              titleTextButton={'New board'}
+              titleTextButton={t('header.newBoard')}
               titleTextModal={'Create Board'}
               titleForm={'Board title'}
               objField={'boardTitle'}
@@ -81,13 +82,14 @@ function Header() {
         ) : (
           <ul className="nav">
             <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">
-              Sign In
+              {t('header.signIn')}
             </Link>
             <Link to={ROUTES.SIGN_UP_PAGE} className="nav__link">
-              Sign Up
+              {t('header.signUp')}
             </Link>
           </ul>
         )}
+        <Localize />
       </div>
     </header>
   );

@@ -3,9 +3,10 @@ import './SignUp.scss';
 import { Button, Form, Input, Row, Typography } from 'antd';
 import { signUp } from 'utils/API/sign-up';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import { clearErrors } from 'app/reducers/authSlice';
+import { useTranslation } from 'react-i18next';
 
 export type UserUp = {
   name: string;
@@ -14,6 +15,7 @@ export type UserUp = {
 };
 
 const SignUp: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { name, token, errorMessage } = useAppSelector((state) => state.auth);
@@ -39,21 +41,21 @@ const SignUp: React.FC = () => {
         <Form name="basic" onFinish={onFinish} autoComplete="off">
           <Typography.Title level={2}>Sign up</Typography.Title>
           <Form.Item
-            label="Name"
+            label={t('sign.name')}
             name="name"
             rules={[
-              { required: true, message: 'Please input your name!' },
-              { type: 'string', min: 3, message: 'Name must be at least 3 characters' },
+              { required: true, message: `${t('formRules.nameRequired')}` },
+              { type: 'string', min: 3, message: `${t('formRules.nameLength')}` },
             ]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Login"
+            label={t('sign.login')}
             name="login"
             rules={[
-              { required: true, message: 'Please input your login!' },
-              { type: 'string', min: 3, message: 'Login must be at least 3 characters' },
+              { required: true, message: `${t('formRules.loginRequired')}` },
+              { type: 'string', min: 3, message: `${t('formRules.loginLength')}` },
             ]}
           >
             <Input />
@@ -63,13 +65,13 @@ const SignUp: React.FC = () => {
               help: errorMessage,
               validateStatus: 'error',
             })}
-            label="Password"
+            label={t('sign.password')}
             name="password"
             rules={[
-              { required: true, message: 'Please input your password!' },
-              { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+              { required: true, message: `${t('formRules.passwordRequired')}` },
+              { type: 'string', min: 8, message: `${t('formRules.passwordLength')}` },
               {
-                message: 'Only numbers and english characters without space can be entered',
+                message: `${t('formRules.passwordPattern')}`,
                 pattern: /^[A-Za-z0-9_]+$/,
               },
             ]}
@@ -79,10 +81,13 @@ const SignUp: React.FC = () => {
           <Row justify="center">
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                {t('sign.submit')}
               </Button>
             </Form.Item>
           </Row>
+          <div>
+            {t('sign.signInQuestion')} <Link to={ROUTES.SIGN_IN_PAGE}>{t('header.signIn')}</Link>
+          </div>
         </Form>
       </Row>
     </main>

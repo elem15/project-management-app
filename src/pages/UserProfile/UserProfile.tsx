@@ -7,6 +7,7 @@ import { ROUTES } from 'utils/const/routes';
 import { updateUser } from 'utils/API/update-user';
 import { deleteUser } from 'utils/API/delete-user';
 import { clearErrors } from 'app/reducers/authSlice';
+import { useTranslation } from 'react-i18next';
 
 export type UserUp = {
   name: string;
@@ -15,6 +16,7 @@ export type UserUp = {
 };
 
 const UserProfile: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { name, login, errorMessage } = useAppSelector((state) => state.auth);
@@ -38,23 +40,23 @@ const UserProfile: React.FC = () => {
     <main>
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
-          <Typography.Title level={2}>Edit Profile</Typography.Title>
+          <Typography.Title level={2}>{t('sign.editProfile')}</Typography.Title>
           <Form.Item
-            label="Name"
+            label={t('sign.name')}
             name="name"
             rules={[
-              { required: true, message: 'Please input your name!' },
-              { type: 'string', min: 3, message: 'Name must be at least 3 characters' },
+              { required: true, message: `${t('formRules.nameRequired')}` },
+              { type: 'string', min: 3, message: `${t('formRules.nameLength')}` },
             ]}
           >
             <Input placeholder={name} />
           </Form.Item>
           <Form.Item
-            label="Login"
+            label={t('sign.login')}
             name="login"
             rules={[
-              { required: true, message: 'Please input your login!' },
-              { type: 'string', min: 3, message: 'Login must be at least 3 characters' },
+              { required: true, message: `${t('formRules.loginRequired')}` },
+              { type: 'string', min: 3, message: `${t('formRules.loginLength')}` },
             ]}
           >
             <Input placeholder={login} />
@@ -64,13 +66,13 @@ const UserProfile: React.FC = () => {
               help: errorMessage,
               validateStatus: 'error',
             })}
-            label="Password"
+            label={t('sign.password')}
             name="password"
             rules={[
-              { required: true, message: 'Please input your password!' },
-              { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+              { required: true, message: `${t('formRules.passwordRequired')}` },
+              { type: 'string', min: 8, message: `${t('formRules.passwordLength')}` },
               {
-                message: 'Only numbers and english characters without space can be entered',
+                message: `${t('formRules.passwordPattern')}`,
                 pattern: /^[A-Za-z0-9_]+$/,
               },
             ]}
@@ -80,22 +82,28 @@ const UserProfile: React.FC = () => {
           <Row justify="center">
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Submit
+                {t('sign.submit')}
               </Button>
             </Form.Item>
           </Row>
           <Row justify="center">
             <Button type="primary" danger onClick={() => setDeleteModal(true)}>
-              Delete account
+              {t('sign.delete')}
             </Button>
           </Row>
         </Form>
-        <Modal title="Account will be permanently deleted!" open={deleteModal} footer={null}>
-          <p>Are you sure?</p>
+        <Modal
+          title={t('sign.danger')}
+          open={deleteModal}
+          footer={null}
+          onCancel={() => setDeleteModal(false)}
+          maskClosable={true}
+        >
+          <p>{t('sign.question')}</p>
           <Row justify="end">
-            <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+            <Button onClick={() => setDeleteModal(false)}>{t('sign.cancel')}</Button>
             <Button type="primary" danger onClick={() => dispatch(deleteUser())}>
-              Delete account
+              {t('sign.ok')}
             </Button>
           </Row>
         </Modal>
