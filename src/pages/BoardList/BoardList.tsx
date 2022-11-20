@@ -12,12 +12,11 @@ import './BoardList.scss';
 
 const BoardList = () => {
   const { token } = useAppSelector((state) => state.auth);
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const router = useNavigate();
   useEffect(() => {
-    !token && navigate(ROUTES.WELCOME_PAGE);
-  }, [token, navigate]);
+    !token && router(ROUTES.WELCOME_PAGE);
+  }, [token, router]);
   useEffect(() => {
     dispatch(getBoards());
   }, [dispatch]);
@@ -58,7 +57,7 @@ const BoardList = () => {
     <Card
       key={item._id}
       onClick={() => handleClickOpen(item._id)}
-      title={`Board title: ${item.title}`}
+      title={`Board title: ${JSON.parse(item.title).title}`}
       className="boards__item"
       bordered
     >

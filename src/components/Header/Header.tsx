@@ -86,13 +86,17 @@ function Header() {
             </li>
             <li>
               <Link to={ROUTES.PROFILE} className="page-name">
-                <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={name + ' profile'}>
+                <Tooltip
+                  mouseEnterDelay={0.2}
+                  placement="bottomRight"
+                  title={name + ' - ' + t('header.profile')}
+                >
                   <img className="icon" src={user} alt="user profile" />
                 </Tooltip>
               </Link>
             </li>
             <li>
-              <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title="sign out">
+              <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={t('header.signOut')}>
                 <img className="icon" onClick={handleSignOut} src={logout} alt="logout" />
               </Tooltip>
             </li>

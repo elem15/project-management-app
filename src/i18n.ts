@@ -25,6 +25,8 @@ i18n
             newBoard: 'New board',
             signIn: 'Sign in',
             signUp: 'Sign up',
+            signOut: 'Sign out',
+            profile: 'edit profile',
           },
           sign: {
             login: 'login',
@@ -76,6 +78,8 @@ i18n
             newBoard: 'Новая доска',
             signIn: 'Войти',
             signUp: 'Зарегистрироваться',
+            signOut: 'Выйти',
+            profile: 'редактировать профиль',
           },
           sign: {
             login: 'логин',
