@@ -18,7 +18,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path={ROUTES.HOME_PAGE} element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<BoardList />} />
           <Route path={ROUTES.WELCOME_PAGE} element={<Welcome />} />
           <Route path={ROUTES.SIGN_IN_PAGE} element={<SignIn />} />
           <Route path={ROUTES.SIGN_UP_PAGE} element={<SignUp />} />

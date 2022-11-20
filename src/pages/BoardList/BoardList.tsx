@@ -11,9 +11,13 @@ import keyCreator from 'utils/keyCreator/keyCreator';
 import './BoardList.scss';
 
 const BoardList = () => {
+  const { token } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const router = useNavigate();
-
+  useEffect(() => {
+    !token && navigate(ROUTES.WELCOME_PAGE);
+  }, [token, navigate]);
   useEffect(() => {
     dispatch(getBoards());
   }, [dispatch]);
