@@ -11,11 +11,13 @@ const Layout = () => {
     appDispatch(getUsers());
   }, [appDispatch]);
   return (
-    <div>
+    <>
       <Header />
-      <Outlet />
+      <main>
+        <Outlet />
+      </main>
       <Footer />
-    </div>
+    </>
   );
 };
 

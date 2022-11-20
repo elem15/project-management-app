@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { ROUTES } from 'utils/const/routes';
-import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
+import { Routes, Route, Navigate, HashRouter, Router, BrowserRouter } from 'react-router-dom';
 import './App.css';
 import Page404 from 'pages/Page404/Page404';
 import SignUp from 'pages/SignUp/SignUp';
@@ -15,7 +15,7 @@ import UserProfile from 'pages/UserProfile/UserProfile';
 
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route path={ROUTES.HOME_PAGE} element={<Layout />}>
           <Route index element={<Home />} />
@@ -30,7 +30,7 @@ function App() {
           <Route path={ROUTES.ANY_PAGE} element={<Navigate to={ROUTES.NOT_FOUND_PAGE} replace />} />
         </Route>
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

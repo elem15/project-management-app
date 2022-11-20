@@ -60,13 +60,14 @@ function Header() {
           {t('header.main')}
         </Link>
         {token ? (
-          <div>
+          <ul className="nav">
             <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
               {t('header.board')}
             </Link>
             <Link to={ROUTES.YOUR_BOARDS} className="page-name">
               {t('header.boardList')}
             </Link>
+            <Link to={ROUTES.HOME_PAGE} className="nav__link"></Link>
             <AddModalCreateBoard
               typeButton={'primary'}
               titleTextButton={t('header.newBoard')}
@@ -78,7 +79,7 @@ function Header() {
               <div className="icon" /> {name}
             </Link>
             <img className="logout" onClick={handleSignOut} src={logout} alt="logout" />
-          </div>
+          </ul>
         ) : (
           <ul className="nav">
             <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">

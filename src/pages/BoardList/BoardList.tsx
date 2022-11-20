@@ -1,4 +1,6 @@
+import { Card } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { Preloader } from 'components/Preloader/Preloader';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getBoardColumns } from 'utils/API/get-board-columns';
@@ -49,24 +51,33 @@ const BoardList = () => {
   };
 
   const boardList = boards.map((item) => (
-    <div key={item._id} className="card-item" onClick={() => handleClickOpen(item._id)}>
-      <h3>Board title:</h3>
-      <div>{item.title}</div>
-      <h3>Created by:</h3>
-      <div>{item.owner}</div>
-      {item.users.length !== 0 && (
+    <Card
+      key={item._id}
+      onClick={() => handleClickOpen(item._id)}
+      title={`Board title: ${item.title}`}
+      className="boards__item"
+      bordered
+    >
+      <h3>Created by: {item.owner}</h3>
+      {item.users.length && (
         <>
           <h3>Teammates:</h3>
           <div>{createTeammatesList(item.users)}</div>
         </>
       )}
-    </div>
+    </Card>
   ));
 
   return (
     <>
-      <h2>Your Boards</h2>
-      {isLoadingBoardsPage ? <h2>Loading...</h2> : <div className="list">{boardList}</div>}
+      <h2
+        style={{
+          padding: '1rem',
+        }}
+      >
+        Your Boards
+      </h2>
+      <div className="boards">{isLoadingBoardsPage ? <Preloader /> : boardList}</div>
     </>
   );
 };

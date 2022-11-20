@@ -1,20 +1,16 @@
-.list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 20px;
-  max-width: 1024px;
+.boards {
+  display: grid;
+  grid-template-columns: repeat(5,minmax(150px,1fr));
+  gap: 1rem;
+  padding: 1rem;
 }
 
-.card-item {
+.boards__item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5px;
-  border: 1px solid black;
-  border-radius: 5px;
-  box-shadow: 0 15px 15px rgba(256,256,256,0.25), 0 15px 15px rgba(256,256,256,0.20);
+  padding: .25rem;
+  border-radius: 3px;
   transition: 0.2s;
     
   &:hover {
@@ -22,4 +18,29 @@
       box-shadow: 0 15px 30px rgba(0,0,0,0.25), 0 15px 15px rgba(0,0,0,0.20);
       cursor: pointer;
     }
+}
+
+@media screen and (max-width: 991px) {
+
+  .boards{
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
+  
+}
+
+
+@media screen and (max-width: 767px) {
+
+  .boards{
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+  
+}
+
+@media screen and (max-width: 481px) {
+
+  .boards{
+    grid-template-columns: 1fr;
+  }
+  
 }

@@ -15,7 +15,7 @@ export default function Localize() {
   };
   return (
     <>
-      <Button type="text" onClick={lingChange}>
+      <Button type="text" onClick={lingChange} style={{ color: 'white' }}>
         {i18n.resolvedLanguage.toUpperCase()}
       </Button>
     </>

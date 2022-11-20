@@ -1,7 +1,9 @@
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
+import { Preloader } from 'components/Preloader/Preloader';
 import React, { useEffect } from 'react';
 import { getBoardColumns } from 'utils/API/get-board-columns';
+import './Board.scss';
 
 const Board: React.FC = () => {
   const { columns, isLoadingBoardPage } = useAppSelector((state) => state.board);
@@ -31,12 +33,18 @@ const Board: React.FC = () => {
 
   return (
     <>
-      <h2>Board</h2>
+      <h2
+        style={{
+          padding: '1rem',
+        }}
+      >
+        Board
+      </h2>
       {isLoadingBoardPage ? (
-        <h2>Loading...</h2>
+        <Preloader />
       ) : (
         <div className="list">
-          {columnsList}{' '}
+          {columnsList}
           <AddModalCreateColumn
             typeButton={'primary'}
             titleTextButton={'Add column'}
