@@ -8,6 +8,10 @@ import { AddModalCreateBoard } from 'components/ModalCreateBoard/ModalCreateBoar
 import logout from '../../media/logout.png';
 import Localize from 'components/Localize/Localize';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { Dropdown } from 'antd';
+import type { MenuProps } from 'antd';
 
 type StickyType = {
   sticky: boolean;
@@ -25,6 +29,27 @@ function Header() {
   const handleSignOut = async () => {
     appDispatch(signOut());
     navigate(ROUTES.HOME_PAGE);
+  };
+
+  const items: MenuProps['items'] = [
+    {
+      label: (
+        <Link to={ROUTES.PROFILE} className="nav__link" style={{ marginLeft: '15px' }}>
+          Edit profile
+        </Link>
+      ),
+      key: '1',
+      icon: <FontAwesomeIcon icon={faUser} />,
+    },
+    {
+      label: <span onClick={handleSignOut}>Sign out</span>,
+      key: '2',
+      icon: <FontAwesomeIcon icon={faSignOut} />,
+    },
+  ];
+
+  const menuProps = {
+    items,
   };
 
   const handleScroll = (elTopOffset: number, elHeight: number) => {
@@ -60,11 +85,11 @@ function Header() {
           {t('header.main')}
         </Link>
         {token ? (
-          <div>
-            <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
+          <ul className="nav">
+            <Link to={ROUTES.TEMPORARY_BOARD} className="nav__link">
               {t('header.board')}
             </Link>
-            <Link to={ROUTES.YOUR_BOARDS} className="page-name">
+            <Link to={ROUTES.YOUR_BOARDS} className="nav__link">
               {t('header.boardList')}
             </Link>
             <AddModalCreateBoard
@@ -74,11 +99,14 @@ function Header() {
               titleForm={'Board title'}
               objField={'boardTitle'}
             />
-            <Link to={ROUTES.PROFILE} className="page-name" style={{ marginLeft: '15px' }}>
-              <div className="icon" /> {name}
-            </Link>
-            <img className="logout" onClick={handleSignOut} src={logout} alt="logout" />
-          </div>
+            <Dropdown.Button
+              menu={menuProps}
+              placement="bottom"
+              icon={<FontAwesomeIcon icon={faUser} />}
+            >
+              {name}
+            </Dropdown.Button>
+          </ul>
         ) : (
           <ul className="nav">
             <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">
