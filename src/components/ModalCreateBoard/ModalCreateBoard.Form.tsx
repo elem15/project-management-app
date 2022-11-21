@@ -21,7 +21,7 @@ type PropsCreateBoardForm = {
 export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
-  const { login } = useAppSelector((state) => state.auth);
+  const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
       await dispatch(
         createBoard({
           title: JSON.stringify({ title: values[props.objField], description: values.description }),
-          owner: login,
+          owner: userId,
           users: [],
         })
       );

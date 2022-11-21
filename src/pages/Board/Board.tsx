@@ -45,7 +45,7 @@ const Board: React.FC = () => {
   }, [boardIdCurrent, dispatch, location]);
 
   const columnsList = columns.map((item) => (
-    <div key={item._id} className="column-item">
+    <div key={item._id} draggable={true} className="column-item">
       <div>
         <div className="column-item-header">
           <div>
