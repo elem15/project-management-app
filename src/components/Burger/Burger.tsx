@@ -6,10 +6,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
-import logout from '../../media/logout.png';
+import logout from '../../media/log-out.png';
 import user from '../../media/user.svg';
 import boards from '../../media/boards.svg';
 import burger from '../../media/burger.svg';
+import signIn from '../../media/sign-in.svg';
+import signUp from '../../media/sign-up.png';
 import './Burger.scss';
 
 const Burger = () => {
@@ -28,8 +30,8 @@ const Burger = () => {
       <div className="burger-btn">
         <img src={burger} onClick={() => setIsMenu(!isMenu)} />
       </div>
-      {!isMenu && <div className="burger-down-layer" onClick={() => setIsMenu(!isMenu)} />}
-      <div className={isMenu ? 'burger-view' : 'burger-no-view'}>
+      {isMenu && <div className="burger-down-layer" onClick={() => setIsMenu(!isMenu)} />}
+      <div className={isMenu ? 'burger-no-view' : 'burger-view'}>
         {token ? (
           <ul className="burger-menu">
             <li className="menu-item">
@@ -69,12 +71,14 @@ const Burger = () => {
           <ul className="burger-menu">
             <li className="menu-item" onClick={() => setIsMenu(!isMenu)}>
               <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">
-                {t('header.signIn')}
+                <img className="icon" src={signIn} alt="user profile" />
+                <span className="menu-item-title">{t('header.signIn')}</span>
               </Link>
             </li>
             <li className="menu-item" onClick={() => setIsMenu(!isMenu)}>
               <Link to={ROUTES.SIGN_UP_PAGE} className="nav__link">
-                {t('header.signUp')}
+                <img className="icon" src={signUp} alt="user profile" />
+                <span className="menu-item-title">{t('header.signUp')}</span>
               </Link>
             </li>
             <li className="menu-item" onClick={() => setIsMenu(!isMenu)}>

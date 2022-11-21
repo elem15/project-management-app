@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { AddModalFormBoard } from './ModalCreateBoard.Form';
 import newBoard from '../../media/new-board.svg';
 
@@ -24,10 +24,12 @@ export const AddModalCreateBoard = (props: PropsModal) => {
 
   return (
     <>
-      <div onClick={showModal}>
+      <>
         <img className="icon" src={newBoard} alt="boards list" onClick={showModal} />
-        <span className="menu-item-title">{props.titleTextButton}</span>
-      </div>
+        <span className="menu-item-title" onClick={showModal}>
+          {props.titleTextButton}
+        </span>
+      </>
       <Modal
         destroyOnClose={true}
         title={props.titleTextModal}

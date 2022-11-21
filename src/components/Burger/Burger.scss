@@ -6,7 +6,7 @@
   top: 20px;
 }
 
-@media (max-width: 470px) {
+@media (max-width: 670px) {
   .burger {
     display: block;
   }
@@ -26,12 +26,12 @@
 
 .burger-view {
   transform: translateX(300px);
-  transition: 1s ease;
+  transition: .5s ease-in-out;
 }
 
 .burger-no-view {
   transform: translateX(0);
-  transition: 1s ease;
+  transition: .5s ease-out;
 }
 
 .burger-btn {
@@ -58,7 +58,7 @@
 }
 
 .menu-item-title {
-  margin-left: 15px;
+  margin-left: 5px;
   cursor: pointer;
   color: azure;
 }
