@@ -100,6 +100,9 @@ function Header() {
                 <img className="icon" onClick={handleSignOut} src={logout} alt="logout" />
               </Tooltip>
             </li>
+            <li>
+              <Localize />
+            </li>
           </ul>
         ) : (
           <ul className="nav">
@@ -113,9 +116,11 @@ function Header() {
                 {t('header.signUp')}
               </Link>
             </li>
+            <li>
+              <Localize />
+            </li>
           </ul>
         )}
-        <Localize />
       </div>
     </header>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Tooltip } from 'antd';
+import { Modal } from 'antd';
 import { AddModalFormBoard } from './ModalCreateBoard.Form';
 import newBoard from '../../media/new-board.svg';
 
@@ -24,9 +24,10 @@ export const AddModalCreateBoard = (props: PropsModal) => {
 
   return (
     <>
-      <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={`${props.titleTextButton}`}>
+      <div onClick={showModal}>
         <img className="icon" src={newBoard} alt="boards list" onClick={showModal} />
-      </Tooltip>
+        <span className="menu-item-title">{props.titleTextButton}</span>
+      </div>
       <Modal
         destroyOnClose={true}
         title={props.titleTextModal}

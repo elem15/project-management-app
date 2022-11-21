@@ -57,7 +57,7 @@ const BoardList = () => {
     <Card
       key={item._id}
       onClick={() => handleClickOpen(item._id)}
-      title={`Board title: ${JSON.parse(item.title).title}`}
+      title={`Board title: ${item.title}`}
       className="boards__item"
       bordered
     >

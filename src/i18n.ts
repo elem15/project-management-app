@@ -26,7 +26,7 @@ i18n
             signIn: 'Sign in',
             signUp: 'Sign up',
             signOut: 'Sign out',
-            profile: 'edit profile',
+            profile: 'Edit profile',
           },
           sign: {
             login: 'login',
@@ -79,7 +79,7 @@ i18n
             signIn: 'Войти',
             signUp: 'Зарегистрироваться',
             signOut: 'Выйти',
-            profile: 'редактировать профиль',
+            profile: 'Редактировать профиль',
           },
           sign: {
             login: 'логин',
