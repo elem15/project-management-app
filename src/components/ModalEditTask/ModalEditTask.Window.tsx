@@ -17,6 +17,7 @@ type PropsModal = {
 
 export const AddModalEditTask = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setOpen(true);
@@ -24,6 +25,7 @@ export const AddModalEditTask = (props: PropsModal) => {
 
   const hideModal = () => {
     setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -49,6 +51,8 @@ export const AddModalEditTask = (props: PropsModal) => {
           description={props.description}
           usersTeammates={props.usersTeammates}
           onCancel={hideModal}
+          loading={loading}
+          setLoading={setLoading}
         />
       </Modal>
     </>

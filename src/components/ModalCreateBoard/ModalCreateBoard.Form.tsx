@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createBoard } from 'utils/API/create-board';
@@ -13,18 +13,21 @@ type Values = {
 type PropsCreateBoardForm = {
   titleForm: string;
   objField: string;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel: () => void;
 };
 
 export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
+  const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { isLoading } = useAppSelector((state) => state.board);
-
   const onFinish = async (values: Values) => {
+    props.setLoading(true);
+    setComponentDisabled(true);
     if (props.objField === 'boardTitle') {
       await dispatch(
         createBoard({
@@ -33,50 +36,47 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
           users: [],
         })
       );
-      form.resetFields();
       props.onCancel();
+      form.resetFields();
       navigate(ROUTES.YOUR_BOARDS);
     }
   };
 
   return (
     <>
-      {isLoading ? (
-        <h2>Loading...</h2>
-      ) : (
-        <Form
-          form={form}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          autoComplete="off"
+      <Form
+        form={form}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        autoComplete="off"
+        disabled={componentDisabled}
+      >
+        <Form.Item
+          label={props.titleForm}
+          name={props.objField}
+          rules={[
+            {
+              required: true,
+              message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
+                1
+              )}!`,
+            },
+          ]}
         >
-          <Form.Item
-            label={props.titleForm}
-            name={props.objField}
-            rules={[
-              {
-                required: true,
-                message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
-                  1
-                )}!`,
-              },
-            ]}
-          >
-            <Input />
+          <Input />
+        </Form.Item>
+        <Form.Item label="Description" name="description">
+          <Input />
+        </Form.Item>
+        <Row justify="center">
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={props.loading}>
+              Submit
+            </Button>
           </Form.Item>
-          <Form.Item label="Description" name="description">
-            <Input />
-          </Form.Item>
-          <Row justify="center">
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Row>
-        </Form>
-      )}
+        </Row>
+      </Form>
     </>
   );
 };

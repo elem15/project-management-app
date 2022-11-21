@@ -15,6 +15,7 @@ type PropsModal = {
 
 export const AddModalCreateColumn = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setOpen(true);
@@ -22,6 +23,7 @@ export const AddModalCreateColumn = (props: PropsModal) => {
 
   const hideModal = () => {
     setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -47,6 +49,8 @@ export const AddModalCreateColumn = (props: PropsModal) => {
           objField={props.objField}
           onCancel={hideModal}
           boardId={props.boardId}
+          loading={loading}
+          setLoading={setLoading}
         />
       </Modal>
     </>

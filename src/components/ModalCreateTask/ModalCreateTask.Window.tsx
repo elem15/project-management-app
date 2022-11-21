@@ -16,6 +16,7 @@ type PropsModal = {
 
 export const AddModalCreateTask = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setOpen(true);
@@ -23,6 +24,7 @@ export const AddModalCreateTask = (props: PropsModal) => {
 
   const hideModal = () => {
     setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -47,6 +49,8 @@ export const AddModalCreateTask = (props: PropsModal) => {
           titleForm={props.titleForm}
           objField={props.objField}
           onCancel={hideModal}
+          loading={loading}
+          setLoading={setLoading}
           boardId={props.boardId}
           columnId={props.columnId}
         />

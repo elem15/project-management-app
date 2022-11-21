@@ -13,6 +13,7 @@ type PropsModal = {
 
 export const AddModalCreateBoard = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const showModal = () => {
     setOpen(true);
@@ -20,6 +21,7 @@ export const AddModalCreateBoard = (props: PropsModal) => {
 
   const hideModal = () => {
     setOpen(false);
+    setLoading(false);
   };
 
   return (
@@ -38,6 +40,8 @@ export const AddModalCreateBoard = (props: PropsModal) => {
         <AddModalFormBoard
           titleForm={props.titleForm}
           objField={props.objField}
+          loading={loading}
+          setLoading={setLoading}
           onCancel={hideModal}
         />
       </Modal>

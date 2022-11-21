@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createTask } from 'utils/API/create-task';
@@ -15,6 +15,8 @@ type PropsCreateBoardForm = {
   objField: string;
   boardId: string;
   columnId: string;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel: () => void;
 };
 
@@ -26,10 +28,11 @@ type Option = {
 
 export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
+  const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
-  const { usersTeam, isLoading } = useAppSelector((state) => state.board);
+  const { usersTeam } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
     return { label: item.login, value: item.login };
   });
@@ -37,7 +40,8 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
   const options: Option[] = usersTeamFilter;
 
   const onFinish = async (values: Values) => {
-    form.resetFields();
+    props.setLoading(true);
+    setComponentDisabled(true);
     if (props.objField === 'taskTitle') {
       await dispatch(
         createTask({
@@ -52,50 +56,48 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
       );
       dispatch(addBoardId(props.boardId));
       props.onCancel();
+      form.resetFields();
     }
   };
 
   return (
     <>
-      {isLoading ? (
-        <h2>Loading...</h2>
-      ) : (
-        <Form
-          form={form}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          autoComplete="off"
+      <Form
+        form={form}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        autoComplete="off"
+        disabled={componentDisabled}
+      >
+        <Form.Item
+          label={props.titleForm}
+          name={props.objField}
+          rules={[
+            {
+              required: true,
+              message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
+                1
+              )}!`,
+            },
+          ]}
         >
-          <Form.Item
-            label={props.titleForm}
-            name={props.objField}
-            rules={[
-              {
-                required: true,
-                message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
-                  1
-                )}!`,
-              },
-            ]}
-          >
-            <Input />
+          <Input />
+        </Form.Item>
+        <Form.Item label="Description" name="description">
+          <Input />
+        </Form.Item>
+        <Form.Item label="Choose teammates" name="teammates">
+          <Cascader options={options} multiple />
+        </Form.Item>
+        <Row justify="center">
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={props.loading}>
+              Submit
+            </Button>
           </Form.Item>
-          <Form.Item label="Description" name="description">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Choose teammates" name="teammates">
-            <Cascader options={options} multiple />
-          </Form.Item>
-          <Row justify="center">
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Row>
-        </Form>
-      )}
+        </Row>
+      </Form>
     </>
   );
 };
