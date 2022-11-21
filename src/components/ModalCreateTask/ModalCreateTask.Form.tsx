@@ -1,44 +1,62 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Row } from 'antd';
+import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { createBoard } from 'utils/API/create-board';
-import { ROUTES } from 'utils/const/routes';
-import { useNavigate } from 'react-router-dom';
+import { createTask } from 'utils/API/create-task';
+import { addBoardId } from 'app/reducers/boardSlice';
 
 type Values = {
-  boardTitle: string;
+  teammates: string[][];
+  taskTitle: string;
   description: string;
 };
 
 type PropsCreateBoardForm = {
   titleForm: string;
   objField: string;
+  boardId: string;
+  columnId: string;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel: () => void;
 };
 
-export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
+type Option = {
+  value: string | number;
+  label: string;
+  children?: Option[];
+};
+
+export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
   const [form] = Form.useForm();
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
-  const { login } = useAppSelector((state) => state.auth);
+  const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+
+  const { usersTeam } = useAppSelector((state) => state.board);
+  const usersTeamFilter = usersTeam.map((item) => {
+    return { label: item.login, value: item.login };
+  });
+
+  const options: Option[] = usersTeamFilter;
 
   const onFinish = async (values: Values) => {
     props.setLoading(true);
     setComponentDisabled(true);
-    if (props.objField === 'boardTitle') {
+    if (props.objField === 'taskTitle') {
       await dispatch(
-        createBoard({
-          title: JSON.stringify({ title: values[props.objField], description: values.description }),
-          owner: login,
-          users: [],
+        createTask({
+          title: values[props.objField],
+          order: 1,
+          description: values.description ? values.description : ' ',
+          userId: userId,
+          users: values.teammates ? values.teammates.flat() : [],
+          boardId: props.boardId,
+          columnId: props.columnId,
         })
       );
+      dispatch(addBoardId(props.boardId));
       props.onCancel();
       form.resetFields();
-      navigate(ROUTES.YOUR_BOARDS);
     }
   };
 
@@ -68,6 +86,9 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
         </Form.Item>
         <Form.Item label="Description" name="description">
           <Input />
+        </Form.Item>
+        <Form.Item label="Choose teammates" name="teammates">
+          <Cascader options={options} multiple />
         </Form.Item>
         <Row justify="center">
           <Form.Item>

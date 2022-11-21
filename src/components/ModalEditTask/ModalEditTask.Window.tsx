@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { AddModalFormColumn } from './ModalCreateColumn.Form';
-import './ModalCreateColumn.scss';
+import './ModalEditTask.scss';
+import { AddModalEditTaskForm } from './ModalEditTask.Form';
 
 type PropsModal = {
-  typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
   titleTextButton: string;
   titleTextModal: string;
   titleForm: string;
   objField: string;
   boardId: string;
+  columnId: string;
+  taskId: string;
+  description: string;
+  usersTeammates: string[];
 };
 
-export const AddModalCreateColumn = (props: PropsModal) => {
+export const AddModalEditTask = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -28,12 +30,7 @@ export const AddModalCreateColumn = (props: PropsModal) => {
 
   return (
     <>
-      <Button
-        className="button-add-column"
-        type={props.typeButton}
-        icon={<PlusOutlined />}
-        onClick={showModal}
-      >
+      <Button className="button-edit-task" onClick={showModal}>
         {props.titleTextButton}
       </Button>
       <Modal
@@ -44,11 +41,16 @@ export const AddModalCreateColumn = (props: PropsModal) => {
         onCancel={hideModal}
         footer={null}
       >
-        <AddModalFormColumn
+        <AddModalEditTaskForm
           titleForm={props.titleForm}
           objField={props.objField}
-          onCancel={hideModal}
           boardId={props.boardId}
+          columnId={props.columnId}
+          taskId={props.taskId}
+          title={props.titleTextButton}
+          description={props.description}
+          usersTeammates={props.usersTeammates}
+          onCancel={hideModal}
           loading={loading}
           setLoading={setLoading}
         />

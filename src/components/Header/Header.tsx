@@ -61,9 +61,6 @@ function Header() {
         </Link>
         {token ? (
           <div>
-            <Link to={ROUTES.TEMPORARY_BOARD} className="page-name">
-              {t('header.board')}
-            </Link>
             <Link to={ROUTES.YOUR_BOARDS} className="page-name">
               {t('header.boardList')}
             </Link>
