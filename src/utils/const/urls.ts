@@ -7,3 +7,4 @@ export const BOARDS = 'boards/';
 export const COLUMNS = 'columns/';
 export const TASKS = 'tasks/';
 export const TASKS_SET = 'tasksSet/';
+export const COLUMNS_SET = 'columnsSet/';

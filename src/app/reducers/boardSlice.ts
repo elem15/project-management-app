@@ -11,6 +11,7 @@ import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import { getUsers } from 'utils/API/get-users';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
+import { updateColumnAfterDnD } from 'utils/API/update-column-DnD';
 import { updateTask } from 'utils/API/update-task';
 
 type User = {
@@ -104,6 +105,9 @@ export const boardSlice = createSlice({
     deleteTaskById: (state, action: PayloadAction<string>) => {
       const newTasks = state.tasks.filter((item) => item._id !== action.payload);
       state.tasks = newTasks;
+    },
+    dragAndDropColumns: (state, action: PayloadAction<Column[]>) => {
+      state.columns = action.payload;
     },
   },
   extraReducers: {
@@ -226,9 +230,13 @@ export const boardSlice = createSlice({
     },
     [updateTask.pending.type]: loaderHandler,
     [updateTask.rejected.type]: errorHandler,
+    [updateColumnAfterDnD.fulfilled.type]: dataHandler,
+    [updateColumnAfterDnD.pending.type]: loaderHandler,
+    [updateColumnAfterDnD.rejected.type]: errorHandler,
   },
 });
 
-export const { addBoards, addBoardId, deleteBoardById, deleteTaskById } = boardSlice.actions;
+export const { addBoards, addBoardId, deleteBoardById, deleteTaskById, dragAndDropColumns } =
+  boardSlice.actions;
 
 export default boardSlice.reducer;
