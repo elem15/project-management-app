@@ -26,7 +26,7 @@
 
 .burger-view {
   transform: translateX(300px);
-  transition: .5s ease-in-out;
+  transition: .5s ease-in;
 }
 
 .burger-no-view {
@@ -62,8 +62,15 @@
   cursor: pointer;
   color: azure;
 }
-
+.menu-item {
+  transition: .5 ease;
+}
 .menu-item:hover :last-child {
   z-index: 1100;
   color: gainsboro;
+}
+
+.menu-item:hover .icon {
+  transform: translateY(-1px);
+  box-shadow: 0px 3px 3px brown;
 }

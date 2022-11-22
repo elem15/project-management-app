@@ -13,11 +13,18 @@ import burger from '../../media/burger.svg';
 import signIn from '../../media/sign-in.svg';
 import signUp from '../../media/sign-up.png';
 import './Burger.scss';
-
+const lingRevert = {
+  en: 'ru',
+  ru: 'en',
+};
 const Burger = () => {
   const [isMenu, setIsMenu] = useState(false);
   const { t } = useTranslation();
-
+  const { i18n } = useTranslation();
+  const lingChange = () => {
+    const ling = i18n.resolvedLanguage as keyof typeof lingRevert;
+    i18n.changeLanguage(lingRevert[ling]);
+  };
   const { token } = useAppSelector((state) => state.auth);
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -61,10 +68,15 @@ const Burger = () => {
             </li>
             <li className="menu-item" onClick={() => setIsMenu(!isMenu)}>
               <img className="icon" onClick={handleSignOut} src={logout} alt="logout" />
-              <span className="menu-item-title">{t('header.signOut')}</span>
+              <span onClick={handleSignOut} className="menu-item-title">
+                {t('header.signOut')}
+              </span>
             </li>
             <li className="menu-item" onClick={() => setIsMenu(!isMenu)}>
               <Localize />
+              <span onClick={lingChange} className="menu-item-title">
+                {t('header.toggleLng')}
+              </span>
             </li>
           </ul>
         ) : (
@@ -81,8 +93,15 @@ const Burger = () => {
                 <span className="menu-item-title">{t('header.signUp')}</span>
               </Link>
             </li>
-            <li className="menu-item" onClick={() => setIsMenu(!isMenu)}>
+            <li
+              className="menu-item"
+              style={{ marginLeft: '7px' }}
+              onClick={() => setIsMenu(!isMenu)}
+            >
               <Localize />
+              <span onClick={lingChange} className="menu-item-title">
+                {t('header.toggleLng')}
+              </span>
             </li>
           </ul>
         )}

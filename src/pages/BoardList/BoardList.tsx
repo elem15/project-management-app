@@ -12,12 +12,16 @@ import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 const BoardList = () => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
+  const { boards } = useAppSelector((state) => state.board);
+  const { token } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    !token && router(ROUTES.WELCOME_PAGE);
+  }, [token, router]);
 
   useEffect(() => {
     dispatch(getBoards());
   }, [dispatch]);
-
-  const { boards } = useAppSelector((state) => state.board);
 
   const handleClickOpen = async (_id: string) => {
     if (_id) {

@@ -10,6 +10,7 @@ import user from '../../media/user.svg';
 import boards from '../../media/boards.svg';
 import signIn from '../../media/sign-in.svg';
 import signUp from '../../media/sign-up.png';
+import none from '../../media/none.png';
 import Localize from 'components/Localize/Localize';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
@@ -98,7 +99,10 @@ function Header() {
               </Tooltip>
             </li>
             <li>
-              <Localize />
+              <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={t('header.toggleLng')}>
+                <img src={none} style={{ visibility: 'hidden' }} alt="toggle language" />
+                <Localize />
+              </Tooltip>
             </li>
           </ul>
         ) : (
@@ -116,7 +120,10 @@ function Header() {
               </Link>
             </li>
             <li>
-              <Localize />
+              <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={t('header.toggleLng')}>
+                <img src={none} style={{ visibility: 'hidden' }} alt="toggle language" />
+                <Localize />
+              </Tooltip>
             </li>
           </ul>
         )}

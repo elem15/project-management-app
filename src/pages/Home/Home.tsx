@@ -13,14 +13,14 @@ const lingRevert = {
 function Home() {
   const { token } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
+  useEffect(() => {
+    !token && navigate(ROUTES.WELCOME_PAGE);
+  }, [token, navigate]);
   const { t, i18n } = useTranslation();
   const lingChange = () => {
     const ling = i18n.resolvedLanguage as keyof typeof lingRevert;
     i18n.changeLanguage(lingRevert[ling]);
   };
-  useEffect(() => {
-    !token && navigate(ROUTES.WELCOME_PAGE);
-  }, [token, navigate]);
   return (
     <div>
       <h2>Homepage</h2>

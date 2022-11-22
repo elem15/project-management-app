@@ -1,7 +1,6 @@
-import { Button } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
+import './Localize.scss';
 const lingRevert = {
   en: 'ru',
   ru: 'en',
@@ -14,12 +13,10 @@ export default function Localize() {
     i18n.changeLanguage(lingRevert[ling]);
   };
   return (
-    <>
-      <Button type="text" onClick={lingChange}>
-        <span style={{ color: 'white', fontSize: '1.2em' }}>
-          {i18n.resolvedLanguage.toUpperCase()}
-        </span>
-      </Button>
-    </>
+    <div className="toggle-wrapper icon">
+      <span className="lang-toggle" onClick={lingChange}>
+        {i18n.resolvedLanguage.toUpperCase()}
+      </span>
+    </div>
   );
 }

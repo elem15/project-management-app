@@ -27,6 +27,7 @@ i18n
             signUp: 'Sign up',
             signOut: 'Sign out',
             profile: 'Edit profile',
+            toggleLng: 'Toggle language',
           },
           sign: {
             login: 'login',
@@ -80,6 +81,7 @@ i18n
             signUp: 'Зарегистрироваться',
             signOut: 'Выйти',
             profile: 'Редактировать профиль',
+            toggleLng: 'Переключить язык',
           },
           sign: {
             login: 'логин',

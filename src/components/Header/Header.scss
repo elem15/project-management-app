@@ -47,6 +47,10 @@ ul {
       box-shadow: 0px 3px 3px brown;
     }
 
+    &:hover .menu-item-title {
+      color: #40a9ff;
+    }
+
     &:active .icon {
       transform: translateY(3px);
     }
