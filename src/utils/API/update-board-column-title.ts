@@ -44,7 +44,6 @@ export const updateBoardColumnTitle = createAsyncThunk(
         );
       }
     } catch (error) {
-      console.log('Error message: ', (error as Error).message);
       return rejectWithValue((error as Error).message);
     }
   }
