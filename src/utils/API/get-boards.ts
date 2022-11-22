@@ -19,9 +19,7 @@ export const getBoards = createAsyncThunk(
   'board/getBoards',
   async (_, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as RootState;
-    console.log('response');
     if (!state.auth.token) return [];
-    console.log('responseresponse');
     try {
       const response: Response = await fetch(BASE_URL + BOARDS, {
         headers: {
@@ -41,7 +39,6 @@ export const getBoards = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      console.log(error);
       return rejectWithValue((error as Error).message);
     }
   }

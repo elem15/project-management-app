@@ -20,8 +20,8 @@ const BoardList = () => {
   }, [token, router]);
 
   useEffect(() => {
-    dispatch(getBoards());
-  }, [dispatch]);
+    token && dispatch(getBoards());
+  }, [dispatch, token]);
 
   const handleClickOpen = async (_id: string) => {
     if (_id) {
