@@ -7,6 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
+import { LOADING } from 'utils/const/status';
+import { Preloader } from 'components/Preloader/Preloader';
 
 export type UserUp = {
   name: string;
@@ -18,7 +20,7 @@ const SignUp: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, token, errorMessage } = useAppSelector((state) => state.auth);
+  const { name, token, errorMessage, status } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
     dispatch(signUp(values));
   };
@@ -37,6 +39,7 @@ const SignUp: React.FC = () => {
   }, [errorMessage, dispatch]);
   return (
     <main>
+      {status === LOADING && <Preloader />}
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
           <Typography.Title level={2}>Sign up</Typography.Title>

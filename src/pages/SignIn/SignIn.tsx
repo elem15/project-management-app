@@ -7,6 +7,8 @@ import { ROUTES } from 'utils/const/routes';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
+import { LOADING } from 'utils/const/status';
+import { Preloader } from 'components/Preloader/Preloader';
 
 export type UserIn = {
   login: string;
@@ -17,7 +19,7 @@ const SignIn: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { token, errorMessage } = useAppSelector((state) => state.auth);
+  const { token, errorMessage, status } = useAppSelector((state) => state.auth);
   const onFinish = async (values: UserIn) => {
     await dispatch(signIn(values));
   };
@@ -33,6 +35,7 @@ const SignIn: React.FC = () => {
   }, [errorMessage, dispatch]);
   return (
     <main>
+      {status === LOADING && <Preloader />}
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
           <Typography.Title level={2}>{t('header.signIn')}</Typography.Title>

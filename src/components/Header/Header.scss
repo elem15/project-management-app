@@ -1,4 +1,10 @@
+ul {
+  list-style: none;
+}
+
 .header-container {
+  z-index: 100;
+  font-size: large;
   position: fixed;
   left: 0;
   top: 0;
@@ -26,18 +32,42 @@
 
 .nav {
   display: flex;
+  flex-wrap: wrap;
+  column-gap: 15px;
   margin: 0;
+  align-items: center;
 
   &__link {
     color: whitesmoke;
     font-weight: 500;
     padding: 1rem .5rem;
+
+    &:hover .icon {
+      transform: translateY(-1px);
+      box-shadow: 0px 3px 3px brown;
+    }
+
+    &:hover .menu-item-title {
+      color: #40a9ff;
+    }
+
+    &:active .icon {
+      transform: translateY(3px);
+    }
+
+    &_user {
+      color: violet;
+    }
+  }
+}
+
+@media (max-width: 711px) {
+  .nav {
+    display: none;
   }
 }
 
 .page-name {
-  padding-left: 10px;
-  padding-right: 10px;
   color: white;
   text-decoration: none;
   transition: 0.5s;
@@ -53,26 +83,18 @@
 }
 
 .icon {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-image: url('../../media/edit-profile.svg');
-  background-size: 20px;
-  background-color: aliceblue;
-  vertical-align: middle;
-}
-
-.logout {
   position: relative;
-  width: 20px;
+  width: 30px;
   cursor: pointer;
   border-radius: 100%;
   transition: 0.5s;
+
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0px 3px 3px brown;
   }
+
   &:active {
-    transform: translateY(1px);
+    transform: translateY(3px);
   }
 }

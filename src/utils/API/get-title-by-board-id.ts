@@ -36,7 +36,6 @@ export const getTitleByBoardId = createAsyncThunk(
       }
       return (data as Board).title;
     } catch (error) {
-      console.log('Error message: ', (error as Error).message);
       return rejectWithValue((error as Error).message);
     }
   }

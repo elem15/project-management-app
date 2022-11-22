@@ -11,7 +11,7 @@
 .section {
   max-width: 1920px;
   width: 100%;
-  margin: 0 auto;
+  margin: 0 auto 14vh;
 
   &:first-of-type {
     padding-top: 3rem;
@@ -28,7 +28,7 @@
   }
 
   &__team {
-    padding: 0 1rem 2rem;
+    padding: 0 1rem 140px;
 
     & .section__title {
       padding-top: 2rem;
@@ -122,11 +122,11 @@
       transition: all .2s ease-in-out;
     }
 
-    ul{
+    ul {
       margin: 0;
       padding: 0;
 
-      li{
+      li {
         font-size: .85rem;
       }
     }
@@ -144,7 +144,7 @@
       padding-top: 1rem;
     }
 
-    & .section__image{
+    & .section__image {
       height: 400px;
     }
   }
