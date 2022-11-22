@@ -4,6 +4,7 @@ import { signUp } from 'utils/API/sign-up';
 import { RootState } from '../store';
 import { FAILED, IDLE, LOADING } from '../../utils/const/status';
 import { getUsers } from 'utils/API/get-users';
+import { updateUser } from 'utils/API/update-user';
 
 export interface User {
   name: string;
@@ -115,6 +116,9 @@ export const authSlice = createSlice({
     [signIn.fulfilled.type]: dataHandler,
     [signIn.pending.type]: loaderHandler,
     [signIn.rejected.type]: errorHandler,
+    [updateUser.fulfilled.type]: dataHandler,
+    [updateUser.pending.type]: loaderHandler,
+    [updateUser.rejected.type]: errorHandler,
     [getUsers.fulfilled.type]: dataHandler,
     [getUsers.pending.type]: loaderHandler,
     [getUsers.rejected.type]: (state) => {

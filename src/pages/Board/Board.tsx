@@ -85,7 +85,7 @@ const Board: React.FC = () => {
 
   return (
     <div className="columns-container">
-      <h2>{title ? JSON.parse(title).title : ''}</h2>
+      <h2 className="header">{title ? JSON.parse(title).title : ''}</h2>
       <h3>{title ? JSON.parse(title).description : ''}</h3>
       <Button onClick={() => router(`${ROUTES.YOUR_BOARDS}`)}>Back</Button>
       <AddModalCreateColumn

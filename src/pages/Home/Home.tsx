@@ -23,7 +23,7 @@ function Home() {
   };
   return (
     <div>
-      <h2>Homepage</h2>
+      <h2 className="header">Homepage</h2>
       <header className="App-header">
         <div>
           <button onClick={lingChange}>{i18n.resolvedLanguage.toUpperCase()}</button>

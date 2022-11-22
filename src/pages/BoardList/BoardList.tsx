@@ -59,7 +59,7 @@ const BoardList = () => {
 
   return (
     <>
-      <h2>Your Boards</h2>
+      <h2 className="header">Your Boards</h2>
       <div className="list">{boardList}</div>
     </>
   );

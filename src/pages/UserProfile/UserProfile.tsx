@@ -8,6 +8,8 @@ import { updateUser } from 'utils/API/update-user';
 import { deleteUser } from 'utils/API/delete-user';
 import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
+import { Preloader } from 'components/Preloader/Preloader';
+import { LOADING } from 'utils/const/status';
 
 export type UserUp = {
   name: string;
@@ -19,7 +21,7 @@ const UserProfile: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, login, errorMessage, token } = useAppSelector((state) => state.auth);
+  const { name, login, errorMessage, token, status } = useAppSelector((state) => state.auth);
   const onFinish = (values: UserUp) => {
     dispatch(updateUser(values));
   };
@@ -41,6 +43,7 @@ const UserProfile: React.FC = () => {
   }, [errorMessage, dispatch]);
   return (
     <main>
+      {status === LOADING && <Preloader />}
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
           <Typography.Title level={2}>{t('sign.editProfile')}</Typography.Title>
