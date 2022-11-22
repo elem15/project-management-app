@@ -8,17 +8,13 @@ body {
 }
 
 #root {
-  display: flex;
-  flex-flow: column nowrap;
-  height: 100%;
+  max-width: 1920px;
+  display: grid;
+  grid-template-rows: 81px 1fr 59px;
+  grid-template-columns: 1fr;
   margin: 0 auto;
 }
 
-main{
-  max-width: 1920px;
-  width: 100%;
-  margin: 0 auto;
+main {
   padding-top: 5rem;
-  flex: 1 0 auto;
-  padding-bottom: 80px;
 }

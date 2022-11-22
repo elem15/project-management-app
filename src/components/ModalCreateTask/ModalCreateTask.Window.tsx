@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { AddModalFormBoard } from './ModalCreateBoard.Form';
-import newBoard from '../../media/new-board.svg';
+import { AddModalFormCreateTask } from './ModalCreateTask.Form';
+import './ModalCreateTask.scss';
 
 type PropsModal = {
   typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
@@ -9,9 +10,11 @@ type PropsModal = {
   titleTextModal: string;
   titleForm: string;
   objField: string;
+  boardId: string;
+  columnId: string;
 };
 
-export const AddModalCreateBoard = (props: PropsModal) => {
+export const AddModalCreateTask = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -26,12 +29,14 @@ export const AddModalCreateBoard = (props: PropsModal) => {
 
   return (
     <>
-      <>
-        <img className="icon" src={newBoard} alt="boards list" onClick={showModal} />
-        <span className="menu-item-title" onClick={showModal}>
-          {props.titleTextButton}
-        </span>
-      </>
+      <Button
+        className="button-add-task"
+        type={props.typeButton}
+        icon={<PlusOutlined />}
+        onClick={showModal}
+      >
+        {props.titleTextButton}
+      </Button>
       <Modal
         destroyOnClose={true}
         title={props.titleTextModal}
@@ -40,12 +45,14 @@ export const AddModalCreateBoard = (props: PropsModal) => {
         onCancel={hideModal}
         footer={null}
       >
-        <AddModalFormBoard
+        <AddModalFormCreateTask
           titleForm={props.titleForm}
           objField={props.objField}
+          onCancel={hideModal}
           loading={loading}
           setLoading={setLoading}
-          onCancel={hideModal}
+          boardId={props.boardId}
+          columnId={props.columnId}
         />
       </Modal>
     </>

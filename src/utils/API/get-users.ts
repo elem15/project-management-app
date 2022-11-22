@@ -9,7 +9,7 @@ export const getUsers = createAsyncThunk(
     const state = getState() as RootState;
     if (!state.auth.token) return;
     try {
-      const response = await fetch(BASE_URL + USERS, {
+      const response: Response = await fetch(BASE_URL + USERS, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: state.auth.token,
@@ -22,6 +22,7 @@ export const getUsers = createAsyncThunk(
       }
       dispatch(addAllUsers(await data));
       dispatch(setUser(await data));
+      return data;
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {

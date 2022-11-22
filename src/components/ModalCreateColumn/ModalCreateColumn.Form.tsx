@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Input, Row } from 'antd';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { ROUTES } from 'utils/const/routes';
-import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from 'app/hooks';
 import { createColumn } from 'utils/API/create-column';
-import { getBoardColumns } from 'utils/API/get-board-columns';
-import { Preloader } from 'components/Preloader/Preloader';
+import { addBoardId } from 'app/reducers/boardSlice';
 
 type Values = {
   usersTeam: string[];
@@ -17,63 +14,65 @@ type PropsCreateColumnForm = {
   titleForm: string;
   objField: string;
   boardId: string;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel: () => void;
 };
 
 export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   const [form] = Form.useForm();
+  const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const { isLoading } = useAppSelector((state) => state.board);
 
   const onFinish = async (values: Values) => {
-    form.resetFields();
+    props.setLoading(true);
+    setComponentDisabled(true);
     if (props.objField === 'columnTitle') {
       await dispatch(
-        createColumn({ title: values[props.objField], order: '1', boardId: props.boardId })
+        createColumn({
+          title: values[props.objField],
+          order: 1,
+          boardId: props.boardId,
+        })
       );
-      await dispatch(getBoardColumns(props.boardId));
+      dispatch(addBoardId(props.boardId));
       props.onCancel();
-      navigate(`${ROUTES.YOUR_BOARDS}/${props.boardId}`);
+      form.resetFields();
     }
   };
 
   return (
     <>
-      {isLoading ? (
-        <Preloader />
-      ) : (
-        <Form
-          form={form}
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          autoComplete="off"
+      <Form
+        form={form}
+        name="basic"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        autoComplete="off"
+        disabled={componentDisabled}
+      >
+        <Form.Item
+          label={props.titleForm}
+          name={props.objField}
+          rules={[
+            {
+              required: true,
+              message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
+                1
+              )}!`,
+            },
+          ]}
         >
-          <Form.Item
-            label={props.titleForm}
-            name={props.objField}
-            rules={[
-              {
-                required: true,
-                message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
-                  1
-                )}!`,
-              },
-            ]}
-          >
-            <Input />
+          <Input />
+        </Form.Item>
+        <Row justify="center">
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={props.loading}>
+              Submit
+            </Button>
           </Form.Item>
-          <Row justify="center">
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Row>
-        </Form>
-      )}
+        </Row>
+      </Form>
     </>
   );
 };

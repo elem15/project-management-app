@@ -1,0 +1,15 @@
+.button-edit-task {
+  margin-top: 10px;
+  min-width: 240px;
+}
+
+.button-edit-task>span {
+  width: 150px;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button-delete-task>span {
+  font-size: 27px;
+}
