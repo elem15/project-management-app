@@ -75,6 +75,10 @@ function Header() {
             </li>
             <li className="nav__link">
               <AddModalCreateBoard
+                setIsMenu={(isMenu: boolean) => {
+                  !isMenu;
+                }}
+                isMenu={true}
                 typeButton={'primary'}
                 titleTextButton={t('header.newBoard')}
                 titleTextModal={'Create Board'}

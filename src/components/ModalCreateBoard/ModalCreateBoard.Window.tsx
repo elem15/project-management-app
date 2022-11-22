@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Modal } from 'antd';
 import { AddModalFormBoard } from './ModalCreateBoard.Form';
 import newBoard from '../../media/new-board.svg';
 
@@ -9,13 +9,16 @@ type PropsModal = {
   titleTextModal: string;
   titleForm: string;
   objField: string;
+  setIsMenu: (isMenu: boolean) => void;
+  isMenu: boolean;
 };
 
 export const AddModalCreateBoard = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const { setIsMenu, isMenu } = props;
   const showModal = () => {
+    setIsMenu(!isMenu);
     setOpen(true);
   };
 

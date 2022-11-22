@@ -51,8 +51,10 @@ const Burger = () => {
                 <span className="menu-item-title">{t('header.boardList')}</span>
               </Link>
             </li>
-            <li className="menu-item" onClick={() => setIsMenu(!isMenu)}>
+            <li className="menu-item">
               <AddModalCreateBoard
+                setIsMenu={setIsMenu}
+                isMenu={isMenu}
                 typeButton={'primary'}
                 titleTextButton={t('header.newBoard')}
                 titleTextModal={'Create Board'}
@@ -95,7 +97,7 @@ const Burger = () => {
             </li>
             <li
               className="menu-item"
-              style={{ marginLeft: '7px' }}
+              style={{ marginLeft: '5px' }}
               onClick={() => setIsMenu(!isMenu)}
             >
               <Localize />

@@ -88,17 +88,15 @@ const Board: React.FC = () => {
       <h2>{title ? JSON.parse(title).title : ''}</h2>
       <h3>{title ? JSON.parse(title).description : ''}</h3>
       <Button onClick={() => router(`${ROUTES.YOUR_BOARDS}`)}>Back</Button>
-      <div className="column-list">
-        {columnsList}{' '}
-        <AddModalCreateColumn
-          typeButton={'primary'}
-          titleTextButton={'Add column'}
-          titleTextModal={'Add column'}
-          titleForm={'Column title'}
-          objField={'columnTitle'}
-          boardId={boardId}
-        />
-      </div>
+      <AddModalCreateColumn
+        typeButton={'primary'}
+        titleTextButton={'Add column'}
+        titleTextModal={'Add column'}
+        titleForm={'Column title'}
+        objField={'columnTitle'}
+        boardId={boardId}
+      />
+      <div className="column-list">{columnsList} </div>
     </div>
   );
 };

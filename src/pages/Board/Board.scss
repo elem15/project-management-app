@@ -4,6 +4,8 @@
 
 .column-list {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
   padding-top: 10px;
   gap: 20px;
   height: 100%;
