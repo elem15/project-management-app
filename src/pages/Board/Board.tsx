@@ -28,7 +28,8 @@ const Board: React.FC = () => {
   let boardIdCurrent = '';
 
   useEffect(() => {
-    token && boardIdFromUrl.length !== boardIdLength && router(ROUTES.NOT_FOUND_PAGE);
+    (token && boardIdFromUrl.length !== boardIdLength && router(ROUTES.NOT_FOUND_PAGE)) ||
+      (!token && router(ROUTES.NOT_FOUND_PAGE));
   }, [boardIdFromUrl.length, router, token]);
 
   if (boardId) {
@@ -39,10 +40,10 @@ const Board: React.FC = () => {
   }
 
   useEffect(() => {
-    dispatch(getBoardColumns(boardIdCurrent));
-    dispatch(getTitleByBoardId(boardIdCurrent));
-    dispatch(getTasksByBoardId(boardIdCurrent));
-  }, [boardIdCurrent, dispatch, location]);
+    token && dispatch(getBoardColumns(boardIdCurrent));
+    token && dispatch(getTitleByBoardId(boardIdCurrent));
+    token && dispatch(getTasksByBoardId(boardIdCurrent));
+  }, [boardIdCurrent, dispatch, location, token]);
 
   const columnsList = columns.map((item) => (
     <div key={item._id} className="column-item">
