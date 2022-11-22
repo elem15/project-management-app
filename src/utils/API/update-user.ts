@@ -35,7 +35,6 @@ export const updateUser = createAsyncThunk(
       dispatch(getUsers());
     } catch (error) {
       if (error instanceof Error) {
-        console.log(error.message);
         if (error.message.startsWith('Error!')) {
           return rejectWithValue(error.message);
         } else {

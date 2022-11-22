@@ -48,7 +48,7 @@ const Board: React.FC = () => {
     <div key={item._id} className="column-item">
       <div>
         <div className="column-item-header">
-          <div>
+          <div className="task-item">
             <EditColumnTitle
               title={item.title}
               order={0}
