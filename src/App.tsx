@@ -23,7 +23,6 @@ function App() {
           <Route path={ROUTES.SIGN_UP_PAGE} element={<SignUp />} />
           <Route path={ROUTES.PROFILE} element={<UserProfile />} />
           <Route path={ROUTES.NOT_FOUND_PAGE} element={<Page404 />} />
-          <Route path={ROUTES.TEMPORARY_BOARD} element={<Board />} />
           <Route path={ROUTES.YOUR_BOARDS} element={<BoardList />} />
           <Route path={`${ROUTES.YOUR_BOARDS}/:_id`} element={<Board />} />
           <Route path={ROUTES.ANY_PAGE} element={<Navigate to={ROUTES.NOT_FOUND_PAGE} replace />} />

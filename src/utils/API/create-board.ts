@@ -14,7 +14,7 @@ export const createBoard = createAsyncThunk(
     const { title, owner, users } = board;
     const state = getState() as RootState;
     try {
-      const response = await fetch(BASE_URL + BOARDS, {
+      const response: Response = await fetch(BASE_URL + BOARDS, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,11 +26,11 @@ export const createBoard = createAsyncThunk(
           users,
         }),
       });
-
       const data = await response.json();
       if (!response.ok) {
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
+      return data;
     } catch (error) {
       console.log('Error message: ', (error as Error).message);
       return rejectWithValue((error as Error).message);

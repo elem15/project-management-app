@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
-import { BOARDS, BASE_URL, COLUMNS } from 'utils/const/urls';
+import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
 
 type Column = {
-  title: string;
-  order: number;
+  columnId: string;
+  title?: string;
+  order?: number;
   boardId: string;
 };
 
@@ -13,25 +14,24 @@ type ColumnError = {
   message: string;
 };
 
-export const createColumn = createAsyncThunk(
-  'board/createColumn',
+export const deleteBoardColumn = createAsyncThunk(
+  'board/deleteBoardColumn',
   async (column: Column, { rejectWithValue, getState }) => {
-    const { title, order, boardId } = column;
+    const { columnId, boardId } = column;
     const state = getState() as RootState;
+    if (!state.auth.token) return;
     try {
-      const response: Response = await fetch(BASE_URL + BOARDS + `${boardId}/` + COLUMNS, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: state.auth.token,
-        },
-        body: JSON.stringify({
-          title,
-          order,
-        }),
-      });
-
-      const data: Column | ColumnError = await response.json();
+      const response: Response = await fetch(
+        BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: state.auth.token,
+          },
+        }
+      );
+      const data = await response.json();
       if (!response.ok) {
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${

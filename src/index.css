@@ -8,9 +8,10 @@ body {
 }
 
 #root {
-  display: flex;
-  flex-flow: column nowrap;
-  height: 100%;
+  max-width: 1920px;
+  display: grid;
+  grid-template-rows: 81px 1fr 59px;
+  grid-template-columns: 1fr;
   margin: 0 auto;
 }
 

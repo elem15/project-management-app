@@ -1,0 +1,16 @@
+.name-column {
+  display: flex;
+}
+
+.submit-button {
+  color: green;
+  border-color: green;
+}
+
+.text-cut {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5em;
+}

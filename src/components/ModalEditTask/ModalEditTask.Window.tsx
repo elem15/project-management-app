@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
-import { AddModalFormBoard } from './ModalCreateBoard.Form';
-import newBoard from '../../media/new-board.svg';
+import './ModalEditTask.scss';
+import { AddModalEditTaskForm } from './ModalEditTask.Form';
 
 type PropsModal = {
-  typeButton: 'link' | 'text' | 'ghost' | 'default' | 'primary' | 'dashed' | undefined;
   titleTextButton: string;
   titleTextModal: string;
   titleForm: string;
   objField: string;
+  boardId: string;
+  columnId: string;
+  taskId: string;
+  description: string;
+  usersTeammates: string[];
 };
 
-export const AddModalCreateBoard = (props: PropsModal) => {
+export const AddModalEditTask = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -26,12 +30,9 @@ export const AddModalCreateBoard = (props: PropsModal) => {
 
   return (
     <>
-      <>
-        <img className="icon" src={newBoard} alt="boards list" onClick={showModal} />
-        <span className="menu-item-title" onClick={showModal}>
-          {props.titleTextButton}
-        </span>
-      </>
+      <Button className="button-edit-task" onClick={showModal}>
+        {props.titleTextButton}
+      </Button>
       <Modal
         destroyOnClose={true}
         title={props.titleTextModal}
@@ -40,12 +41,18 @@ export const AddModalCreateBoard = (props: PropsModal) => {
         onCancel={hideModal}
         footer={null}
       >
-        <AddModalFormBoard
+        <AddModalEditTaskForm
           titleForm={props.titleForm}
           objField={props.objField}
+          boardId={props.boardId}
+          columnId={props.columnId}
+          taskId={props.taskId}
+          title={props.titleTextButton}
+          description={props.description}
+          usersTeammates={props.usersTeammates}
+          onCancel={hideModal}
           loading={loading}
           setLoading={setLoading}
-          onCancel={hideModal}
         />
       </Modal>
     </>
