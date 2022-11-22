@@ -5,13 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import './Header.scss';
 import { AddModalCreateBoard } from 'components/ModalCreateBoard/ModalCreateBoard.Window';
-import logout from '../../media/logout.png';
+import logout from '../../media/log-out.png';
+import user from '../../media/user.svg';
+import signIn from '../../media/sign-in.svg';
+import signUp from '../../media/sign-up.png';
 import Localize from 'components/Localize/Localize';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignOut } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown } from 'antd';
-import type { MenuProps } from 'antd';
+import { Tooltip } from 'antd';
 
 type StickyType = {
   sticky: boolean;
@@ -29,27 +29,6 @@ function Header() {
   const handleSignOut = async () => {
     appDispatch(signOut());
     navigate(ROUTES.HOME_PAGE);
-  };
-
-  const items: MenuProps['items'] = [
-    {
-      label: (
-        <Link to={ROUTES.PROFILE} className="nav__link" style={{ marginLeft: '15px' }}>
-          Edit profile
-        </Link>
-      ),
-      key: '1',
-      icon: <FontAwesomeIcon icon={faUser} />,
-    },
-    {
-      label: <span onClick={handleSignOut}>Sign out</span>,
-      key: '2',
-      icon: <FontAwesomeIcon icon={faSignOut} />,
-    },
-  ];
-
-  const menuProps = {
-    items,
   };
 
   const handleScroll = (elTopOffset: number, elHeight: number) => {
@@ -81,43 +60,59 @@ function Header() {
       ref={headerRef}
     >
       <div className="page-name-container">
-        <Link to={ROUTES.HOME_PAGE} className="nav__link">
+        <Link to={ROUTES.WELCOME_PAGE} className="nav__link">
           {t('header.main')}
         </Link>
         {token ? (
           <ul className="nav">
-            <Link to={ROUTES.TEMPORARY_BOARD} className="nav__link">
-              {t('header.board')}
-            </Link>
-            <Link to={ROUTES.YOUR_BOARDS} className="nav__link">
-              {t('header.boardList')}
-            </Link>
-            <AddModalCreateBoard
-              typeButton={'primary'}
-              titleTextButton={t('header.newBoard')}
-              titleTextModal={'Create Board'}
-              titleForm={'Board title'}
-              objField={'boardTitle'}
-            />
-            <Dropdown.Button
-              menu={menuProps}
-              placement="bottom"
-              icon={<FontAwesomeIcon icon={faUser} />}
-            >
-              {name}
-            </Dropdown.Button>
+            <li className="nav__link">
+              <AddModalCreateBoard
+                typeButton={'primary'}
+                titleTextButton={t('header.newBoard')}
+                titleTextModal={'Create Board'}
+                titleForm={'Board title'}
+                objField={'boardTitle'}
+              />
+            </li>
+            <li>
+              <Link to={ROUTES.PROFILE} className="page-name">
+                <Tooltip
+                  mouseEnterDelay={0.2}
+                  placement="bottomRight"
+                  title={name + ' - ' + t('header.profile')}
+                >
+                  <img className="icon" src={user} alt="user profile" />
+                </Tooltip>
+              </Link>
+            </li>
+            <li>
+              <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={t('header.signOut')}>
+                <img className="icon" onClick={handleSignOut} src={logout} alt="logout" />
+              </Tooltip>
+            </li>
+            <li>
+              <Localize />
+            </li>
           </ul>
         ) : (
           <ul className="nav">
-            <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">
-              {t('header.signIn')}
-            </Link>
-            <Link to={ROUTES.SIGN_UP_PAGE} className="nav__link">
-              {t('header.signUp')}
-            </Link>
+            <li>
+              <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">
+                <img className="icon" src={signIn} alt="user profile" />
+                <span> {t('header.signIn')}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to={ROUTES.SIGN_UP_PAGE} className="nav__link">
+                <img className="icon" src={signUp} alt="user profile" />
+                <span> {t('header.signUp')}</span>
+              </Link>
+            </li>
+            <li>
+              <Localize />
+            </li>
           </ul>
         )}
-        <Localize />
       </div>
     </header>
   );

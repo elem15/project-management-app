@@ -1,4 +1,5 @@
 import { useAppDispatch } from 'app/hooks';
+import Burger from 'components/Burger/Burger';
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import React, { useEffect } from 'react';
@@ -12,6 +13,7 @@ const Layout = () => {
   }, [appDispatch]);
   return (
     <>
+      <Burger />
       <Header />
       <main>
         <Outlet />
