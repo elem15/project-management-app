@@ -2,10 +2,16 @@
   display: flex;
   justify-content: center;
   height: 100%;
-  max-height: calc(70vh - 300px);
+  max-height: calc(70vh - 200px);
   min-height: 5px;
-  overflow-y: auto;
+  overflow-y: auto;  
 }
+@media (max-height: 768px) {
+  .task-container {
+    max-height: 60vh;
+  }
+}
+
 .task-container::-webkit-scrollbar {
   width: 5px;
 }
