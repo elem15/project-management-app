@@ -8,12 +8,17 @@
 }
 @media (max-height: 768px) {
   .task-container {
-    max-height: calc(70vh - 300px);;
+    max-height: calc(70vh - 250px);;
+  }
+}
+@media (max-height: 612px) {
+  .task-container {
+    max-height: calc(70vh - 350px);;
   }
 }
 @media (max-height: 450px) {
   .task-container {
-    max-height: calc(70vh - 200px);;
+    max-height: calc(70vh - 250px);;
   }
 }
 
