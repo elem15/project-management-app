@@ -6,11 +6,6 @@
   min-height: 5px;
   overflow-y: auto;
 }
-@media (max-width: 711px) {
-  .task-container {
-    height: 25vh;
-  }
-}
 .task-container::-webkit-scrollbar {
   width: 5px;
 }
