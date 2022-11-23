@@ -8,7 +8,12 @@
 }
 @media (max-height: 768px) {
   .task-container {
-    max-height: 60vh;
+    max-height: calc(70vh - 300px);;
+  }
+}
+@media (max-height: 450px) {
+  .task-container {
+    max-height: calc(70vh - 200px);;
   }
 }
 
