@@ -63,7 +63,7 @@ function Header() {
     >
       <div className="page-name-container">
         <Link to={ROUTES.WELCOME_PAGE} className="nav__link">
-          {t('header.main')}
+          {t('header.welcome')}
         </Link>
         {token ? (
           <ul className="nav">
