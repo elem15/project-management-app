@@ -58,8 +58,12 @@
       height: 50px;
     }
 
+    &__year {
+      display: none;
+    }
   }
 }
+
 @media screen and (max-height: 450px) {
   .footer {
     visibility: collapse;
