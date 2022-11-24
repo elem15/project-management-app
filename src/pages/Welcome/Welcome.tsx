@@ -1,13 +1,17 @@
 import { Button, Typography } from 'antd';
+import { useAppSelector } from 'app/hooks';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../utils/const/routes';
 import './Welcome.scss';
+import signIn from '../../media/sign-in.svg';
+import signUp from '../../media/sign-up.png';
 
 function Welcome() {
   const { t } = useTranslation();
   const { Title } = Typography;
+  const { token } = useAppSelector((state) => state.auth);
   return (
     <>
       <section className="section section__intro">
@@ -16,11 +20,28 @@ function Welcome() {
             {t('welcome.appTitle')}
           </Title>
           <p className="section__title_subheading">{t('welcome.appSubtitle')}</p>
-          <Link to={ROUTES.HOME_PAGE}>
-            <Button type="primary" className="to__main">
-              {t('header.main')}
-            </Button>
-          </Link>
+          {token ? (
+            <Link to={ROUTES.HOME_PAGE}>
+              <Button type="primary" className="to__main">
+                {t('header.main')}
+              </Button>
+            </Link>
+          ) : (
+            <ul className="welcome-nav">
+              <li>
+                <Link to={ROUTES.SIGN_IN_PAGE} className="nav__link">
+                  <img className="icon" src={signIn} alt="user profile" />
+                  <span className="sign-title"> {t('header.signIn')}</span>
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.SIGN_UP_PAGE} className="nav__link">
+                  <img className="icon" src={signUp} alt="user profile" />
+                  <span className="sign-title"> {t('header.signUp')}</span>
+                </Link>
+              </li>
+            </ul>
+          )}
         </div>
         <div className="section__image"></div>
       </section>

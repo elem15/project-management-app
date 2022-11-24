@@ -47,29 +47,26 @@ const Board: React.FC = () => {
 
   const columnsList = columns.map((item) => (
     <div key={item._id} className="column-item">
-      <div>
-        <div className="column-item-header">
-          <div className="task-item">
-            <EditColumnTitle
-              title={item.title}
-              order={0}
-              columnId={item._id}
-              boardId={item.boardId}
-            />
-            <h3>Column order:</h3>
-            <div className="text-cut">{item.order}</div>
-            <h3>boardId:</h3>
-            <div className="text-cut">{item.boardId}</div>
-          </div>
-          <Button
-            shape="circle"
-            icon={<DeleteOutlined />}
-            danger
-            onClick={(e) => showDeleteConfirm(e, dispatch, 'column', item.boardId, item._id)}
-          ></Button>
+      <div className="column-item-header">
+        <div className="task-item">
+          <EditColumnTitle
+            title={item.title}
+            order={0}
+            columnId={item._id}
+            boardId={item.boardId}
+          />
+          <h3>
+            Column order: <span className="text-cut">{item.order}</span>
+          </h3>
         </div>
-        <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
+        <Button
+          shape="circle"
+          icon={<DeleteOutlined />}
+          danger
+          onClick={(e) => showDeleteConfirm(e, dispatch, 'column', item.boardId, item._id)}
+        ></Button>
       </div>
+      <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
       <div>
         <AddModalCreateTask
           typeButton={'primary'}

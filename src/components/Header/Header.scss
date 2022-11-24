@@ -19,6 +19,11 @@ ul {
     background-color: rgb(3, 39, 94);
   }
 }
+@media (max-width: 711px) {
+  .header-container {
+    width: 100vw;
+  }
+}
 
 .page-name-container {
   display: flex;

@@ -2,15 +2,26 @@
   display: flex;
   justify-content: center;
   height: 100%;
-  max-height: calc(70vh - 300px);
+  max-height: calc(70vh - 200px);
   min-height: 5px;
-  overflow-y: auto;
+  overflow-y: auto;  
 }
-@media (max-width: 711px) {
+@media (max-height: 768px) {
   .task-container {
-    height: 25vh;
+    max-height: calc(70vh - 250px);;
   }
 }
+@media (max-height: 612px) {
+  .task-container {
+    max-height: calc(70vh - 250px);;
+  }
+}
+@media (max-height: 450px) {
+  .task-container {
+    max-height: calc(70vh - 200px);;
+  }
+}
+
 .task-container::-webkit-scrollbar {
   width: 5px;
 }
