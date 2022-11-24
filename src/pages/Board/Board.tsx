@@ -3,7 +3,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoardId, dragAndDropColumns } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { boardIdLength } from 'utils/const/other';
@@ -54,13 +54,24 @@ const Board: React.FC = () => {
 
   const [currentCard, setCurrentCard] = useState({} as Column);
   const [cardList, setCardList] = useState(columns);
+  const [dragging, setDragging] = useState(false);
+  const [dragItemNode, setDragItemNode] = useState({} as EventTarget);
+  // const dragItem = useRef();
 
   const dragStartHandler = (e: React.DragEvent<HTMLDivElement>, card: Column): void => {
+    setDragItemNode(e.target);
+    // dragItemNode.addEventListener('dragend', dragEndHandler);
     setCurrentCard(card);
+    // (dragItem.current as unknown as string) = card._id;
+    setTimeout(() => {
+      setDragging(true);
+    }, 0);
   };
 
-  const dragEndHandler = (e: React.DragEvent<HTMLDivElement>): void => {
+  const dragEndHandler = (): void => {
     // e.target.style.background = 'white';
+    dragItemNode.removeEventListener('dragend', dragEndHandler);
+    setDragging(false);
   };
 
   const dragOverHandler = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -70,17 +81,17 @@ const Board: React.FC = () => {
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, card: Column): void => {
     e.preventDefault();
-    const newColumns = columns.map((item) => {
-      if (item._id === card._id) {
-        return { ...item, order: currentCard.order };
-      }
-      if (item._id === currentCard._id) {
-        return { ...item, order: card.order };
-      }
-      return item;
-    });
-    dispatch(dragAndDropColumns(newColumns));
-    const columnsForBackend = newColumns.map((item) => {
+    // const newColumns = columns.map((item) => {
+    //   if (item._id === card._id) {
+    //     return { ...item, order: currentCard.order };
+    //   }
+    //   if (item._id === currentCard._id) {
+    //     return { ...item, order: card.order };
+    //   }
+    //   return item;
+    // });
+    // dispatch(dragAndDropColumns(newColumns));
+    const columnsForBackend = columns.map((item) => {
       return {
         _id: item._id,
         order: item.order,
@@ -88,6 +99,29 @@ const Board: React.FC = () => {
     });
     dispatch(updateColumnAfterDnD(columnsForBackend));
     // e.target.style.background = 'white';
+    setDragging(false);
+  };
+
+  const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>, card: Column): void => {
+    e.preventDefault();
+    console.log('Entering a drag target', card);
+    // e.target.style.background = 'lightgray';
+    const newColumns = columns.map((item: Column) => {
+      if (item._id === card._id) {
+        // console.log('---------------------------');
+        // console.log('Entering a drag target item', item);
+        // console.log('Entering a drag target card', card);
+        // console.log('Entering a drag target currentCard', currentCard);
+        // setCurrentCard({ ...item, order: currentCard.order });
+        return { ...item, order: currentCard.order };
+      }
+      if (item._id === currentCard._id) {
+        setCurrentCard({ ...item, order: card.order });
+        return { ...item, order: card.order };
+      }
+      return item;
+    });
+    dispatch(dragAndDropColumns(newColumns));
   };
 
   const sortCards = (a: Column, b: Column) => {
@@ -102,17 +136,25 @@ const Board: React.FC = () => {
     }
   };
 
+  const getStyles = (item: Column) => {
+    if (currentCard._id === item._id) {
+      return 'column-item current';
+    }
+    return 'column-item';
+  };
+
   const tempColumn = [...columns];
   const columnsList = tempColumn.sort(sortCards).map((item) => (
     <div
       key={item._id}
       onDragStart={(e) => dragStartHandler(e, item)}
-      onDragLeave={(e) => dragEndHandler(e)}
-      onDragEnd={(e) => dragEndHandler(e)}
+      // onDragLeave={(e) => dragEndHandler(e)}
+      onDragEnter={(e) => dragEnterHandler(e, item)}
+      onDragEnd={dragEndHandler}
       onDragOver={(e) => dragOverHandler(e)}
       onDrop={(e) => dropHandler(e, item)}
       draggable={true}
-      className="column-item"
+      className={dragging ? getStyles(item) : 'column-item'}
     >
       <div>
         <div className="column-item-header">
