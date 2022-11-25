@@ -104,7 +104,7 @@ const Board: React.FC = () => {
 
   const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>, card: Column): void => {
     e.preventDefault();
-    console.log('Entering a drag target', card);
+    // console.log('Entering a drag target', card);
     // e.target.style.background = 'lightgray';
     const newColumns = columns.map((item: Column) => {
       if (item._id === card._id) {
