@@ -38,7 +38,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
 
   const { usersTeam } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
-    return { label: item.name, value: item.login };
+    return { label: item.login, value: item._id };
   });
   const initialTeammates = props.usersTeammates.reduce(
     (matrix: string[][], item: string, index: number) => {

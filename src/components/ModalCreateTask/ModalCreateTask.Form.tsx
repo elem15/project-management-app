@@ -34,9 +34,9 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
 
   const { usersTeam } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
-    return { label: item.login, value: item.login };
+    return { label: item.login, value: item._id };
   });
-
+  console.log(usersTeamFilter);
   const options: Option[] = usersTeamFilter;
 
   const onFinish = async (values: Values) => {
