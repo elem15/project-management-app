@@ -11,6 +11,7 @@ import boards from '../../media/boards.svg';
 import signIn from '../../media/sign-in.svg';
 import signUp from '../../media/sign-up.png';
 import none from '../../media/none.png';
+import search from '../../media/search.svg';
 import Localize from 'components/Localize/Localize';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
@@ -67,6 +68,12 @@ function Header() {
         </Link>
         {token ? (
           <ul className="nav">
+            <li>
+              <Link to={ROUTES.SEARCH} className="nav__link">
+                <img className="icon" src={search} alt="search" />
+                <span className="menu-item-title">{t('header.search')}</span>
+              </Link>
+            </li>
             <li>
               <Link to={ROUTES.YOUR_BOARDS} className="nav__link">
                 <img className="icon" src={boards} alt="boards list" />

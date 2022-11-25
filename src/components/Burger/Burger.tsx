@@ -12,6 +12,7 @@ import boards from '../../media/boards.svg';
 import burger from '../../media/burger.svg';
 import signIn from '../../media/sign-in.svg';
 import signUp from '../../media/sign-up.png';
+import search from '../../media/search.svg';
 import './Burger.scss';
 const lingRevert = {
   en: 'ru',
@@ -41,6 +42,12 @@ const Burger = () => {
       <div className={isMenu ? 'burger-no-view' : 'burger-view'}>
         {token ? (
           <ul className="burger-menu">
+            <li className="menu-item">
+              <Link to={ROUTES.SEARCH} onClick={() => setIsMenu(!isMenu)} className="page-name">
+                <img className="icon" src={search} alt="search" />
+                <span className="menu-item-title">{t('header.search')}</span>
+              </Link>
+            </li>
             <li className="menu-item">
               <Link
                 to={ROUTES.YOUR_BOARDS}

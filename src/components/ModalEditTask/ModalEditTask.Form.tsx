@@ -59,7 +59,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
         updateTask({
           title: values[props.objField],
           order: 1,
-          description: values.description ? values.description : ' ',
+          description: values.description,
           boardId: props.boardId,
           columnId: props.columnId,
           taskId: props.taskId,
@@ -93,7 +93,11 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Description" name="description">
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[{ required: true, message: 'Please input description!' }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item label="Choose teammates" name="teammates">
