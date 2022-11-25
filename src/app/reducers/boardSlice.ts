@@ -26,7 +26,7 @@ type Board = {
   users: string[];
 };
 
-type Column = {
+export type Column = {
   _id: string;
   title: string;
   order: number;
@@ -91,6 +91,9 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
+    addColumns: (state, action: PayloadAction<Column[]>) => {
+      state.columns = action.payload;
+    },
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;
     },
@@ -229,6 +232,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { addBoards, addBoardId, deleteBoardById, deleteTaskById } = boardSlice.actions;
+export const { addBoards, addBoardId, deleteBoardById, deleteTaskById, addColumns } =
+  boardSlice.actions;
 
 export default boardSlice.reducer;

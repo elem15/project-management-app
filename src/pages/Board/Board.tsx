@@ -1,24 +1,21 @@
 import { Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { addBoardId } from 'app/reducers/boardSlice';
+import { addBoardId, addColumns } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { boardIdLength } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
-import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
-import TaskList from 'pages/TaskList/TasksList';
-import { EditColumnTitle } from 'components/EditColumnTitle/EditColumnTitle';
-import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import './Board.scss';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
+import TasksColumn from 'components/TasksColumn/TasksColumn';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
-  const { columns, boardId, tasks, title } = useAppSelector((state) => state.board);
+  const { columns, boardId, title } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
@@ -26,6 +23,17 @@ const Board: React.FC = () => {
   const boardIdFromUrl =
     document.location.href.split('/')[document.location.href.split('/').length - 1];
   let boardIdCurrent = '';
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index)
+      return;
+    const newColumns = [...columns];
+    newColumns.splice(source.index, 1);
+    newColumns.splice(destination.index, 0, columns[source.index]);
+    dispatch(addColumns(newColumns));
+  };
 
   useEffect(() => {
     (token && boardIdFromUrl.length !== boardIdLength && router(ROUTES.NOT_FOUND_PAGE)) ||
@@ -45,42 +53,6 @@ const Board: React.FC = () => {
     token && dispatch(getTasksByBoardId(boardIdCurrent));
   }, [boardIdCurrent, dispatch, location, token]);
 
-  const columnsList = columns.map((item) => (
-    <div key={item._id} className="column-item">
-      <div className="column-item-header">
-        <div className="task-item">
-          <EditColumnTitle
-            title={item.title}
-            order={0}
-            columnId={item._id}
-            boardId={item.boardId}
-          />
-          <h3>
-            Column order: <span className="text-cut">{item.order}</span>
-          </h3>
-        </div>
-        <Button
-          shape="circle"
-          icon={<DeleteOutlined />}
-          danger
-          onClick={(e) => showDeleteConfirm(e, dispatch, 'column', item.boardId, item._id)}
-        ></Button>
-      </div>
-      <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
-      <div>
-        <AddModalCreateTask
-          typeButton={'primary'}
-          titleTextButton={'Add task'}
-          titleTextModal={'Add task'}
-          titleForm={'Task title'}
-          objField={'taskTitle'}
-          boardId={item.boardId}
-          columnId={item._id}
-        />
-      </div>
-    </div>
-  ));
-
   return (
     <div className="columns-container">
       <h2 className="header">{title ? JSON.parse(title).title : ''}</h2>
@@ -94,7 +66,17 @@ const Board: React.FC = () => {
         objField={'columnTitle'}
         boardId={boardId}
       />
-      <div className="column-list">{columnsList} </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId={boardIdCurrent}>
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps} className="column-list">
+              {columns.map((item, index) => (
+                <TasksColumn key={item._id} item={item} index={index} />
+              ))}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 };
