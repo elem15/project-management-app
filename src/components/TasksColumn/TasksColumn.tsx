@@ -19,9 +19,9 @@ const TasksColumn = (props: IProps) => {
   const { item, index } = props;
   return (
     <Draggable draggableId={item._id} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
-          className="column-item"
+          className={snapshot.isDragging ? `column-item draggable` : `column-item`}
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}

@@ -68,8 +68,12 @@ const Board: React.FC = () => {
       />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={boardIdCurrent}>
-          {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps} className="column-list">
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className={snapshot.isDraggingOver ? `column-list droppable` : `column-list`}
+            >
               {columns.map((item, index) => (
                 <TasksColumn key={item._id} item={item} index={index} />
               ))}

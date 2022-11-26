@@ -30,6 +30,9 @@
   gap: 20px;
   padding-bottom: 10px;
 }
+.droppable {
+  background-color: gainsboro;
+}
 
 .column-item {
   display: flex;
@@ -42,13 +45,13 @@
   max-width: 300px;
   height: min-content;
   max-height: 80vh;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 15px rgba(0, 0, 0, 0.20);
-
-  &:hover {
-    cursor: grab;
-  }
-
+  background-color: rgb(201, 239, 240);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 15px rgba(0, 0, 0, 0.20);  
 }
+
+.draggable {
+   background-color: rgb(32, 196, 203);
+ }
 
 .column-item-header {
   display: flex;
