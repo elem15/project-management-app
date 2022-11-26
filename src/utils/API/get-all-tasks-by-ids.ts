@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, IDS_LIST } from 'utils/const/urls';
 
@@ -21,7 +20,7 @@ type TaskError = {
 
 export const getAllTasksByIds = createAsyncThunk(
   'board/getAllTasksByIds',
-  async (ids: string, { rejectWithValue, dispatch, getState }) => {
+  async (ids: string, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
 
@@ -34,7 +33,6 @@ export const getAllTasksByIds = createAsyncThunk(
       });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
-        dispatch(signOut());
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message

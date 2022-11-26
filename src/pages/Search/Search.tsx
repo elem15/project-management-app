@@ -44,7 +44,8 @@ const Search = () => {
       await dispatch(getAllTasksByKeyword(values.keyword));
     }
     if (values.select === 'id') {
-      await dispatch(getAllTasksByIds(values.id + values.ids.map((el) => el.idItem).join(',')));
+      const additionalId = values.ids ? values.ids.map((el) => el.idItem).join(',') : '';
+      await dispatch(getAllTasksByIds(values.id + additionalId));
     }
     setLoading(false);
     setComponentDisabled(false);
@@ -188,7 +189,8 @@ const Search = () => {
           </Row>
         </Form>
       </Row>
-      <div className="list">{tasksList}</div>
+      {tasksList.length !== 0 && <div className="list">{tasksList}</div>}
+      {tasksList.length === 0 && <div className="list">{t('search.searchMessage')}</div>}
     </>
   );
 };
