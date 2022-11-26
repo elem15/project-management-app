@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import { getAllTasksByIds } from 'utils/API/get-all-tasks-by-ids';
 import { deleteTasks } from 'app/reducers/searchReducer';
+import { useTranslation } from 'react-i18next';
 
 type Values = {
   select: string;
@@ -18,6 +19,7 @@ type Values = {
 };
 
 const Search = () => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
@@ -65,11 +67,11 @@ const Search = () => {
     <div key={item._id}>
       <div className="card-item" onClick={() => handleClickOpenBoard(item.boardId)}>
         <div>
-          <h3>Task id:</h3>
+          <h3>{t('search.searchCardTitle')}</h3>
           <div className="text-cut">{item._id}</div>
-          <h3>Task title:</h3>
+          <h3>{t('search.searchTaskTitle')}</h3>
           <div className="text-cut">{item.title}</div>
-          <h3>Task description:</h3>
+          <h3>{t('search.searchTaskDescription')}</h3>
           <div className="text-cut">{item.description ? item.description : '-'}</div>
         </div>
       </div>
@@ -79,7 +81,7 @@ const Search = () => {
   return (
     <>
       <Row justify="center">
-        <h2>Search tasks</h2>
+        <h2>{t('search.searchTitle')}</h2>
       </Row>
       <Row justify="center">
         <Form
@@ -93,18 +95,21 @@ const Search = () => {
           disabled={componentDisabled}
           className="form-search"
         >
-          <Form.Item label="Search" name="select">
+          <Form.Item label={t('search.searchLabel')} name="select">
             <Select onChange={handleChange}>
-              <Select.Option value="text">by keyword</Select.Option>
-              <Select.Option value="id">by id task</Select.Option>
+              <Select.Option value="text">{t('search.searchByKeyword')}</Select.Option>
+              <Select.Option value="id">{t('search.searchById')}</Select.Option>
             </Select>
           </Form.Item>
           {!isSearchById && (
             <Form.Item
               name="keyword"
-              rules={[{ required: true, message: 'Please input attempt!' }]}
+              rules={[{ required: true, message: `${t('search.searchByKeywordErr')}` }]}
             >
-              <Input prefix={<SearchOutlined />} />
+              <Input
+                prefix={<SearchOutlined />}
+                placeholder={`${t('search.searchByKeywordPlaceholder')}`}
+              />
             </Form.Item>
           )}
           {isSearchById && (
@@ -112,15 +117,23 @@ const Search = () => {
               <Form.Item
                 name="id"
                 rules={[
-                  { required: true, message: 'Please input task id!' },
-                  { type: 'string', min: 24, max: 24, message: 'Id must contain 24 characters' },
+                  { required: true, message: `${t('search.searchByIdErrInput')}` },
                   {
-                    message: 'Only numbers and letters',
+                    type: 'string',
+                    min: 24,
+                    max: 24,
+                    message: `${t('search.searchByIdErrLength')}`,
+                  },
+                  {
+                    message: `${t('search.searchByIdErrType')}`,
                     pattern: /^[A-Za-z0-9_]+$/,
                   },
                 ]}
               >
-                <Input prefix={<SearchOutlined />} />
+                <Input
+                  prefix={<SearchOutlined />}
+                  placeholder={`${t('search.searchByIdPlaceholder')}`}
+                />
               </Form.Item>
               <Form.List name="ids">
                 {(fields, { add, remove }) => (
@@ -135,27 +148,30 @@ const Search = () => {
                           {...restField}
                           name={[name, 'idItem']}
                           rules={[
-                            { required: true, message: 'Please input task id!' },
+                            { required: true, message: `${t('search.searchByIdErrInput')}` },
                             {
                               type: 'string',
                               min: 24,
                               max: 24,
-                              message: 'Id must contain 24 characters',
+                              message: `${t('search.searchByIdErrLength')}`,
                             },
                             {
-                              message: 'Only numbers and letters',
+                              message: `${t('search.searchByIdErrType')}`,
                               pattern: /^[A-Za-z0-9_]+$/,
                             },
                           ]}
                         >
-                          <Input prefix={<SearchOutlined />} />
+                          <Input
+                            prefix={<SearchOutlined />}
+                            placeholder={`${t('search.searchByIdPlaceholder')}`}
+                          />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
                       </Space>
                     ))}
                     <Form.Item>
                       <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                        Add field
+                        {t('search.searchByIdAddButton')}
                       </Button>
                     </Form.Item>
                   </>
@@ -166,7 +182,7 @@ const Search = () => {
           <Row justify="center">
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={loading}>
-                Search
+                {t('search.searchButton')}
               </Button>
             </Form.Item>
           </Row>

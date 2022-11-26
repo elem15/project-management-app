@@ -69,12 +69,6 @@ function Header() {
         {token ? (
           <ul className="nav">
             <li>
-              <Link to={ROUTES.SEARCH} className="nav__link">
-                <img className="icon" src={search} alt="search" />
-                <span className="menu-item-title">{t('header.search')}</span>
-              </Link>
-            </li>
-            <li>
               <Link to={ROUTES.YOUR_BOARDS} className="nav__link">
                 <img className="icon" src={boards} alt="boards list" />
                 <span className="menu-item-title">{t('header.boardList')}</span>
@@ -92,6 +86,13 @@ function Header() {
                 titleForm={'Board title'}
                 objField={'boardTitle'}
               />
+            </li>
+            <li>
+              <Link to={ROUTES.SEARCH}>
+                <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={t('header.search')}>
+                  <img className="icon" src={search} alt="search" />
+                </Tooltip>
+              </Link>
             </li>
             <li>
               <Link to={ROUTES.PROFILE} className="page-name">
