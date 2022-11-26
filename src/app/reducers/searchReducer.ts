@@ -53,15 +53,13 @@ export const searchSlice = createSlice({
   },
   extraReducers: {
     [getAllTasksByKeyword.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
-      state.isLoading = false;
-      state.isError = '';
+      dataHandler(state);
       state.tasksByKeyword = action.payload;
     },
     [getAllTasksByKeyword.pending.type]: loaderHandler,
     [getAllTasksByKeyword.rejected.type]: errorHandler,
     [getAllTasksByIds.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
-      state.isLoading = false;
-      state.isError = '';
+      dataHandler(state);
       state.tasksByKeyword = action.payload;
     },
     [getAllTasksByIds.pending.type]: loaderHandler,

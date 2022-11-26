@@ -41,7 +41,6 @@ export const getAllTasksByIds = createAsyncThunk(
           }`
         );
       }
-      console.log(data);
       return data;
     } catch (error) {
       return rejectWithValue((error as Error).message);

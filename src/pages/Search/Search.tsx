@@ -36,7 +36,6 @@ const Search = () => {
   }, [dispatch, token]);
 
   const onFinish = async (values: Values) => {
-    console.log(values);
     setLoading(true);
     setComponentDisabled(true);
     if (values.select === 'text') {
