@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getAllTasksByIds } from 'utils/API/get-all-tasks-by-ids';
 import { getAllTasksByKeyword } from 'utils/API/get-all-tasks-by-keyword';
 
 type Task = {
@@ -45,20 +46,10 @@ export const searchSlice = createSlice({
   name: 'search',
   initialState,
   reducers: {
-    // addBoards: (state, action: PayloadAction<Board[]>) => {
-    //   state.boards = action.payload;
-    // },
-    // addBoardId: (state, action: PayloadAction<string>) => {
-    //   state.boardId = action.payload;
-    // },
-    // deleteBoardById: (state, action: PayloadAction<string>) => {
-    //   const newBoards = state.boards.filter((item) => item._id !== action.payload);
-    //   state.boards = newBoards;
-    // },
-    // deleteTaskById: (state, action: PayloadAction<string>) => {
-    //   const newTasks = state.tasks.filter((item) => item._id !== action.payload);
-    //   state.tasks = newTasks;
-    // },
+    deleteTasks: (state) => {
+      state.tasksById = [];
+      state.tasksByKeyword = [];
+    },
   },
   extraReducers: {
     [getAllTasksByKeyword.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
@@ -68,9 +59,16 @@ export const searchSlice = createSlice({
     },
     [getAllTasksByKeyword.pending.type]: loaderHandler,
     [getAllTasksByKeyword.rejected.type]: errorHandler,
+    [getAllTasksByIds.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+      state.isLoading = false;
+      state.isError = '';
+      state.tasksByKeyword = action.payload;
+    },
+    [getAllTasksByIds.pending.type]: loaderHandler,
+    [getAllTasksByIds.rejected.type]: errorHandler,
   },
 });
 
-// export const { addBoards, addBoardId, deleteBoardById, deleteTaskById } = searchSlice.actions;
+export const { deleteTasks } = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -8,3 +8,4 @@ export const COLUMNS = 'columns/';
 export const TASKS = 'tasks/';
 export const TASKS_SET = 'tasksSet/';
 export const SEARCH = 'tasksSet?search=';
+export const IDS_LIST = 'tasksSet?ids=';

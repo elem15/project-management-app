@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Input, Row, Select, Space } from 'antd';
 import { SearchOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import './Search.scss';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { getAllTasksByKeyword } from 'utils/API/get-all-tasks-by-keyword';
-import TaskList from 'pages/TaskList/TasksList';
 import { addBoardId } from 'app/reducers/boardSlice';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
+import { getAllTasksByIds } from 'utils/API/get-all-tasks-by-ids';
+import { deleteTasks } from 'app/reducers/searchReducer';
 
 type Values = {
   select: string;
@@ -22,8 +23,17 @@ const Search = () => {
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const [isSearchById, setIsSearchById] = useState<boolean>(false);
   const { tasksByKeyword } = useAppSelector((state) => state.search);
+  const { token } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const router = useNavigate();
+
+  useEffect(() => {
+    !token && router(ROUTES.WELCOME_PAGE);
+  }, [token, router]);
+
+  useEffect(() => {
+    token && dispatch(deleteTasks());
+  }, [dispatch, token]);
 
   const onFinish = async (values: Values) => {
     console.log(values);
@@ -31,6 +41,9 @@ const Search = () => {
     setComponentDisabled(true);
     if (values.select === 'text') {
       await dispatch(getAllTasksByKeyword(values.keyword));
+    }
+    if (values.select === 'id') {
+      await dispatch(getAllTasksByIds(values.id + values.ids.map((el) => el.idItem).join(',')));
     }
     setLoading(false);
     setComponentDisabled(false);
