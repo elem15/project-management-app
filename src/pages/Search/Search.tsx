@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import { Button, Form, Input, Row, Select, Space } from 'antd';
 import { SearchOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import './Search.scss';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { getAllTasksByKeyword } from 'utils/API/get-all-tasks-by-keyword';
+import TaskList from 'pages/TaskList/TasksList';
+import { addBoardId } from 'app/reducers/boardSlice';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from 'utils/const/routes';
 
 type Values = {
   select: string;
   keyword: string;
   id: string;
+  ids: { idItem: string }[];
 };
 
 const Search = () => {
@@ -14,14 +21,48 @@ const Search = () => {
   const [loading, setLoading] = useState(false);
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const [isSearchById, setIsSearchById] = useState<boolean>(false);
+  const { tasksByKeyword } = useAppSelector((state) => state.search);
+  const dispatch = useAppDispatch();
+  const router = useNavigate();
 
   const onFinish = async (values: Values) => {
     console.log(values);
+    setLoading(true);
+    setComponentDisabled(true);
+    if (values.select === 'text') {
+      await dispatch(getAllTasksByKeyword(values.keyword));
+    }
+    setLoading(false);
+    setComponentDisabled(false);
   };
 
   const handleChange = (typeOfSearch: string) => {
     typeOfSearch === 'id' ? setIsSearchById(true) : setIsSearchById(false);
   };
+
+  const handleClickOpenBoard = async (_id: string) => {
+    if (_id) {
+      dispatch(addBoardId(_id));
+      router(`${ROUTES.YOUR_BOARDS}/${_id}`);
+    } else {
+      router(`${ROUTES.HOME_PAGE}`);
+    }
+  };
+
+  const tasksList = tasksByKeyword.map((item) => (
+    <div key={item._id}>
+      <div className="card-item" onClick={() => handleClickOpenBoard(item.boardId)}>
+        <div>
+          <h3>Task id:</h3>
+          <div className="text-cut">{item._id}</div>
+          <h3>Task title:</h3>
+          <div className="text-cut">{item.title}</div>
+          <h3>Task description:</h3>
+          <div className="text-cut">{item.description ? item.description : '-'}</div>
+        </div>
+      </div>
+    </div>
+  ));
 
   return (
     <>
@@ -113,12 +154,13 @@ const Search = () => {
           <Row justify="center">
             <Form.Item>
               <Button type="primary" htmlType="submit" loading={loading}>
-                Submit
+                Search
               </Button>
             </Form.Item>
           </Row>
         </Form>
       </Row>
+      <div className="list">{tasksList}</div>
     </>
   );
 };
