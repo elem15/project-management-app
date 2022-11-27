@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { addBoardId, addColumns } from 'app/reducers/boardSlice';
+import { addBoardId, swapColumns, swapTasks } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -29,10 +29,7 @@ const Board: React.FC = () => {
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
-    const newColumns = [...columns];
-    newColumns.splice(source.index, 1);
-    newColumns.splice(destination.index, 0, columns[source.index]);
-    dispatch(addColumns(newColumns));
+    dispatch(swapColumns({ sourceIdx: source.index, destinationIdx: destination.index }));
   };
 
   useEffect(() => {

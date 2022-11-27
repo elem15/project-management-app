@@ -6,6 +6,7 @@ import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { swapTasks } from 'app/reducers/boardSlice';
 
 type Task = {
   _id: string;
@@ -25,9 +26,6 @@ type TaskListProps = {
 };
 function TaskList(props: TaskListProps) {
   const dispatch = useAppDispatch();
-  const onDragEnd = (result: DropResult) => {
-    console.log(result);
-  };
 
   const createTaskList = (columnId: string) => {
     const tasksList = props.tasks.map((task, index) => {
@@ -69,9 +67,23 @@ function TaskList(props: TaskListProps) {
 
     return <div>{tasksList}</div>;
   };
-
+  const onDragTaskEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index)
+      return;
+    console.log(source, destination);
+    dispatch(
+      swapTasks({
+        sourceIdx: source.index,
+        destinationIdx: destination.index,
+        sourceDropIdx: source.droppableId,
+        destinationDropIdx: destination.droppableId,
+      })
+    );
+  };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragTaskEnd}>
       <Droppable droppableId={props.columnId}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps} className="task-container">

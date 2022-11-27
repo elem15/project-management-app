@@ -24,9 +24,8 @@ const TasksColumn = (props: IProps) => {
           className={snapshot.isDragging ? `column-item draggable` : `column-item`}
           ref={provided.innerRef}
           {...provided.draggableProps}
-          {...provided.dragHandleProps}
         >
-          <div className="column-item-header">
+          <div className="column-item-header" {...provided.dragHandleProps}>
             <div className="task-item">
               <EditColumnTitle
                 title={item.title}

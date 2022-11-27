@@ -91,8 +91,24 @@ export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    addColumns: (state, action: PayloadAction<Column[]>) => {
-      state.columns = action.payload;
+    swapColumns: (state, action) => {
+      const newColumns = [...state.columns];
+      const { sourceIdx, destinationIdx } = action.payload;
+      newColumns.splice(sourceIdx, 1);
+      newColumns.splice(destinationIdx, 0, state.columns[sourceIdx]);
+      state.columns = newColumns;
+    },
+    swapTasks: (state, action) => {
+      const { sourceIdx, destinationIdx, sourceDropIdx, destinationDropIdx } = action.payload;
+      const newTasks = [...state.tasks];
+      newTasks.splice(sourceIdx, 1);
+      console.log(sourceDropIdx, destinationDropIdx);
+      if (sourceDropIdx === destinationDropIdx) {
+        state.tasks[sourceIdx].columnId = destinationDropIdx;
+        newTasks.splice(destinationIdx, 0, state.tasks[sourceIdx]);
+        state.tasks = newTasks;
+        return;
+      }
     },
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;
@@ -232,7 +248,7 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { addBoards, addBoardId, deleteBoardById, deleteTaskById, addColumns } =
+export const { addBoards, addBoardId, deleteBoardById, deleteTaskById, swapColumns, swapTasks } =
   boardSlice.actions;
 
 export default boardSlice.reducer;
