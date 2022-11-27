@@ -156,7 +156,7 @@ i18n
             searchByIdPlaceholder: 'Введите полный идентификатор',
             searchByIdAddButton: 'Добавить поле',
             searchButton: 'Поиск',
-            searchMessage: 'Пока ничего не найдено. Попробуйте еще раз?',
+            searchMessage: 'Пока ничего не найдено. Попробуйте еще раз.',
           },
         },
       },
