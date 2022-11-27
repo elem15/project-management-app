@@ -84,6 +84,11 @@ i18n
             searchButton: 'Search',
             searchMessage: 'Nothing found yet. Another attempt?',
           },
+          message: {
+            errorMessage: 'Error message',
+            createBoardSuccess: 'The board was created successfully!',
+            createBoardError: 'The board was not created!',
+          },
         },
       },
       ru: {
@@ -157,6 +162,11 @@ i18n
             searchByIdAddButton: 'Добавить поле',
             searchButton: 'Поиск',
             searchMessage: 'Пока ничего не найдено. Попробуйте еще раз.',
+          },
+          message: {
+            errorMessage: 'Содержание ошибки',
+            createBoardSuccess: 'Доска успешно создана!',
+            createBoardError: 'Ошибка создания доски!',
           },
         },
       },
