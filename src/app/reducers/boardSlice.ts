@@ -102,13 +102,11 @@ export const boardSlice = createSlice({
       const { sourceIdx, destinationIdx, sourceDropIdx, destinationDropIdx } = action.payload;
       const newTasks = [...state.tasks];
       newTasks.splice(sourceIdx, 1);
-      console.log(sourceDropIdx, destinationDropIdx);
-      if (sourceDropIdx === destinationDropIdx) {
+      if (sourceDropIdx !== destinationDropIdx) {
         state.tasks[sourceIdx].columnId = destinationDropIdx;
-        newTasks.splice(destinationIdx, 0, state.tasks[sourceIdx]);
-        state.tasks = newTasks;
-        return;
       }
+      newTasks.splice(destinationIdx, 0, state.tasks[sourceIdx]);
+      state.tasks = newTasks;
     },
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;

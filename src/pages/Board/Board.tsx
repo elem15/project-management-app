@@ -25,10 +25,21 @@ const Board: React.FC = () => {
   let boardIdCurrent = '';
 
   const onDragEnd = (result: DropResult) => {
-    const { destination, source } = result;
+    const { destination, source, type } = result;
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
+    if (type === 'task') {
+      dispatch(
+        swapTasks({
+          sourceIdx: source.index,
+          destinationIdx: destination.index,
+          sourceDropIdx: source.droppableId,
+          destinationDropIdx: destination.droppableId,
+        })
+      );
+      return;
+    }
     dispatch(swapColumns({ sourceIdx: source.index, destinationIdx: destination.index }));
   };
 
@@ -64,7 +75,7 @@ const Board: React.FC = () => {
         boardId={boardId}
       />
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId={boardIdCurrent}>
+        <Droppable droppableId={boardIdCurrent} direction="horizontal" type="column">
           {(provided, snapshot) => (
             <div
               ref={provided.innerRef}

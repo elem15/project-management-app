@@ -3,11 +3,11 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Column } from 'app/reducers/boardSlice';
 import { EditColumnTitle } from 'components/EditColumnTitle/EditColumnTitle';
 import React from 'react';
-import TaskList from 'components/TaskList/TasksList';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
 import { Draggable } from 'react-beautiful-dnd';
+import TaskList from 'components/TaskList/TasksList';
 
 interface IProps {
   item: Column;

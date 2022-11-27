@@ -5,8 +5,7 @@ import { useAppDispatch } from 'app/hooks';
 import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
-import { swapTasks } from 'app/reducers/boardSlice';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 type Task = {
   _id: string;
@@ -67,31 +66,15 @@ function TaskList(props: TaskListProps) {
 
     return <div>{tasksList}</div>;
   };
-  const onDragTaskEnd = (result: DropResult) => {
-    const { destination, source } = result;
-    if (!destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index)
-      return;
-    console.log(source, destination);
-    dispatch(
-      swapTasks({
-        sourceIdx: source.index,
-        destinationIdx: destination.index,
-        sourceDropIdx: source.droppableId,
-        destinationDropIdx: destination.droppableId,
-      })
-    );
-  };
+
   return (
-    <DragDropContext onDragEnd={onDragTaskEnd}>
-      <Droppable droppableId={props.columnId}>
-        {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps} className="task-container">
-            {createTaskList(props.columnId)}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <Droppable droppableId={props.columnId} direction="vertical" type="task">
+      {(provided) => (
+        <div ref={provided.innerRef} {...provided.droppableProps} className="task-container">
+          {createTaskList(props.columnId)}
+        </div>
+      )}
+    </Droppable>
   );
 }
 
