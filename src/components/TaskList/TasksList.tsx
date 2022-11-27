@@ -5,6 +5,7 @@ import { useAppDispatch } from 'app/hooks';
 import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 
 type Task = {
   _id: string;
@@ -22,35 +23,46 @@ type TaskListProps = {
   columnId: string;
   boardId: string;
 };
-
 function TaskList(props: TaskListProps) {
   const dispatch = useAppDispatch();
+  const onDragEnd = (result: DropResult) => {
+    console.log(result);
+  };
 
   const createTaskList = (columnId: string) => {
-    const tasksList = props.tasks.map((task) => {
+    const tasksList = props.tasks.map((task, index) => {
       if (task.columnId === columnId) {
         return (
-          <div key={task._id}>
-            <AddModalEditTask
-              titleTextButton={task.title}
-              titleTextModal={'Task'}
-              titleForm={'Task title'}
-              objField={'taskTitle'}
-              boardId={task.boardId}
-              columnId={task.columnId}
-              taskId={task._id}
-              description={task.description}
-              usersTeammates={task.users}
-            />
-            <Button
-              className="button-delete-task"
-              icon={<DeleteOutlined />}
-              onClick={(e) =>
-                showDeleteConfirm(e, dispatch, 'task', props.boardId, props.columnId, task._id)
-              }
-              danger
-            ></Button>
-          </div>
+          <Draggable draggableId={task._id} index={index} key={task._id}>
+            {(provided, snapshot) => (
+              <div
+                className={snapshot.isDragging ? `task draggable` : `task`}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+              >
+                <AddModalEditTask
+                  titleTextButton={task.title}
+                  titleTextModal={'Task'}
+                  titleForm={'Task title'}
+                  objField={'taskTitle'}
+                  boardId={task.boardId}
+                  columnId={task.columnId}
+                  taskId={task._id}
+                  description={task.description}
+                  usersTeammates={task.users}
+                />
+                <Button
+                  className="button-delete-task"
+                  icon={<DeleteOutlined />}
+                  onClick={(e) =>
+                    showDeleteConfirm(e, dispatch, 'task', props.boardId, props.columnId, task._id)
+                  }
+                  danger
+                ></Button>
+              </div>
+            )}
+          </Draggable>
         );
       }
     });
@@ -58,7 +70,17 @@ function TaskList(props: TaskListProps) {
     return <div>{tasksList}</div>;
   };
 
-  return <div className="task-container">{createTaskList(props.columnId)}</div>;
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId={props.columnId}>
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps} className="task-container">
+            {createTaskList(props.columnId)}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
 }
 
 export default TaskList;

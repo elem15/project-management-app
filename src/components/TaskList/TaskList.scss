@@ -3,7 +3,7 @@
   justify-content: center;
   height: 100%;
   max-height: calc(70vh - 200px);
-  min-height: 5px;
+  min-height: 50px;
   overflow-y: auto;  
 }
 @media (max-height: 768px) {
@@ -35,4 +35,15 @@
 .task-container::-webkit-scrollbar-thumb {
   background: #1890ff;
   border-radius: 20px;
+}
+
+.task {
+  display: flex;
+  padding: 10px;
+  min-width: 280px;
+  justify-content: center;
+  border:#018186 0.1px solid;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: #8af2f6;
 }
