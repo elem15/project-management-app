@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BOARDS, BASE_URL, COLUMNS } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Column = {
   title: string;
@@ -39,8 +41,10 @@ export const createColumn = createAsyncThunk(
           }`
         );
       }
+      openNotificationWithIcon('success', t('message.createColumnSuccess'));
       return data;
     } catch (error) {
+      openNotificationWithIcon('error', t('message.createColumnError'), (error as Error).message);
       return rejectWithValue((error as Error).message);
     }
   }
