@@ -11,6 +11,7 @@ import boards from '../../media/boards.svg';
 import signIn from '../../media/sign-in.svg';
 import signUp from '../../media/sign-up.png';
 import none from '../../media/none.png';
+import search from '../../media/search.svg';
 import Localize from 'components/Localize/Localize';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
@@ -85,6 +86,13 @@ function Header() {
                 titleForm={'Board title'}
                 objField={'boardTitle'}
               />
+            </li>
+            <li>
+              <Link to={ROUTES.SEARCH}>
+                <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={t('header.search')}>
+                  <img className="icon" src={search} alt="search" />
+                </Tooltip>
+              </Link>
             </li>
             <li>
               <Link to={ROUTES.PROFILE} className="page-name">

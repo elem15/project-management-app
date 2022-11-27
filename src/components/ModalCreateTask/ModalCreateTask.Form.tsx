@@ -34,7 +34,7 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
 
   const { usersTeam } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
-    return { label: item.login, value: item.login };
+    return { label: item.login, value: item._id };
   });
 
   const options: Option[] = usersTeamFilter;
@@ -47,7 +47,7 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
         createTask({
           title: values[props.objField],
           order: 1,
-          description: values.description ? values.description : ' ',
+          description: values.description,
           userId: userId,
           users: values.teammates ? values.teammates.flat() : [],
           boardId: props.boardId,
@@ -84,7 +84,11 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Description" name="description">
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[{ required: true, message: 'Please input description!' }]}
+        >
           <Input />
         </Form.Item>
         <Form.Item label="Choose teammates" name="teammates">

@@ -33,7 +33,7 @@ function TaskList(props: TaskListProps) {
           <div key={task._id}>
             <AddModalEditTask
               titleTextButton={task.title}
-              titleTextModal={'Task'}
+              titleTextModal={`Task id: ${task._id}`}
               titleForm={'Task title'}
               objField={'taskTitle'}
               boardId={task.boardId}

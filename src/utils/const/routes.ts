@@ -6,5 +6,6 @@ export const ROUTES = {
   PROFILE: '/profile',
   NOT_FOUND_PAGE: '/notFoundPage',
   YOUR_BOARDS: '/boards',
+  SEARCH: '/search',
   ANY_PAGE: '*',
 };
