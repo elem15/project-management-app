@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   taskId: string;
@@ -18,7 +20,6 @@ export const deleteColumnTask = createAsyncThunk(
   async (task: Task, { rejectWithValue, getState }) => {
     const { taskId, columnId, boardId } = task;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
     try {
       const response: Response = await fetch(
         BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/` + TASKS + `${taskId}/`,
@@ -38,7 +39,10 @@ export const deleteColumnTask = createAsyncThunk(
           }`
         );
       }
+      openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
+      return data;
     } catch (error) {
+      openNotificationWithIcon('error', t('message.deleteTaskError'), (error as Error).message);
       return rejectWithValue((error as Error).message);
     }
   }

@@ -2,7 +2,6 @@ import { Modal } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import React from 'react';
 import { deleteBoard } from 'utils/API/delete-board';
-import { deleteBoardById, deleteTaskById } from 'app/reducers/boardSlice';
 import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
@@ -83,14 +82,12 @@ export const showDeleteConfirm = (
     async onOk() {
       if (nameItem === 'board') {
         await dispatch(deleteBoard(boardId));
-        dispatch(deleteBoardById(boardId));
       }
       if (nameItem === 'column') {
         await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
       }
       if (nameItem === 'task') {
         await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
-        dispatch(deleteTaskById(taskId));
       }
     },
   });

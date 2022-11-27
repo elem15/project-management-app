@@ -176,8 +176,12 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = false;
       errorHandler(state, action);
     },
-    [deleteBoard.fulfilled.type]: (state) => {
-      state.isLoadingBoardsPage = false;
+    [deleteBoard.fulfilled.type]: (state, action: PayloadAction<Board>) => {
+      const newStateBoardsAfterDelete = state.boards.filter(
+        (item) => item._id !== action.payload._id
+      );
+      state.isLoadingBoardPage = false;
+      state.boards = newStateBoardsAfterDelete;
       dataHandler(state);
     },
     [deleteBoard.pending.type]: (state) => {
@@ -213,7 +217,14 @@ export const boardSlice = createSlice({
     [updateBoardColumnTitle.fulfilled.type]: dataHandler,
     [updateBoardColumnTitle.pending.type]: loaderHandler,
     [updateBoardColumnTitle.rejected.type]: errorHandler,
-    [deleteColumnTask.fulfilled.type]: dataHandler,
+    [deleteColumnTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
+      const newStateTasksAfterDelete = state.tasks.filter(
+        (item) => item._id !== action.payload._id
+      );
+      state.isLoadingBoardPage = false;
+      state.tasks = newStateTasksAfterDelete;
+      dataHandler(state);
+    },
     [deleteColumnTask.pending.type]: loaderHandler,
     [deleteColumnTask.rejected.type]: errorHandler,
     [updateTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
