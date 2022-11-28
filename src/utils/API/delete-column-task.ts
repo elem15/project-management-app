@@ -42,7 +42,7 @@ export const deleteColumnTask = createAsyncThunk(
       openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.deleteTaskError'), (error as Error).message);
+      openNotificationWithIcon('error', t('message.deleteTaskError'), t('message.unexpectedError'));
       return rejectWithValue((error as Error).message);
     }
   }

@@ -32,7 +32,11 @@ export const deleteBoard = createAsyncThunk(
       openNotificationWithIcon('success', t('message.deleteBoardSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.deleteBoardError'), (error as Error).message);
+      openNotificationWithIcon(
+        'error',
+        t('message.deleteBoardError'),
+        t('message.unexpectedError')
+      );
       return rejectWithValue((error as Error).message);
     }
   }

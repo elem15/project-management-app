@@ -43,7 +43,11 @@ export const deleteBoardColumn = createAsyncThunk(
       openNotificationWithIcon('success', t('message.deleteColumnSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.deleteColumnError'), (error as Error).message);
+      openNotificationWithIcon(
+        'error',
+        t('message.deleteColumnError'),
+        t('message.unexpectedError')
+      );
       return rejectWithValue((error as Error).message);
     }
   }

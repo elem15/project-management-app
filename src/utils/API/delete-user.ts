@@ -27,7 +27,11 @@ export const deleteUser = createAsyncThunk(
       openNotificationWithIcon('success', t('message.deleteUserSuccess'));
     } catch (error) {
       if (error instanceof Error) {
-        openNotificationWithIcon('error', t('message.deleteUserError'), (error as Error).message);
+        openNotificationWithIcon(
+          'error',
+          t('message.deleteUserError'),
+          t('message.unexpectedError')
+        );
         if (error.message.startsWith('Error!')) {
           return rejectWithValue(error.message);
         } else {
