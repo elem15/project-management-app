@@ -12,13 +12,14 @@ type Board = {
 };
 
 type BoardError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getTitleByBoardId = createAsyncThunk(
   'board/getTitleByBoardId',
   async (boardId: string, { rejectWithValue, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
 
     try {
@@ -30,6 +31,7 @@ export const getTitleByBoardId = createAsyncThunk(
       });
       const data: Board | BoardError = await response.json();
       if (!response.ok) {
+        statusCode = (data as BoardError).statusCode;
         throw new Error(
           `Error! Status: ${(data as BoardError).statusCode}. Message: ${
             (data as BoardError).message
@@ -38,11 +40,20 @@ export const getTitleByBoardId = createAsyncThunk(
       }
       return (data as Board).title;
     } catch (error) {
-      openNotificationWithIcon(
-        'error',
-        t('message.getTitleByBoardIdError'),
-        (error as Error).message
-      );
+      if (statusCode === 404) {
+        openNotificationWithIcon(
+          'error',
+          t('message.getTitleByBoardIdError'),
+          t('message.boardNotFound')
+        );
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.getTitleByBoardIdError'),
+          t('message.unexpectedError')
+        );
+      }
+
       return rejectWithValue((error as Error).message);
     }
   }

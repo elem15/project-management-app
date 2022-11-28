@@ -27,7 +27,7 @@ export const getUsers = createAsyncThunk(
       return data;
     } catch (error) {
       if (error instanceof Error) {
-        openNotificationWithIcon('error', t('message.getUsersError'), (error as Error).message);
+        openNotificationWithIcon('error', t('message.getUsersError'), t('message.unexpectedError'));
         if (error.message.startsWith('Error!')) {
           return rejectWithValue(error.message);
         } else {

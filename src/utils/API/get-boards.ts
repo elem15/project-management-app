@@ -41,7 +41,7 @@ export const getBoards = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.getBoardsError'), (error as Error).message);
+      openNotificationWithIcon('error', t('message.getBoardsError'), t('message.unexpectedError'));
       return rejectWithValue((error as Error).message);
     }
   }

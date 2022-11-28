@@ -16,13 +16,14 @@ type Task = {
 };
 
 type TaskError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getAllTasksByIds = createAsyncThunk(
   'board/getAllTasksByIds',
   async (ids: string, { rejectWithValue, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
     try {
       const response: Response = await fetch(BASE_URL + IDS_LIST + `${ids}`, {
@@ -33,6 +34,7 @@ export const getAllTasksByIds = createAsyncThunk(
       });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -44,11 +46,19 @@ export const getAllTasksByIds = createAsyncThunk(
         : openNotificationWithIcon('success', t('message.getAllTasksByIdsSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon(
-        'error',
-        t('message.getAllTasksByIdsError'),
-        (error as Error).message
-      );
+      if (statusCode === 400) {
+        openNotificationWithIcon(
+          'error',
+          t('message.getAllTasksByIdsError'),
+          t('message.badRequest')
+        );
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.getAllTasksByIdsError'),
+          t('message.unexpectedError')
+        );
+      }
       return rejectWithValue((error as Error).message);
     }
   }

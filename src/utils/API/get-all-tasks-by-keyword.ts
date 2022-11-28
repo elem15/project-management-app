@@ -16,13 +16,14 @@ type Task = {
 };
 
 type TaskError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getAllTasksByKeyword = createAsyncThunk(
   'board/getAllTasksByKeyword',
   async (keyword: string, { rejectWithValue, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
 
     try {
@@ -35,6 +36,7 @@ export const getAllTasksByKeyword = createAsyncThunk(
       });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -46,11 +48,19 @@ export const getAllTasksByKeyword = createAsyncThunk(
         : openNotificationWithIcon('success', t('message.getAllTasksByKeywordSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon(
-        'error',
-        t('message.getAllTasksByKeywordError'),
-        (error as Error).message
-      );
+      if (statusCode === 400) {
+        openNotificationWithIcon(
+          'error',
+          t('message.getAllTasksByKeywordError'),
+          t('message.badRequest')
+        );
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.getAllTasksByKeywordError'),
+          t('message.unexpectedError')
+        );
+      }
       return rejectWithValue((error as Error).message);
     }
   }

@@ -38,7 +38,11 @@ export const getBoardColumns = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.getBoardColumnError'), (error as Error).message);
+      openNotificationWithIcon(
+        'error',
+        t('message.getBoardColumnError'),
+        t('message.unexpectedError')
+      );
       return rejectWithValue((error as Error).message);
     }
   }
