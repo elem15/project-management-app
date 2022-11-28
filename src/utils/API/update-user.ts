@@ -1,13 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addLogin, addName, addUserId } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { UserUp } from 'pages/SignUp/SignUp';
 import { BASE_URL, USERS } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 import { getUsers } from './get-users';
 
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
   async (user: UserUp, { rejectWithValue, dispatch, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
     const { userId, token } = state.auth;
     const { name, login, password } = user;
@@ -26,6 +29,7 @@ export const updateUser = createAsyncThunk(
       });
       const data = await response.json();
       if (!response.ok) {
+        statusCode = data.statusCode;
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
       localStorage.setItem('login', login);
@@ -33,7 +37,20 @@ export const updateUser = createAsyncThunk(
       dispatch(addName(data.name));
       dispatch(addUserId(data._id));
       dispatch(getUsers());
+      openNotificationWithIcon('success', t('message.updateUserSuccess'));
     } catch (error) {
+      if (statusCode === 400) {
+        openNotificationWithIcon('error', t('message.updateUserError'), t('message.badRequest'));
+      } else if (statusCode === 409) {
+        openNotificationWithIcon('error', t('message.updateUserError'), t('message.loginExist'));
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.updateUserError'),
+          t('message.unexpectedError')
+        );
+      }
+
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {
           return rejectWithValue(error.message);

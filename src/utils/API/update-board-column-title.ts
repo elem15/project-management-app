@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Column = {
   title: string;
@@ -17,9 +19,10 @@ type ColumnError = {
 export const updateBoardColumnTitle = createAsyncThunk(
   'board/updateBoardColumnTitle',
   async (column: Column, { rejectWithValue, getState }) => {
+    let statusCode;
     const { title, order, columnId, boardId } = column;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
+
     try {
       const response: Response = await fetch(
         BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/`,
@@ -37,13 +40,29 @@ export const updateBoardColumnTitle = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
+        statusCode = data.statusCode;
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${
             (data as ColumnError).message
           }`
         );
       }
+      openNotificationWithIcon('success', t('message.updateColumnTitleSuccess'));
     } catch (error) {
+      if (statusCode === 400) {
+        openNotificationWithIcon(
+          'error',
+          t('message.updateColumnTitleError'),
+          t('message.badRequest')
+        );
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.updateColumnTitleError'),
+          t('message.unexpectedError')
+        );
+      }
+
       return rejectWithValue((error as Error).message);
     }
   }
