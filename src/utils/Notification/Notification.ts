@@ -10,5 +10,6 @@ export const openNotificationWithIcon = (
     message: message,
     description: type === 'success' ? '' : `${error}`,
     duration: 3,
+    placement: 'bottomRight',
   });
 };
