@@ -13,6 +13,7 @@ type Board = {
 export const createBoard = createAsyncThunk(
   'board/createBoard',
   async (board: Board, { rejectWithValue, getState }) => {
+    let statusCode;
     const { title, owner, users } = board;
     const state = getState() as RootState;
     try {
@@ -30,12 +31,21 @@ export const createBoard = createAsyncThunk(
       });
       const data = await response.json();
       if (!response.ok) {
+        statusCode = data.statusCode;
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
       openNotificationWithIcon('success', t('message.createBoardSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.createBoardError'), (error as Error).message);
+      if (statusCode === 400) {
+        openNotificationWithIcon('error', t('message.createBoardError'), t('message.badRequest'));
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.createBoardError'),
+          t('message.unexpectedError')
+        );
+      }
       return rejectWithValue((error as Error).message);
     }
   }

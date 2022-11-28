@@ -1,14 +1,14 @@
 import { notification } from 'antd';
-import { t } from 'i18next';
+import { DefaultTFuncReturn } from 'i18next';
 
 export const openNotificationWithIcon = (
   type: 'success' | 'error' | 'warning',
   message: string,
-  error = ''
+  error: string | DefaultTFuncReturn = ''
 ) => {
   notification[type]({
     message: message,
-    description: type === 'success' ? '' : `${t('message.errorMessage')}: '${error}'`,
+    description: type === 'success' ? '' : `${error}`,
     duration: 3,
   });
 };
