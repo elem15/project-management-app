@@ -96,7 +96,7 @@ export const boardSlice = createSlice({
       const { sourceIdx, destinationIdx } = action.payload;
       newColumns.splice(sourceIdx, 1);
       newColumns.splice(destinationIdx, 0, state.columns[sourceIdx]);
-      state.columns = newColumns;
+      state.columns = newColumns.map((col, idx) => ({ ...col, order: idx }));
     },
     swapTasks: (state, action) => {
       const { sourceIdx, destinationIdx, sourceDropIdx, destinationDropIdx } = action.payload;
@@ -156,7 +156,7 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = false;
       state.isLoading = false;
       state.isError = '';
-      state.columns = action.payload;
+      state.columns = action.payload.sort((col1, col2) => col1.order - col2.order);
     },
     [getBoardColumns.pending.type]: (state) => {
       state.isLoadingBoardPage = true;

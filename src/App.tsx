@@ -11,6 +11,7 @@ import Board from 'pages/Board/Board';
 import BoardList from 'pages/BoardList/BoardList';
 import Welcome from 'pages/Welcome/Welcome';
 import UserProfile from 'pages/UserProfile/UserProfile';
+import Search from 'pages/Search/Search';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path={ROUTES.PROFILE} element={<UserProfile />} />
           <Route path={ROUTES.NOT_FOUND_PAGE} element={<Page404 />} />
           <Route path={ROUTES.YOUR_BOARDS} element={<BoardList />} />
+          <Route path={ROUTES.SEARCH} element={<Search />} />
           <Route path={`${ROUTES.YOUR_BOARDS}/:_id`} element={<Board />} />
           <Route path={ROUTES.ANY_PAGE} element={<Navigate to={ROUTES.NOT_FOUND_PAGE} replace />} />
         </Route>

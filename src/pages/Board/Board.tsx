@@ -12,6 +12,7 @@ import './Board.scss';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import TasksColumn from 'components/TasksColumn/TasksColumn';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
@@ -48,6 +49,19 @@ const Board: React.FC = () => {
       (!token && router(ROUTES.NOT_FOUND_PAGE));
   }, [boardIdFromUrl.length, router, token]);
 
+  useEffect(() => {
+    columns.map((column) =>
+      dispatch(
+        updateBoardColumnTitle({
+          title: column.title,
+          boardId: column.boardId,
+          columnId: column._id,
+          order: column.order,
+        })
+      )
+    );
+  }, [columns, dispatch]);
+
   if (boardId) {
     boardIdCurrent = boardId;
   } else {
@@ -65,7 +79,7 @@ const Board: React.FC = () => {
     <div className="columns-container">
       <h2 className="header">{title ? JSON.parse(title).title : ''}</h2>
       <h3>{title ? JSON.parse(title).description : ''}</h3>
-      <Button onClick={() => router(`${ROUTES.YOUR_BOARDS}`)}>Back</Button>
+      <Button onClick={() => router(-1)}>Back</Button>
       <AddModalCreateColumn
         typeButton={'primary'}
         titleTextButton={'Add column'}
