@@ -1,7 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Boards = {
   _id: string;
@@ -19,7 +21,7 @@ export const getBoards = createAsyncThunk(
   'board/getBoards',
   async (_, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as RootState;
-    if (!state.auth.token) return [];
+
     try {
       const response: Response = await fetch(BASE_URL + BOARDS, {
         headers: {
@@ -39,6 +41,7 @@ export const getBoards = createAsyncThunk(
       }
       return data;
     } catch (error) {
+      openNotificationWithIcon('error', t('message.getBoardsError'), (error as Error).message);
       return rejectWithValue((error as Error).message);
     }
   }

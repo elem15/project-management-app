@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, TASKS_SET } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   _id: string;
@@ -22,7 +24,7 @@ export const getTasksByBoardId = createAsyncThunk(
   'board/getTasksByBoardId',
   async (boardId: string, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
-    if (!state.auth.token) return;
+
     try {
       const response: Response = await fetch(BASE_URL + TASKS_SET + `${boardId}/`, {
         headers: {
@@ -40,6 +42,11 @@ export const getTasksByBoardId = createAsyncThunk(
       }
       return data;
     } catch (error) {
+      openNotificationWithIcon(
+        'error',
+        t('message.getTasksByBoardIdError'),
+        (error as Error).message
+      );
       return rejectWithValue((error as Error).message);
     }
   }

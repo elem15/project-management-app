@@ -1,13 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addAllUsers, setUser, signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, USERS } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 export const getUsers = createAsyncThunk(
   'auth/getUsers',
   async (_, { rejectWithValue, dispatch, getState }) => {
     const state = getState() as RootState;
-    if (!state.auth.token) return;
+
     try {
       const response: Response = await fetch(BASE_URL + USERS, {
         headers: {
@@ -25,6 +27,7 @@ export const getUsers = createAsyncThunk(
       return data;
     } catch (error) {
       if (error instanceof Error) {
+        openNotificationWithIcon('error', t('message.getUsersError'), (error as Error).message);
         if (error.message.startsWith('Error!')) {
           return rejectWithValue(error.message);
         } else {

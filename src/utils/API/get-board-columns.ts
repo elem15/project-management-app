@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Column = {
   _id: string;
@@ -18,7 +20,7 @@ export const getBoardColumns = createAsyncThunk(
   'board/getBoardColumn',
   async (boardId: string, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
-    if (!state.auth.token) return;
+
     try {
       const response: Response = await fetch(BASE_URL + BOARDS + `${boardId}/` + COLUMNS, {
         headers: {
@@ -36,6 +38,7 @@ export const getBoardColumns = createAsyncThunk(
       }
       return data;
     } catch (error) {
+      openNotificationWithIcon('error', t('message.getBoardColumnError'), (error as Error).message);
       return rejectWithValue((error as Error).message);
     }
   }
