@@ -15,13 +15,14 @@ type Task = {
 };
 
 type TaskError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const createTask = createAsyncThunk(
   'board/createTask',
   async (task: Task, { rejectWithValue, getState }) => {
+    let statusCode;
     const { title, order, description, userId, users, boardId, columnId } = task;
     const state = getState() as RootState;
     try {
@@ -44,6 +45,7 @@ export const createTask = createAsyncThunk(
       );
       const data: Task | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -53,7 +55,15 @@ export const createTask = createAsyncThunk(
       openNotificationWithIcon('success', t('message.createTaskSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.createTaskError'), (error as Error).message);
+      if (statusCode === 400) {
+        openNotificationWithIcon('error', t('message.createTaskError'), t('message.badRequest'));
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.createTaskError'),
+          t('message.unexpectedError')
+        );
+      }
       return rejectWithValue((error as Error).message);
     }
   }

@@ -11,13 +11,14 @@ type Column = {
 };
 
 type ColumnError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const createColumn = createAsyncThunk(
   'board/createColumn',
   async (column: Column, { rejectWithValue, getState }) => {
+    let statusCode;
     const { title, order, boardId } = column;
     const state = getState() as RootState;
     try {
@@ -35,6 +36,7 @@ export const createColumn = createAsyncThunk(
 
       const data: Column | ColumnError = await response.json();
       if (!response.ok) {
+        statusCode = (data as ColumnError).statusCode;
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${
             (data as ColumnError).message
@@ -44,7 +46,15 @@ export const createColumn = createAsyncThunk(
       openNotificationWithIcon('success', t('message.createColumnSuccess'));
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.createColumnError'), (error as Error).message);
+      if (statusCode === 400) {
+        openNotificationWithIcon('error', t('message.createColumnError'), t('message.badRequest'));
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.createColumnError'),
+          t('message.unexpectedError')
+        );
+      }
       return rejectWithValue((error as Error).message);
     }
   }
