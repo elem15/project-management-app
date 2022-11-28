@@ -8,6 +8,7 @@ import { openNotificationWithIcon } from 'utils/Notification/Notification';
 export const signUp = createAsyncThunk(
   'auth/signUp',
   async (user: UserUp, { rejectWithValue, dispatch }) => {
+    let statusCode;
     const { name, login, password } = user;
     try {
       const response = await fetch(BASE_URL + AUTH_SIGNUP, {
@@ -23,6 +24,7 @@ export const signUp = createAsyncThunk(
       });
       const data = await response.json();
       if (!response.ok) {
+        statusCode = data.statusCode;
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
       dispatch(addLogin(data.login));
@@ -30,8 +32,15 @@ export const signUp = createAsyncThunk(
       dispatch(addUserId(data._id));
       openNotificationWithIcon('success', t('message.signUpSuccess'));
     } catch (error) {
+      if (statusCode === 400) {
+        openNotificationWithIcon('error', t('message.signUpError'), t('message.badRequest'));
+      } else if (statusCode === 409) {
+        openNotificationWithIcon('error', t('message.signUpError'), t('message.loginExist'));
+      } else {
+        openNotificationWithIcon('error', t('message.signUpError'), t('message.unexpectedError'));
+      }
+
       if (error instanceof Error) {
-        openNotificationWithIcon('error', t('message.signUpError'), (error as Error).message);
         if (error.message.startsWith('Error!')) {
           return rejectWithValue(error.message);
         } else {

@@ -8,6 +8,7 @@ import { openNotificationWithIcon } from 'utils/Notification/Notification';
 export const getUsers = createAsyncThunk(
   'auth/getUsers',
   async (_, { rejectWithValue, dispatch, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
 
     try {
@@ -20,14 +21,20 @@ export const getUsers = createAsyncThunk(
       const data = await response.json();
       if (!response.ok) {
         dispatch(signOut());
+        statusCode = data.statusCode;
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
       dispatch(addAllUsers(await data));
       dispatch(setUser(await data));
       return data;
     } catch (error) {
-      if (error instanceof Error) {
+      if (statusCode === 403) {
+        openNotificationWithIcon('error', t('message.signInError'), t('message.invalidToken'));
+      } else {
         openNotificationWithIcon('error', t('message.getUsersError'), t('message.unexpectedError'));
+      }
+
+      if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {
           return rejectWithValue(error.message);
         } else {
