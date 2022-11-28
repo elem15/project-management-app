@@ -14,9 +14,9 @@ interface IProps {
   index: number;
 }
 const TasksColumn = (props: IProps) => {
-  const { tasks } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const { item, index } = props;
+  const { tasks } = item;
   return (
     <Draggable draggableId={item._id} index={index}>
       {(provided, snapshot) => (

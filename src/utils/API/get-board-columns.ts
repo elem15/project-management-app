@@ -1,12 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { Task } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
-import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
+import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
 
 type Column = {
   _id: string;
   title: string;
   order: number;
   boardId: string[];
+  tasks: Task[];
 };
 
 type ColumnError = {
@@ -15,7 +17,7 @@ type ColumnError = {
 };
 
 export const getBoardColumns = createAsyncThunk(
-  'board/getBoardColumn',
+  'board/getBoardColumns',
   async (boardId: string, { rejectWithValue, getState }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
@@ -34,7 +36,9 @@ export const getBoardColumns = createAsyncThunk(
           }`
         );
       }
-      return data;
+      const columns = (await data) as Column[];
+      columns.map((col) => (col.tasks = []));
+      return columns;
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }

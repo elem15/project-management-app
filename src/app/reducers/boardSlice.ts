@@ -31,9 +31,10 @@ export type Column = {
   title: string;
   order: number;
   boardId: string;
+  tasks: Task[];
 };
 
-type Task = {
+export type Task = {
   _id: string;
   title: string;
   order: number;
@@ -99,14 +100,20 @@ export const boardSlice = createSlice({
       state.columns = newColumns.map((col, idx) => ({ ...col, order: idx }));
     },
     swapTasks: (state, action) => {
-      const { sourceIdx, destinationIdx, sourceDropIdx, destinationDropIdx } = action.payload;
-      const newTasks = [...state.tasks];
-      newTasks.splice(sourceIdx, 1);
-      if (sourceDropIdx !== destinationDropIdx) {
-        state.tasks[sourceIdx].columnId = destinationDropIdx;
+      const { sourceIdx, destinationIdx, sourceDropId, destinationDropId } = action.payload;
+      const startColumn = state.columns.find((column) => column._id === sourceDropId) as Column;
+      const finishColumn = state.columns.find(
+        (column) => column._id === destinationDropId
+      ) as Column;
+      if (sourceDropId !== destinationDropId) {
+        startColumn.tasks[sourceIdx].columnId = destinationDropId;
+        finishColumn.tasks.splice(destinationIdx, 0, startColumn.tasks[sourceIdx]);
+        startColumn.tasks.splice(sourceIdx, 1);
+        return;
       }
-      newTasks.splice(destinationIdx, 0, state.tasks[sourceIdx]);
-      state.tasks = newTasks;
+      const tasks = [...startColumn.tasks];
+      startColumn.tasks.splice(sourceIdx, 1);
+      startColumn.tasks.splice(destinationIdx, 0, tasks[sourceIdx]);
     },
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;
@@ -121,6 +128,11 @@ export const boardSlice = createSlice({
     deleteTaskById: (state, action: PayloadAction<string>) => {
       const newTasks = state.tasks.filter((item) => item._id !== action.payload);
       state.tasks = newTasks;
+    },
+    addTaskToColumn: (state, action) => {
+      const { columnId, tasks } = action.payload;
+      const column = state.columns.find((column) => column._id === columnId);
+      if (column) column.tasks = tasks;
     },
   },
   extraReducers: {
@@ -224,6 +236,15 @@ export const boardSlice = createSlice({
       state.isLoading = false;
       state.isError = '';
       state.tasks = action.payload;
+      state.tasks.map((task) => {
+        state.columns.map((col) => {
+          if (task.columnId === col._id) {
+            if (!col.tasks) col.tasks = [];
+            col.tasks.push(task);
+            col.tasks = col.tasks.sort((task1, task2) => task1.order - task2.order);
+          }
+        });
+      });
     },
     [getTasksByBoardId.pending.type]: loaderHandler,
     [getTasksByBoardId.rejected.type]: errorHandler,
@@ -246,7 +267,14 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { addBoards, addBoardId, deleteBoardById, deleteTaskById, swapColumns, swapTasks } =
-  boardSlice.actions;
+export const {
+  addBoards,
+  addBoardId,
+  deleteBoardById,
+  deleteTaskById,
+  swapColumns,
+  swapTasks,
+  addTaskToColumn,
+} = boardSlice.actions;
 
 export default boardSlice.reducer;

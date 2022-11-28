@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { addBoardId, swapColumns, swapTasks } from 'app/reducers/boardSlice';
+import { addBoardId, addTaskToColumn, swapColumns, swapTasks } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import TasksColumn from 'components/TasksColumn/TasksColumn';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
+import { getTaskByColumn } from 'utils/API/get-tasks-by-column';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
@@ -35,8 +36,8 @@ const Board: React.FC = () => {
         swapTasks({
           sourceIdx: source.index,
           destinationIdx: destination.index,
-          sourceDropIdx: source.droppableId,
-          destinationDropIdx: destination.droppableId,
+          sourceDropId: source.droppableId,
+          destinationDropId: destination.droppableId,
         })
       );
       return;
@@ -50,31 +51,29 @@ const Board: React.FC = () => {
   }, [boardIdFromUrl.length, router, token]);
 
   useEffect(() => {
-    columns.map((column) =>
-      dispatch(
-        updateBoardColumnTitle({
-          title: column.title,
-          boardId: column.boardId,
-          columnId: column._id,
-          order: column.order,
-        })
-      )
-    );
+    token && dispatch(getTitleByBoardId(boardIdCurrent));
+    token && dispatch(getBoardColumns(boardIdCurrent));
+  }, [boardIdCurrent, dispatch, location, token]);
+  useEffect(() => {
+    if (columns.length) {
+      columns.map((column) => {
+        dispatch(
+          updateBoardColumnTitle({
+            title: column.title,
+            boardId: column.boardId,
+            columnId: column._id,
+            order: column.order,
+          })
+        );
+      });
+    }
   }, [columns, dispatch]);
-
   if (boardId) {
     boardIdCurrent = boardId;
   } else {
     boardIdCurrent = boardIdFromUrl;
     dispatch(addBoardId(boardIdCurrent));
   }
-
-  useEffect(() => {
-    token && dispatch(getBoardColumns(boardIdCurrent));
-    token && dispatch(getTitleByBoardId(boardIdCurrent));
-    token && dispatch(getTasksByBoardId(boardIdCurrent));
-  }, [boardIdCurrent, dispatch, location, token]);
-
   return (
     <div className="columns-container">
       <h2 className="header">{title ? JSON.parse(title).title : ''}</h2>
