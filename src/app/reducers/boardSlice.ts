@@ -144,6 +144,11 @@ export const boardSlice = createSlice({
       const idx = column?.tasks.findIndex((t) => t._id === task._id) as number;
       column.tasks[idx] = task;
     },
+    deleteTaskInColumn: (state, action) => {
+      const { columnId, taskId } = action.payload;
+      const column = state.columns.find((column) => column._id === columnId) as Column;
+      column.tasks = column.tasks.filter((t) => t._id !== taskId);
+    },
     removeColumnsState: (state) => {
       state.columns = [];
       state.tasks = [];
@@ -302,6 +307,7 @@ export const {
   addColumns,
   addTasks,
   updateTaskInColumn,
+  deleteTaskInColumn,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
