@@ -152,6 +152,7 @@ export const boardSlice = createSlice({
       state.tasks = action.payload;
       if (state.columns.length) {
         addTasksToColumns(state.columns, state.tasks);
+        state.tasks = [];
       }
     },
   },

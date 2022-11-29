@@ -105,16 +105,18 @@ const Board: React.FC = () => {
   }, [boardIdFromUrl.length, router, token]);
 
   useEffect(() => {
+    dispatch(removeColumnsState());
     token && dispatch(getBoardColumns(boardIdCurrent));
     token && dispatch(getTitleByBoardId(boardIdCurrent));
     token && dispatch(getTasksByBoardId(boardIdCurrent));
   }, [boardIdCurrent, dispatch, location, token]);
-  useEffect(() => {
-    return () => {
-      dispatch(removeColumnsState());
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   dispatch(removeColumnsState());
+  //   return () => {
+  //     dispatch(removeColumnsState());
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
   if (boardId) {
     boardIdCurrent = boardId;
   } else {
