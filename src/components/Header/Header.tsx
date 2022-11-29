@@ -29,7 +29,7 @@ function Header() {
   const [sticky, setSticky] = useState<StickyType>({ sticky: false, offset: 0 });
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
     appDispatch(signOut());
     navigate(ROUTES.HOME_PAGE);
   };

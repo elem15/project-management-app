@@ -29,7 +29,7 @@ const Burger = () => {
   const { token } = useAppSelector((state) => state.auth);
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
-  const handleSignOut = async () => {
+  const handleSignOut = () => {
     appDispatch(signOut());
     navigate(ROUTES.HOME_PAGE);
   };

@@ -110,13 +110,7 @@ const Board: React.FC = () => {
     token && dispatch(getTitleByBoardId(boardIdCurrent));
     token && dispatch(getTasksByBoardId(boardIdCurrent));
   }, [boardIdCurrent, dispatch, location, token]);
-  // useEffect(() => {
-  //   dispatch(removeColumnsState());
-  //   return () => {
-  //     dispatch(removeColumnsState());
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+
   if (boardId) {
     boardIdCurrent = boardId;
   } else {
