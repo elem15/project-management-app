@@ -18,7 +18,6 @@ type PropsModal = {
 export const AddModalEditTask = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const showModal = () => {
     setOpen(true);
   };

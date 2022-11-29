@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addTaskToColumn, Task } from 'app/reducers/boardSlice';
+import { addTasksToColumn, Task } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
 
@@ -33,7 +33,7 @@ export const getTaskByColumn = createAsyncThunk(
         );
       }
       const tasks = data as Task[];
-      dispatch(addTaskToColumn({ columnId, tasks }));
+      dispatch(addTasksToColumn({ columnId, tasks }));
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }

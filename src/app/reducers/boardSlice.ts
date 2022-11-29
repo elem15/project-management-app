@@ -133,10 +133,16 @@ export const boardSlice = createSlice({
       const newTasks = state.tasks.filter((item) => item._id !== action.payload);
       state.tasks = newTasks;
     },
-    addTaskToColumn: (state, action) => {
+    addTasksToColumn: (state, action) => {
       const { columnId, tasks } = action.payload;
       const column = state.columns.find((column) => column._id === columnId);
       if (column) column.tasks = tasks;
+    },
+    updateTaskInColumn: (state, action) => {
+      const { columnId, task } = action.payload;
+      const column = state.columns.find((column) => column._id === columnId) as Column;
+      const idx = column?.tasks.findIndex((t) => t._id === task._id) as number;
+      column.tasks[idx] = task;
     },
     removeColumnsState: (state) => {
       state.columns = [];
@@ -291,10 +297,11 @@ export const {
   swapColumns,
   swapTasksInside,
   swapTasksBetween,
-  addTaskToColumn,
+  addTasksToColumn,
   removeColumnsState,
   addColumns,
   addTasks,
+  updateTaskInColumn,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

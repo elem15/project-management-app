@@ -71,7 +71,7 @@ function TaskList(props: TaskListProps) {
 
   return (
     <Droppable droppableId={props.columnId} direction="vertical" type="task">
-      {(provided, snapshot) => (
+      {(provided) => (
         <div ref={provided.innerRef} {...provided.droppableProps} className="task-container">
           {createTaskList(provided)}
         </div>
