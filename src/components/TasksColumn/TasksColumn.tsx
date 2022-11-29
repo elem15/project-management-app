@@ -29,7 +29,7 @@ const TasksColumn = (props: IProps) => {
             <div className="task-item">
               <EditColumnTitle
                 title={item.title}
-                order={0}
+                order={item.order}
                 columnId={item._id}
                 boardId={item.boardId}
               />

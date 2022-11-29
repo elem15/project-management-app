@@ -24,7 +24,6 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { columns } = useAppSelector((state) => state.board);
-
   const onFinish = async (values: Values) => {
     props.setLoading(true);
     setComponentDisabled(true);
