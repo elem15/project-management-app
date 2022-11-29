@@ -1,6 +1,13 @@
 import { Button } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { addBoardId, removeColumnsState, swapColumns, swapTasks } from 'app/reducers/boardSlice';
+import {
+  addBoardId,
+  Column,
+  removeColumnsState,
+  swapColumns,
+  swapTasksBetween,
+  swapTasksInside,
+} from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -14,6 +21,7 @@ import TasksColumn from 'components/TasksColumn/TasksColumn';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { Preloader } from 'components/Preloader/Preloader';
+import { updateTask } from 'utils/API/update-task';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
@@ -31,31 +39,63 @@ const Board: React.FC = () => {
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index)
       return;
+    const newColumns = [...columns];
     if (type === 'task') {
-      dispatch(
-        swapTasks({
-          sourceIdx: source.index,
-          destinationIdx: destination.index,
-          sourceDropId: source.droppableId,
-          destinationDropId: destination.droppableId,
-        })
-      );
+      const startColumn = {
+        ...newColumns.find((column) => column._id === source.droppableId),
+      } as Column;
+      const finishColumn = {
+        ...newColumns.find((column) => column._id === destination.droppableId),
+      } as Column;
+      if (source.droppableId !== destination.droppableId) {
+        const startTasks = [...startColumn.tasks];
+        const finishTasks = [...finishColumn.tasks];
+        finishTasks.splice(destination.index, 0, startColumn.tasks[source.index]);
+        const orderedFinishTasks = finishTasks.map((task, idx) => ({
+          ...task,
+          order: idx,
+        }));
+        startTasks.splice(source.index, 1);
+        const orderedStartTasks = startTasks.map((task, idx) => ({
+          ...task,
+          order: idx,
+        }));
+        dispatch(
+          swapTasksBetween({
+            startColumnId: startColumn._id,
+            startTasks: orderedStartTasks,
+            finishColumnId: finishColumn._id,
+            finishTasks: orderedFinishTasks,
+          })
+        );
+        orderedFinishTasks.map((task) => {
+          dispatch(updateTask({ ...task, columnId: destination.droppableId, taskId: task._id }));
+        });
+        orderedStartTasks.map((task) => {
+          dispatch(updateTask({ ...task, columnId: source.droppableId, taskId: task._id }));
+        });
+        return;
+      }
+      const tasks = [...startColumn.tasks];
+      const tasksOld = [...startColumn.tasks];
+      tasks.splice(source.index, 1);
+      tasks.splice(destination.index, 0, tasksOld[source.index]);
+      const orderedTasks = tasks.map((task, idx) => ({
+        ...task,
+        order: idx,
+      }));
+      dispatch(swapTasksInside({ startColumnId: startColumn._id, startTasks: orderedTasks }));
+      orderedTasks.map((task) => {
+        dispatch(updateTask({ ...task, taskId: task._id }));
+      });
       return;
     }
-    const newColumns = [...columns];
     newColumns.splice(source.index, 1);
     newColumns.splice(destination.index, 0, columns[source.index]);
     const sortedColumns = newColumns.map((col, idx) => ({ ...col, order: idx }));
     dispatch(swapColumns(sortedColumns));
     sortedColumns.map((column) => {
-      dispatch(
-        updateBoardColumnTitle({
-          title: column.title,
-          boardId: column.boardId,
-          columnId: column._id,
-          order: column.order,
-        })
-      );
+      dispatch(updateBoardColumnTitle({ ...column, columnId: column._id }));
     });
   };
 

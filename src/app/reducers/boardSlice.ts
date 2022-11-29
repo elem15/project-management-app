@@ -107,21 +107,17 @@ export const boardSlice = createSlice({
     swapColumns: (state, action: PayloadAction<Column[]>) => {
       state.columns = action.payload;
     },
-    swapTasks: (state, action) => {
-      const { sourceIdx, destinationIdx, sourceDropId, destinationDropId } = action.payload;
-      const startColumn = state.columns.find((column) => column._id === sourceDropId) as Column;
-      const finishColumn = state.columns.find(
-        (column) => column._id === destinationDropId
-      ) as Column;
-      if (sourceDropId !== destinationDropId) {
-        startColumn.tasks[sourceIdx].columnId = destinationDropId;
-        finishColumn.tasks.splice(destinationIdx, 0, startColumn.tasks[sourceIdx]);
-        startColumn.tasks.splice(sourceIdx, 1);
-        return;
-      }
-      const tasks = [...startColumn.tasks];
-      startColumn.tasks.splice(sourceIdx, 1);
-      startColumn.tasks.splice(destinationIdx, 0, tasks[sourceIdx]);
+    swapTasksInside: (state, action) => {
+      const { startColumnId, startTasks } = action.payload;
+      const startColumn = state.columns.find((col) => col._id === startColumnId) as Column;
+      startColumn.tasks = startTasks;
+    },
+    swapTasksBetween: (state, action) => {
+      const { startColumnId, startTasks, finishColumnId, finishTasks } = action.payload;
+      const startColumn = state.columns.find((col) => col._id === startColumnId) as Column;
+      const finishColumn = state.columns.find((col) => col._id === finishColumnId) as Column;
+      startColumn.tasks = startTasks;
+      finishColumn.tasks = finishTasks;
     },
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;
@@ -291,7 +287,8 @@ export const {
   deleteBoardById,
   deleteTaskById,
   swapColumns,
-  swapTasks,
+  swapTasksInside,
+  swapTasksBetween,
   addTaskToColumn,
   removeColumnsState,
   addColumns,
