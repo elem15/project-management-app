@@ -5,7 +5,7 @@ import { useAppDispatch } from 'app/hooks';
 import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { Draggable, Droppable, DroppableProvided } from 'react-beautiful-dnd';
 
 type Task = {
   _id: string;
@@ -25,7 +25,7 @@ type TaskListProps = {
 };
 function TaskList(props: TaskListProps) {
   const dispatch = useAppDispatch();
-  const createTaskList = () => {
+  const createTaskList = (provided: DroppableProvided) => {
     const tasksList = props.tasks.map((task, index) => {
       return (
         <Draggable draggableId={task._id} index={index} key={task._id}>
@@ -61,14 +61,19 @@ function TaskList(props: TaskListProps) {
       );
     });
 
-    return <div>{tasksList}</div>;
+    return (
+      <div>
+        {tasksList}
+        <div>{provided.placeholder}</div>
+      </div>
+    );
   };
 
   return (
     <Droppable droppableId={props.columnId} direction="vertical" type="task">
-      {(provided) => (
+      {(provided, snapshot) => (
         <div ref={provided.innerRef} {...provided.droppableProps} className="task-container">
-          {createTaskList()}
+          {createTaskList(provided)}
         </div>
       )}
     </Droppable>

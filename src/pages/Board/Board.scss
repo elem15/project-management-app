@@ -42,8 +42,7 @@
   padding: 5px;
   border: 1px solid black;
   border-radius: 5px;
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 310px;
   height: min-content;
   max-height: 80vh;
   background-color: rgb(201, 239, 240);
@@ -57,10 +56,14 @@
 .column-item-header {
   display: flex;
   justify-content: space-between;
+  background-color: rgb(32, 196, 203);
+  padding: 4px;
+  border-radius: 3px;
+  margin-bottom: 4px;
 }
 
 .task-item {
-  max-width: 250px;
+  max-width: 280px;
 }
 
 .text-cut {
@@ -78,4 +81,7 @@
   text-overflow: ellipsis;
   margin-bottom: 0.5em;
   cursor: pointer;
+  background-color: azure;
+  padding: 2px 4px;
+  border-radius: 3px;
 }
