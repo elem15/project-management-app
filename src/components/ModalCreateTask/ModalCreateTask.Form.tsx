@@ -16,6 +16,7 @@ type PropsCreateBoardForm = {
   boardId: string;
   columnId: string;
   loading: boolean;
+  tasksLength: number;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel: () => void;
 };
@@ -46,7 +47,7 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
       await dispatch(
         createTask({
           title: values[props.objField],
-          order: 1,
+          order: props.tasksLength,
           description: values.description,
           userId: userId,
           users: values.teammates ? values.teammates.flat() : [],

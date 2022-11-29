@@ -4,7 +4,7 @@ import { Column } from 'app/reducers/boardSlice';
 import { EditColumnTitle } from 'components/EditColumnTitle/EditColumnTitle';
 import React from 'react';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { useAppDispatch } from 'app/hooks';
 import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
 import { Draggable } from 'react-beautiful-dnd';
 import TaskList from 'components/TaskList/TasksList';
@@ -54,6 +54,7 @@ const TasksColumn = (props: IProps) => {
               objField={'taskTitle'}
               boardId={item.boardId}
               columnId={item._id}
+              tasksLength={tasks.length}
             />
           </div>
         </div>

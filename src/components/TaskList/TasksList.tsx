@@ -1,12 +1,11 @@
 import { Button } from 'antd';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useAppDispatch } from 'app/hooks';
 import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { getTaskByColumn } from 'utils/API/get-tasks-by-column';
 
 type Task = {
   _id: string;
@@ -26,10 +25,6 @@ type TaskListProps = {
 };
 function TaskList(props: TaskListProps) {
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(getTaskByColumn(props.columnId));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const createTaskList = () => {
     const tasksList = props.tasks.map((task, index) => {
       return (

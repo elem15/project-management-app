@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { addBoardId, addTaskToColumn, swapColumns, swapTasks } from 'app/reducers/boardSlice';
+import { addBoardId, removeColumnsState, swapColumns, swapTasks } from 'app/reducers/boardSlice';
 import { AddModalCreateColumn } from 'components/ModalCreateColumn/ModalCreateColumn.Window';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -13,11 +13,11 @@ import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import TasksColumn from 'components/TasksColumn/TasksColumn';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
-import { getTaskByColumn } from 'utils/API/get-tasks-by-column';
+import { Preloader } from 'components/Preloader/Preloader';
 
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
-  const { columns, boardId, title } = useAppSelector((state) => state.board);
+  const { columns, boardId, title, isLoading } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
@@ -42,7 +42,21 @@ const Board: React.FC = () => {
       );
       return;
     }
-    dispatch(swapColumns({ sourceIdx: source.index, destinationIdx: destination.index }));
+    const newColumns = [...columns];
+    newColumns.splice(source.index, 1);
+    newColumns.splice(destination.index, 0, columns[source.index]);
+    const sortedColumns = newColumns.map((col, idx) => ({ ...col, order: idx }));
+    dispatch(swapColumns(sortedColumns));
+    sortedColumns.map((column) => {
+      dispatch(
+        updateBoardColumnTitle({
+          title: column.title,
+          boardId: column.boardId,
+          columnId: column._id,
+          order: column.order,
+        })
+      );
+    });
   };
 
   useEffect(() => {
@@ -51,23 +65,16 @@ const Board: React.FC = () => {
   }, [boardIdFromUrl.length, router, token]);
 
   useEffect(() => {
-    token && dispatch(getTitleByBoardId(boardIdCurrent));
     token && dispatch(getBoardColumns(boardIdCurrent));
+    token && dispatch(getTitleByBoardId(boardIdCurrent));
+    token && dispatch(getTasksByBoardId(boardIdCurrent));
   }, [boardIdCurrent, dispatch, location, token]);
   useEffect(() => {
-    if (columns.length) {
-      columns.map((column) => {
-        dispatch(
-          updateBoardColumnTitle({
-            title: column.title,
-            boardId: column.boardId,
-            columnId: column._id,
-            order: column.order,
-          })
-        );
-      });
-    }
-  }, [columns, dispatch]);
+    return () => {
+      dispatch(removeColumnsState());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   if (boardId) {
     boardIdCurrent = boardId;
   } else {
@@ -87,6 +94,7 @@ const Board: React.FC = () => {
         objField={'columnTitle'}
         boardId={boardId}
       />
+      {isLoading && <Preloader />}
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={boardIdCurrent} direction="horizontal" type="column">
           {(provided, snapshot) => (

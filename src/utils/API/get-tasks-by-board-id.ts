@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { addTasks } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, TASKS_SET } from 'utils/const/urls';
 
@@ -20,7 +21,7 @@ type TaskError = {
 
 export const getTasksByBoardId = createAsyncThunk(
   'board/getTasksByBoardId',
-  async (boardId: string, { rejectWithValue, getState }) => {
+  async (boardId: string, { rejectWithValue, getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
     try {
@@ -38,7 +39,8 @@ export const getTasksByBoardId = createAsyncThunk(
           }`
         );
       }
-      return data;
+      const tasks = data as Task[];
+      dispatch(addTasks(tasks));
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }

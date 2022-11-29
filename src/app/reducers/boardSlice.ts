@@ -8,6 +8,7 @@ import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
+import { getTaskByColumn } from 'utils/API/get-tasks-by-column';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import { getUsers } from 'utils/API/get-users';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
@@ -88,16 +89,23 @@ const errorHandler = (state: BoardType, action: PayloadAction<string>) => {
   state.isError = action.payload;
 };
 
+const addTasksToColumns = (columns: Column[], tasks: Task[]) => {
+  tasks.map((task) => {
+    columns.map((col) => {
+      if (task.columnId === col._id) {
+        col.tasks.push(task);
+        col.tasks = col.tasks.sort((task1, task2) => task1.order - task2.order);
+      }
+    });
+  });
+};
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
-    swapColumns: (state, action) => {
-      const newColumns = [...state.columns];
-      const { sourceIdx, destinationIdx } = action.payload;
-      newColumns.splice(sourceIdx, 1);
-      newColumns.splice(destinationIdx, 0, state.columns[sourceIdx]);
-      state.columns = newColumns.map((col, idx) => ({ ...col, order: idx }));
+    swapColumns: (state, action: PayloadAction<Column[]>) => {
+      state.columns = action.payload;
     },
     swapTasks: (state, action) => {
       const { sourceIdx, destinationIdx, sourceDropId, destinationDropId } = action.payload;
@@ -134,6 +142,22 @@ export const boardSlice = createSlice({
       const column = state.columns.find((column) => column._id === columnId);
       if (column) column.tasks = tasks;
     },
+    removeColumnsState: (state) => {
+      state.columns = [];
+      state.tasks = [];
+    },
+    addColumns: (state, action: PayloadAction<Column[]>) => {
+      state.columns = action.payload.sort((col1, col2) => col1.order - col2.order);
+      if (state.tasks.length) {
+        addTasksToColumns(state.columns, state.tasks);
+      }
+    },
+    addTasks: (state, action: PayloadAction<Task[]>) => {
+      state.tasks = action.payload;
+      if (state.columns.length) {
+        addTasksToColumns(state.columns, state.tasks);
+      }
+    },
   },
   extraReducers: {
     [createBoard.fulfilled.type]: (state, action: PayloadAction<Board>) => {
@@ -164,11 +188,10 @@ export const boardSlice = createSlice({
       state.isLoadingBoardsPage = false;
       errorHandler(state, action);
     },
-    [getBoardColumns.fulfilled.type]: (state, action: PayloadAction<Column[]>) => {
+    [getBoardColumns.fulfilled.type]: (state) => {
       state.isLoadingBoardPage = false;
       state.isLoading = false;
       state.isError = '';
-      state.columns = action.payload.sort((col1, col2) => col1.order - col2.order);
     },
     [getBoardColumns.pending.type]: (state) => {
       state.isLoadingBoardPage = true;
@@ -220,7 +243,9 @@ export const boardSlice = createSlice({
     [createTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
       state.isLoading = false;
       state.isError = '';
-      state.tasks = [...state.tasks, action.payload];
+      const task = action.payload;
+      const column = state.columns.find((column) => column._id === task.columnId) as Column;
+      column.tasks = [...column.tasks, task];
     },
     [createTask.pending.type]: loaderHandler,
     [createTask.rejected.type]: errorHandler,
@@ -232,19 +257,9 @@ export const boardSlice = createSlice({
     },
     [createColumn.pending.type]: loaderHandler,
     [createColumn.rejected.type]: errorHandler,
-    [getTasksByBoardId.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+    [getTasksByBoardId.fulfilled.type]: (state) => {
       state.isLoading = false;
       state.isError = '';
-      state.tasks = action.payload;
-      state.tasks.map((task) => {
-        state.columns.map((col) => {
-          if (task.columnId === col._id) {
-            if (!col.tasks) col.tasks = [];
-            col.tasks.push(task);
-            col.tasks = col.tasks.sort((task1, task2) => task1.order - task2.order);
-          }
-        });
-      });
     },
     [getTasksByBoardId.pending.type]: loaderHandler,
     [getTasksByBoardId.rejected.type]: errorHandler,
@@ -254,6 +269,9 @@ export const boardSlice = createSlice({
     [deleteColumnTask.fulfilled.type]: dataHandler,
     [deleteColumnTask.pending.type]: loaderHandler,
     [deleteColumnTask.rejected.type]: errorHandler,
+    [getTaskByColumn.fulfilled.type]: dataHandler,
+    [getTaskByColumn.pending.type]: loaderHandler,
+    [getTaskByColumn.rejected.type]: errorHandler,
     [updateTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
       const newStateTasksAfterUpdate = state.tasks.map(function (item) {
         return item._id == action.payload._id ? action.payload : item;
@@ -275,6 +293,9 @@ export const {
   swapColumns,
   swapTasks,
   addTaskToColumn,
+  removeColumnsState,
+  addColumns,
+  addTasks,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
