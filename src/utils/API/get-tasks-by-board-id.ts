@@ -44,7 +44,13 @@ export const getTasksByBoardId = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      if (statusCode === 404) {
+      if (statusCode === 403) {
+        openNotificationWithIcon(
+          'error',
+          t('message.getTasksByBoardIdError'),
+          t('message.invalidToken')
+        );
+      } else if (statusCode === 404) {
         openNotificationWithIcon(
           'error',
           t('message.getTasksByBoardIdError'),

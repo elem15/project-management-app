@@ -40,7 +40,13 @@ export const getTitleByBoardId = createAsyncThunk(
       }
       return (data as Board).title;
     } catch (error) {
-      if (statusCode === 404) {
+      if (statusCode === 403) {
+        openNotificationWithIcon(
+          'error',
+          t('message.getTitleByBoardIdError'),
+          t('message.invalidToken')
+        );
+      } else if (statusCode === 404) {
         openNotificationWithIcon(
           'error',
           t('message.getTitleByBoardIdError'),

@@ -12,13 +12,14 @@ type Column = {
 };
 
 type ColumnError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getBoardColumns = createAsyncThunk(
   'board/getBoardColumn',
   async (boardId: string, { rejectWithValue, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
 
     try {
@@ -30,6 +31,7 @@ export const getBoardColumns = createAsyncThunk(
       });
       const data: Column[] | ColumnError = await response.json();
       if (!response.ok) {
+        statusCode = (data as ColumnError).statusCode;
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${
             (data as ColumnError).message
@@ -38,11 +40,20 @@ export const getBoardColumns = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      openNotificationWithIcon(
-        'error',
-        t('message.getBoardColumnError'),
-        t('message.unexpectedError')
-      );
+      if (statusCode === 403) {
+        openNotificationWithIcon(
+          'error',
+          t('message.getBoardColumnError'),
+          t('message.invalidToken')
+        );
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.getBoardColumnError'),
+          t('message.unexpectedError')
+        );
+      }
+
       return rejectWithValue((error as Error).message);
     }
   }

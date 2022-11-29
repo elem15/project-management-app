@@ -13,13 +13,14 @@ type Boards = {
 };
 
 type BoardsError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getBoards = createAsyncThunk(
   'board/getBoards',
   async (_, { rejectWithValue, dispatch, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
 
     try {
@@ -33,6 +34,7 @@ export const getBoards = createAsyncThunk(
 
       if (!response.ok) {
         dispatch(signOut());
+        statusCode = (data as BoardsError).statusCode;
         throw new Error(
           `Error! Status: ${(data as BoardsError).statusCode}. Message: ${
             (data as BoardsError).message
@@ -41,7 +43,19 @@ export const getBoards = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      openNotificationWithIcon('error', t('message.getBoardsError'), t('message.unexpectedError'));
+      if (statusCode === 403) {
+        openNotificationWithIcon(
+          'error',
+          t('message.getTasksByBoardIdError'),
+          t('message.invalidToken')
+        );
+      } else {
+        openNotificationWithIcon(
+          'error',
+          t('message.getBoardsError'),
+          t('message.unexpectedError')
+        );
+      }
       return rejectWithValue((error as Error).message);
     }
   }
