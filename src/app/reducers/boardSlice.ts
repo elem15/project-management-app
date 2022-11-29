@@ -250,7 +250,8 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = false;
       state.isLoading = false;
       state.isError = '';
-      state.columns = [...state.columns, action.payload];
+      const column = { ...action.payload, tasks: [] };
+      state.columns = [...state.columns, column];
     },
     [createColumn.pending.type]: loaderHandler,
     [createColumn.rejected.type]: errorHandler,
