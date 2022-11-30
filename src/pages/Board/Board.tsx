@@ -14,7 +14,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { boardIdLength } from 'utils/const/other';
 import { ROUTES } from 'utils/const/routes';
-import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import './Board.scss';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import TasksColumn from 'components/TasksColumn/TasksColumn';
@@ -106,9 +105,8 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     dispatch(removeColumnsState());
-    token && dispatch(getBoardColumns(boardIdCurrent));
     token && dispatch(getTitleByBoardId(boardIdCurrent));
-    token && dispatch(getTasksByBoardId(boardIdCurrent));
+    token && dispatch(getBoardColumns(boardIdCurrent));
   }, [boardIdCurrent, dispatch, location, token]);
 
   if (boardId) {

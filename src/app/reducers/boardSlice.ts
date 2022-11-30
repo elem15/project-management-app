@@ -160,9 +160,6 @@ export const boardSlice = createSlice({
     },
     addColumns: (state, action: PayloadAction<Column[]>) => {
       state.columns = action.payload.sort((col1, col2) => col1.order - col2.order);
-      if (state.tasks.length) {
-        addTasksToColumns(state.columns, state.tasks);
-      }
     },
     addTasks: (state, action: PayloadAction<Task[]>) => {
       state.tasks = action.payload;
