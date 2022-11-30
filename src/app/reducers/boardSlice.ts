@@ -8,6 +8,7 @@ import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
+import { getTaskByColumn } from 'utils/API/get-tasks-by-column';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import { getUsers } from 'utils/API/get-users';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
@@ -26,14 +27,15 @@ type Board = {
   users: string[];
 };
 
-type Column = {
+export type Column = {
   _id: string;
   title: string;
   order: number;
   boardId: string;
+  tasks: Task[];
 };
 
-type Task = {
+export type Task = {
   _id: string;
   title: string;
   order: number;
@@ -87,10 +89,36 @@ const errorHandler = (state: BoardType, action: PayloadAction<string>) => {
   state.isError = action.payload;
 };
 
+const addTasksToColumns = (columns: Column[], tasks: Task[]) => {
+  tasks.map((task) => {
+    columns.map((col) => {
+      if (task.columnId === col._id) {
+        col.tasks.push(task);
+        col.tasks = col.tasks.sort((task1, task2) => task1.order - task2.order);
+      }
+    });
+  });
+};
+
 export const boardSlice = createSlice({
   name: 'board',
   initialState,
   reducers: {
+    swapColumns: (state, action: PayloadAction<Column[]>) => {
+      state.columns = action.payload;
+    },
+    swapTasksInside: (state, action) => {
+      const { startColumnId, startTasks } = action.payload;
+      const startColumn = state.columns.find((col) => col._id === startColumnId) as Column;
+      startColumn.tasks = startTasks;
+    },
+    swapTasksBetween: (state, action) => {
+      const { startColumnId, startTasks, finishColumnId, finishTasks } = action.payload;
+      const startColumn = state.columns.find((col) => col._id === startColumnId) as Column;
+      const finishColumn = state.columns.find((col) => col._id === finishColumnId) as Column;
+      startColumn.tasks = startTasks;
+      finishColumn.tasks = finishTasks;
+    },
     addBoards: (state, action: PayloadAction<Board[]>) => {
       state.boards = action.payload;
     },
@@ -104,6 +132,41 @@ export const boardSlice = createSlice({
     deleteTaskById: (state, action: PayloadAction<string>) => {
       const newTasks = state.tasks.filter((item) => item._id !== action.payload);
       state.tasks = newTasks;
+    },
+    addTasksToColumn: (state, action) => {
+      const { columnId, tasks } = action.payload;
+      const column = state.columns.find((column) => column._id === columnId);
+      if (column) column.tasks = tasks;
+    },
+    updateTaskInColumn: (state, action) => {
+      const { columnId, task } = action.payload;
+      const column = state.columns.find((column) => column._id === columnId) as Column;
+      const idx = column?.tasks.findIndex((t) => t._id === task._id) as number;
+      column.tasks[idx] = task;
+    },
+    deleteTaskInColumn: (state, action) => {
+      const { columnId, taskId } = action.payload;
+      const column = state.columns.find((column) => column._id === columnId) as Column;
+      column.tasks = column.tasks.filter((t) => t._id !== taskId);
+    },
+    updateColumn: (state, action) => {
+      const column = action.payload;
+      const idx = state.columns.findIndex((c) => c._id === column._id) as number;
+      state.columns[idx] = { ...state.columns[idx], ...column };
+    },
+    removeColumnsState: (state) => {
+      state.columns = [];
+      state.tasks = [];
+    },
+    addColumns: (state, action: PayloadAction<Column[]>) => {
+      state.columns = action.payload.sort((col1, col2) => col1.order - col2.order);
+    },
+    addTasks: (state, action: PayloadAction<Task[]>) => {
+      state.tasks = action.payload;
+      if (state.columns.length) {
+        addTasksToColumns(state.columns, state.tasks);
+        state.tasks = [];
+      }
     },
   },
   extraReducers: {
@@ -135,11 +198,10 @@ export const boardSlice = createSlice({
       state.isLoadingBoardsPage = false;
       errorHandler(state, action);
     },
-    [getBoardColumns.fulfilled.type]: (state, action: PayloadAction<Column[]>) => {
+    [getBoardColumns.fulfilled.type]: (state) => {
       state.isLoadingBoardPage = false;
       state.isLoading = false;
       state.isError = '';
-      state.columns = action.payload;
     },
     [getBoardColumns.pending.type]: (state) => {
       state.isLoadingBoardPage = true;
@@ -195,7 +257,9 @@ export const boardSlice = createSlice({
     [createTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
       state.isLoading = false;
       state.isError = '';
-      state.tasks = [...state.tasks, action.payload];
+      const task = action.payload;
+      const column = state.columns.find((column) => column._id === task.columnId) as Column;
+      column.tasks = [...column.tasks, task];
     },
     [createTask.pending.type]: loaderHandler,
     [createTask.rejected.type]: errorHandler,
@@ -203,14 +267,14 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = false;
       state.isLoading = false;
       state.isError = '';
-      state.columns = [...state.columns, action.payload];
+      const column = { ...action.payload, tasks: [] };
+      state.columns = [...state.columns, column];
     },
     [createColumn.pending.type]: loaderHandler,
     [createColumn.rejected.type]: errorHandler,
-    [getTasksByBoardId.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+    [getTasksByBoardId.fulfilled.type]: (state) => {
       state.isLoading = false;
       state.isError = '';
-      state.tasks = action.payload;
     },
     [getTasksByBoardId.pending.type]: loaderHandler,
     [getTasksByBoardId.rejected.type]: errorHandler,
@@ -227,6 +291,9 @@ export const boardSlice = createSlice({
     },
     [deleteColumnTask.pending.type]: loaderHandler,
     [deleteColumnTask.rejected.type]: errorHandler,
+    [getTaskByColumn.fulfilled.type]: dataHandler,
+    [getTaskByColumn.pending.type]: loaderHandler,
+    [getTaskByColumn.rejected.type]: errorHandler,
     [updateTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
       const newStateTasksAfterUpdate = state.tasks.map(function (item) {
         return item._id == action.payload._id ? action.payload : item;
@@ -240,6 +307,21 @@ export const boardSlice = createSlice({
   },
 });
 
-export const { addBoards, addBoardId, deleteBoardById, deleteTaskById } = boardSlice.actions;
+export const {
+  addBoards,
+  addBoardId,
+  deleteBoardById,
+  deleteTaskById,
+  swapColumns,
+  swapTasksInside,
+  swapTasksBetween,
+  addTasksToColumn,
+  removeColumnsState,
+  addColumns,
+  addTasks,
+  updateTaskInColumn,
+  deleteTaskInColumn,
+  updateColumn,
+} = boardSlice.actions;
 
 export default boardSlice.reducer;

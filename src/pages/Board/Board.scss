@@ -1,26 +1,27 @@
 .columns-container {
   padding: 0px 10px 0px 10px;
-  max-width: 100vw;
 }
+
 @media (max-width: 1024px) {
   .columns-container {
-      overflow-x: scroll;
-      
-        &::-webkit-scrollbar {
-          height: 5px;
-          width: 5px;
-        }
-      
-        &::-webkit-scrollbar-track {
-          background-color: #1890ff;
-          border-radius: 20px;
-          border: 2px solid rgba(255, 255, 255, 0.7);
-        }
-      
-        &::-webkit-scrollbar-thumb {
-          background: #1890ff;
-          border-radius: 20px;
-        }
+    max-width: 100vw;
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+      height: 5px;
+      width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #1890ff;
+      border-radius: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #1890ff;
+      border-radius: 20px;
+    }
   }
 }
 
@@ -29,6 +30,11 @@
   padding-top: 10px;
   gap: 20px;
   padding-bottom: 10px;
+  min-width: 300px;
+}
+
+.droppable {
+  background-color: gainsboro;
 }
 
 .column-item {
@@ -38,25 +44,28 @@
   padding: 5px;
   border: 1px solid black;
   border-radius: 5px;
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 310px;
   height: min-content;
   max-height: 80vh;
+  background-color: rgb(201, 239, 240);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 15px rgba(0, 0, 0, 0.20);
+}
 
-  &:hover {
-    cursor: grab;
-  }
-
+.draggable {
+  background-color: rgb(32, 196, 203);
 }
 
 .column-item-header {
   display: flex;
   justify-content: space-between;
+  background-color: rgb(32, 196, 203);
+  padding: 4px;
+  border-radius: 3px;
+  margin-bottom: 4px;
 }
 
 .task-item {
-  max-width: 250px;
+  max-width: 280px;
 }
 
 .text-cut {
@@ -74,4 +83,7 @@
   text-overflow: ellipsis;
   margin-bottom: 0.5em;
   cursor: pointer;
+  background-color: azure;
+  padding: 2px 4px;
+  border-radius: 3px;
 }

@@ -12,6 +12,7 @@ type PropsModal = {
   objField: string;
   boardId: string;
   columnId: string;
+  tasksLength: number;
 };
 
 export const AddModalCreateTask = (props: PropsModal) => {
@@ -53,6 +54,7 @@ export const AddModalCreateTask = (props: PropsModal) => {
           setLoading={setLoading}
           boardId={props.boardId}
           columnId={props.columnId}
+          tasksLength={props.tasksLength}
         />
       </Modal>
     </>

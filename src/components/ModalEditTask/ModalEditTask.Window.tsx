@@ -13,12 +13,12 @@ type PropsModal = {
   taskId: string;
   description: string;
   usersTeammates: string[];
+  order: number;
 };
 
 export const AddModalEditTask = (props: PropsModal) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const showModal = () => {
     setOpen(true);
   };
@@ -53,6 +53,7 @@ export const AddModalEditTask = (props: PropsModal) => {
           onCancel={hideModal}
           loading={loading}
           setLoading={setLoading}
+          order={props.order}
         />
       </Modal>
     </>

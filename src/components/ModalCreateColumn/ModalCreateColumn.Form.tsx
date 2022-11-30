@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Row } from 'antd';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createColumn } from 'utils/API/create-column';
 import { addBoardId } from 'app/reducers/boardSlice';
 
@@ -23,7 +23,7 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   const [form] = Form.useForm();
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-
+  const { columns } = useAppSelector((state) => state.board);
   const onFinish = async (values: Values) => {
     props.setLoading(true);
     setComponentDisabled(true);
@@ -31,7 +31,7 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
       await dispatch(
         createColumn({
           title: values[props.objField],
-          order: 1,
+          order: columns.length,
           boardId: props.boardId,
         })
       );

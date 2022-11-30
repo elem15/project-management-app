@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { updateTaskInColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
@@ -22,7 +23,7 @@ type TaskError = {
 
 export const updateTask = createAsyncThunk(
   'board/updateTask',
-  async (task: Task, { rejectWithValue, getState }) => {
+  async (task: Task, { rejectWithValue, getState, dispatch }) => {
     let statusCode;
     const { title, order, description, boardId, columnId, taskId, userId, users } = task;
     const state = getState() as RootState;
@@ -54,6 +55,8 @@ export const updateTask = createAsyncThunk(
           }`
         );
       }
+      const task = data as Task;
+      dispatch(updateTaskInColumn({ columnId, task }));
       openNotificationWithIcon('success', t('message.updateTaskSuccess'));
       return data;
     } catch (error) {

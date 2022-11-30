@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { deleteTaskInColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
@@ -17,7 +18,7 @@ type TaskError = {
 
 export const deleteColumnTask = createAsyncThunk(
   'board/deleteColumnTask',
-  async (task: Task, { rejectWithValue, getState }) => {
+  async (task: Task, { rejectWithValue, getState, dispatch }) => {
     const { taskId, columnId, boardId } = task;
     const state = getState() as RootState;
     try {
@@ -39,8 +40,7 @@ export const deleteColumnTask = createAsyncThunk(
           }`
         );
       }
-      openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
-      return data;
+      dispatch(deleteTaskInColumn({ columnId, taskId }));
     } catch (error) {
       openNotificationWithIcon('error', t('message.deleteTaskError'), t('message.unexpectedError'));
       return rejectWithValue((error as Error).message);

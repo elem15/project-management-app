@@ -27,7 +27,6 @@ export const getAllTasksByKeyword = createAsyncThunk(
     const state = getState() as RootState;
 
     try {
-      console.log(BASE_URL + SEARCH + `${String(keyword)}`);
       const response: Response = await fetch(BASE_URL + SEARCH + `${String(keyword)}`, {
         headers: {
           'Content-Type': 'application/json',

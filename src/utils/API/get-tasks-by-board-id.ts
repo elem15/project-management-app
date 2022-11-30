@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { addTasks } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, TASKS_SET } from 'utils/const/urls';
@@ -22,7 +23,7 @@ type TaskError = {
 
 export const getTasksByBoardId = createAsyncThunk(
   'board/getTasksByBoardId',
-  async (boardId: string, { rejectWithValue, getState }) => {
+  async (boardId: string, { rejectWithValue, getState, dispatch }) => {
     let statusCode;
     const state = getState() as RootState;
 
@@ -42,7 +43,8 @@ export const getTasksByBoardId = createAsyncThunk(
           }`
         );
       }
-      return data;
+      const tasks = data as Task[];
+      dispatch(addTasks(tasks));
     } catch (error) {
       if (statusCode === 403) {
         openNotificationWithIcon(

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { updateColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
@@ -18,7 +19,7 @@ type ColumnError = {
 
 export const updateBoardColumnTitle = createAsyncThunk(
   'board/updateBoardColumnTitle',
-  async (column: Column, { rejectWithValue, getState }) => {
+  async (column: Column, { rejectWithValue, getState, dispatch }) => {
     let statusCode;
     const { title, order, columnId, boardId } = column;
     const state = getState() as RootState;
@@ -47,6 +48,7 @@ export const updateBoardColumnTitle = createAsyncThunk(
           }`
         );
       }
+      dispatch(updateColumn({ ...column, _id: columnId }));
       openNotificationWithIcon('success', t('message.updateColumnTitleSuccess'));
     } catch (error) {
       if (statusCode === 400) {
