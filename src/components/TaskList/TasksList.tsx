@@ -46,6 +46,7 @@ function TaskList(props: TaskListProps) {
                 taskId={task._id}
                 description={task.description}
                 usersTeammates={task.users}
+                order={task.order}
               />
               <Button
                 className="button-delete-task"

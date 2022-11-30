@@ -13,6 +13,7 @@ type PropsModal = {
   taskId: string;
   description: string;
   usersTeammates: string[];
+  order: number;
 };
 
 export const AddModalEditTask = (props: PropsModal) => {
@@ -52,6 +53,7 @@ export const AddModalEditTask = (props: PropsModal) => {
           onCancel={hideModal}
           loading={loading}
           setLoading={setLoading}
+          order={props.order}
         />
       </Modal>
     </>
