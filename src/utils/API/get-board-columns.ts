@@ -1,24 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { addColumns, Column, Task } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
-import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
-
-type Column = {
-  _id: string;
-  title: string;
-  order: number;
-  boardId: string[];
-};
+import { BASE_URL, BOARDS, COLUMNS, TASKS_SET } from 'utils/const/urls';
 
 type ColumnError = {
   statusCode: string;
   message: string;
 };
-
+type TaskError = {
+  statusCode: string;
+  message: string;
+};
 export const getBoardColumns = createAsyncThunk(
-  'board/getBoardColumn',
-  async (boardId: string, { rejectWithValue, getState }) => {
+  'board/getBoardColumns',
+  async (boardId: string, { rejectWithValue, getState, dispatch }) => {
     const state = getState() as RootState;
     if (!state.auth.token) return;
+    let columns = [] as Column[];
     try {
       const response: Response = await fetch(BASE_URL + BOARDS + `${boardId}/` + COLUMNS, {
         headers: {
@@ -34,7 +32,36 @@ export const getBoardColumns = createAsyncThunk(
           }`
         );
       }
-      return data;
+      columns = data as Column[];
+      columns.map((col) => (col.tasks = []));
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+    try {
+      const response: Response = await fetch(BASE_URL + TASKS_SET + `${boardId}/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: state.auth.token,
+        },
+      });
+      const data: Task[] | TaskError = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          `Error! Status: ${(data as TaskError).statusCode}. Message: ${
+            (data as TaskError).message
+          }`
+        );
+      }
+      const tasks = data as Task[];
+      tasks.map((task) => {
+        columns.map((col) => {
+          if (task.columnId === col._id) {
+            col.tasks.push(task);
+            col.tasks = col.tasks.sort((task1, task2) => task1.order - task2.order);
+          }
+        });
+      });
+      dispatch(addColumns(columns));
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { updateTaskInColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
 
@@ -20,7 +21,7 @@ type TaskError = {
 
 export const updateTask = createAsyncThunk(
   'board/updateTask',
-  async (task: Task, { rejectWithValue, getState }) => {
+  async (task: Task, { rejectWithValue, getState, dispatch }) => {
     const { title, order, description, boardId, columnId, taskId, userId, users } = task;
     const state = getState() as RootState;
     if (!state.auth.token) return;
@@ -51,6 +52,8 @@ export const updateTask = createAsyncThunk(
           }`
         );
       }
+      const task = data as Task;
+      dispatch(updateTaskInColumn({ columnId, task }));
       return data;
     } catch (error) {
       return rejectWithValue((error as Error).message);

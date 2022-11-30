@@ -22,6 +22,7 @@ type PropsCreateBoardForm = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel: () => void;
+  order: number;
 };
 
 type Option = {
@@ -58,7 +59,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
       await dispatch(
         updateTask({
           title: values[props.objField],
-          order: 1,
+          order: props.order,
           description: values.description,
           boardId: props.boardId,
           columnId: props.columnId,
