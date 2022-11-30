@@ -41,6 +41,7 @@ export const deleteColumnTask = createAsyncThunk(
         );
       }
       dispatch(deleteTaskInColumn({ columnId, taskId }));
+      openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
     } catch (error) {
       openNotificationWithIcon('error', t('message.deleteTaskError'), t('message.unexpectedError'));
       return rejectWithValue((error as Error).message);
