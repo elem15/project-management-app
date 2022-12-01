@@ -23,7 +23,7 @@ type TaskListProps = {
   columnId: string;
   boardId: string;
 };
-function TaskList(props: TaskListProps) {
+const TaskList = (props: TaskListProps) => {
   const dispatch = useAppDispatch();
   const createTaskList = (provided: DroppableProvided) => {
     const tasksList = props.tasks.map((task, index) => {
@@ -79,6 +79,6 @@ function TaskList(props: TaskListProps) {
       )}
     </Droppable>
   );
-}
+};
 
 export default TaskList;
