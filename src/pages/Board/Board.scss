@@ -28,7 +28,7 @@
 }
 
 .column-list {
-  display: flex;
+  display: inline-flex;
   padding-top: 10px;
   gap: 20px;
   padding-bottom: 10px;
@@ -37,6 +37,7 @@
 
 .droppable {
   background-color: gainsboro;
+  width: fit-content;
 }
 
 .column-item {

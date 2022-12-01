@@ -33,6 +33,9 @@ const TasksColumn = (props: IProps) => {
                 columnId={item._id}
                 boardId={item.boardId}
               />
+              <h3>
+                Column order: <span className="text-cut">{item.order}</span>
+              </h3>
             </div>
             <Button
               shape="circle"

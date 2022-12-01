@@ -7,13 +7,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* #root {
+#root {
   max-width: 1920px;
   display: grid;
   grid-template-rows: 81px 1fr 59px;
   grid-template-columns: 1fr;
   margin: 0 auto;
-} */
+}
 
 main {
   padding-top: 5rem;

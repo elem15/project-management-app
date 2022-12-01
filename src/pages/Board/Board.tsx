@@ -140,7 +140,7 @@ const Board: React.FC = () => {
               {columns.map((item, index) => (
                 <TasksColumn key={item._id} item={item} index={index} />
               ))}
-              <div>{provided.placeholder}</div>
+              <div className="placeholder">{provided.placeholder}</div>
             </div>
           )}
         </Droppable>
