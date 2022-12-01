@@ -68,10 +68,19 @@ const Board: React.FC = () => {
           })
         );
         orderedFinishTasks.map((task) => {
-          dispatch(updateTask({ ...task, columnId: destination.droppableId, taskId: task._id }));
+          dispatch(
+            updateTask({
+              ...task,
+              columnId: destination.droppableId,
+              taskId: task._id,
+              isSwap: true,
+            })
+          );
         });
         orderedStartTasks.map((task) => {
-          dispatch(updateTask({ ...task, columnId: source.droppableId, taskId: task._id }));
+          dispatch(
+            updateTask({ ...task, columnId: source.droppableId, taskId: task._id, isSwap: true })
+          );
         });
         return;
       }
@@ -85,7 +94,7 @@ const Board: React.FC = () => {
       }));
       dispatch(swapTasksInside({ startColumnId: startColumn._id, startTasks: orderedTasks }));
       orderedTasks.map((task) => {
-        dispatch(updateTask({ ...task, taskId: task._id }));
+        dispatch(updateTask({ ...task, taskId: task._id, isSwap: true }));
       });
       return;
     }
@@ -94,7 +103,7 @@ const Board: React.FC = () => {
     const sortedColumns = newColumns.map((col, idx) => ({ ...col, order: idx }));
     dispatch(swapColumns(sortedColumns));
     sortedColumns.map((column) => {
-      dispatch(updateBoardColumnTitle({ ...column, columnId: column._id }));
+      dispatch(updateBoardColumnTitle({ ...column, columnId: column._id, isSwap: true }));
     });
   };
 

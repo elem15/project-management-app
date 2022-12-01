@@ -10,6 +10,7 @@ type Column = {
   order: number;
   columnId: string;
   boardId: string;
+  isSwap: boolean;
 };
 
 type ColumnError = {
@@ -21,7 +22,7 @@ export const updateBoardColumnTitle = createAsyncThunk(
   'board/updateBoardColumnTitle',
   async (column: Column, { rejectWithValue, getState, dispatch }) => {
     let statusCode;
-    const { title, order, columnId, boardId } = column;
+    const { title, order, columnId, boardId, isSwap } = column;
     const state = getState() as RootState;
 
     try {
@@ -49,7 +50,9 @@ export const updateBoardColumnTitle = createAsyncThunk(
         );
       }
       dispatch(updateColumn({ ...column, _id: columnId }));
-      openNotificationWithIcon('success', t('message.updateColumnTitleSuccess'));
+      if (!isSwap) {
+        openNotificationWithIcon('success', t('message.updateColumnTitleSuccess'));
+      }
     } catch (error) {
       if (statusCode === 400) {
         openNotificationWithIcon(

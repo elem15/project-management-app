@@ -14,6 +14,7 @@ type Task = {
   taskId: string;
   userId: string;
   users: string[];
+  isSwap: boolean;
 };
 
 type TaskError = {
@@ -25,7 +26,7 @@ export const updateTask = createAsyncThunk(
   'board/updateTask',
   async (task: Task, { rejectWithValue, getState, dispatch }) => {
     let statusCode;
-    const { title, order, description, boardId, columnId, taskId, userId, users } = task;
+    const { title, order, description, boardId, columnId, taskId, userId, users, isSwap } = task;
     const state = getState() as RootState;
     try {
       const response: Response = await fetch(
@@ -57,7 +58,9 @@ export const updateTask = createAsyncThunk(
       }
       const task = data as Task;
       dispatch(updateTaskInColumn({ columnId, task }));
-      openNotificationWithIcon('success', t('message.updateTaskSuccess'));
+      if (!isSwap) {
+        openNotificationWithIcon('success', t('message.updateTaskSuccess'));
+      }
       return data;
     } catch (error) {
       if (statusCode === 400) {

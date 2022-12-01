@@ -66,6 +66,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
           taskId: props.taskId,
           userId: userId,
           users: values.teammates ? values.teammates.flat() : [],
+          isSwap: false,
         })
       );
       dispatch(addBoardId(props.boardId));
