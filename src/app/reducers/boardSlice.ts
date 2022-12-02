@@ -117,7 +117,6 @@ const errorHandler = (state: BoardType, action: PayloadAction<ErrorMessage>) => 
   if (action.payload.statusCode === 409) {
     descriptionError = t('message.loginExist');
   }
-  console.log(action.payload.statusCode);
   openNotificationWithIcon('error', action.payload.message, descriptionError);
 };
 
