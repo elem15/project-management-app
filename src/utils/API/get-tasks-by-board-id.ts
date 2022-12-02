@@ -3,7 +3,6 @@ import { addTasks } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, TASKS_SET } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   _id: string;
@@ -46,27 +45,10 @@ export const getTasksByBoardId = createAsyncThunk(
       const tasks = data as Task[];
       dispatch(addTasks(tasks));
     } catch (error) {
-      if (statusCode === 403) {
-        openNotificationWithIcon(
-          'error',
-          t('message.getTasksByBoardIdError'),
-          t('message.invalidToken')
-        );
-      } else if (statusCode === 404) {
-        openNotificationWithIcon(
-          'error',
-          t('message.getTasksByBoardIdError'),
-          t('message.taskNotFound')
-        );
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.getTasksByBoardIdError'),
-          t('message.unexpectedError')
-        );
-      }
-
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getTasksByBoardIdError'),
+      });
     }
   }
 );

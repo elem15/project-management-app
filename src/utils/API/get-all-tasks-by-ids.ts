@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, IDS_LIST } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   _id: string;
@@ -41,25 +40,12 @@ export const getAllTasksByIds = createAsyncThunk(
           }`
         );
       }
-      (data as Task[]).length === 0
-        ? openNotificationWithIcon('success', t('message.getAllTasksByIdsEmptySuccess'))
-        : openNotificationWithIcon('success', t('message.getAllTasksByIdsSuccess'));
       return data;
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon(
-          'error',
-          t('message.getAllTasksByIdsError'),
-          t('message.badRequest')
-        );
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.getAllTasksByIdsError'),
-          t('message.unexpectedError')
-        );
-      }
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getAllTasksByIdsError'),
+      });
     }
   }
 );

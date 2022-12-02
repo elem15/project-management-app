@@ -3,7 +3,6 @@ import { addColumns, Column, Task } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS, TASKS_SET } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type ColumnError = {
   statusCode: number;
@@ -68,21 +67,10 @@ export const getBoardColumns = createAsyncThunk(
       });
       dispatch(addColumns(columns));
     } catch (error) {
-      if (statusCode === 403) {
-        openNotificationWithIcon(
-          'error',
-          t('message.getBoardColumnError'),
-          t('message.invalidToken')
-        );
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.getBoardColumnError'),
-          t('message.unexpectedError')
-        );
-      }
-
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getBoardColumnError'),
+      });
     }
   }
 );

@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, SEARCH } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   _id: string;
@@ -42,25 +41,12 @@ export const getAllTasksByKeyword = createAsyncThunk(
           }`
         );
       }
-      (data as Task[]).length === 0
-        ? openNotificationWithIcon('success', t('message.getAllTasksByKeywordEmptySuccess'))
-        : openNotificationWithIcon('success', t('message.getAllTasksByKeywordSuccess'));
       return data;
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon(
-          'error',
-          t('message.getAllTasksByKeywordError'),
-          t('message.badRequest')
-        );
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.getAllTasksByKeywordError'),
-          t('message.unexpectedError')
-        );
-      }
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getAllTasksByKeywordError'),
+      });
     }
   }
 );

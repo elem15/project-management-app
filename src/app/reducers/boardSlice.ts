@@ -7,6 +7,8 @@ import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { deleteUser } from 'utils/API/delete-user';
+import { getAllTasksByIds } from 'utils/API/get-all-tasks-by-ids';
+import { getAllTasksByKeyword } from 'utils/API/get-all-tasks-by-keyword';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
@@ -102,6 +104,9 @@ const errorHandler = (state: BoardType, action: PayloadAction<ErrorMessage>) => 
   }
   if (action.payload.statusCode === 403) {
     descriptionError = t('message.invalidToken');
+  }
+  if (action.payload.statusCode === 404) {
+    descriptionError = t('message.notFound');
   }
   openNotificationWithIcon('error', action.payload.message, descriptionError);
 };
@@ -332,6 +337,22 @@ export const boardSlice = createSlice({
     },
     [deleteUser.pending.type]: loaderHandler,
     [deleteUser.rejected.type]: errorHandler,
+    [getAllTasksByIds.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+      dataHandler(state);
+      action.payload.length === 0
+        ? openNotificationWithIcon('success', t('message.getAllTasksByIdsEmptySuccess'))
+        : openNotificationWithIcon('success', t('message.getAllTasksByIdsSuccess'));
+    },
+    [getAllTasksByIds.pending.type]: loaderHandler,
+    [getAllTasksByIds.rejected.type]: errorHandler,
+    [getAllTasksByKeyword.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+      dataHandler(state);
+      action.payload.length === 0
+        ? openNotificationWithIcon('success', t('message.getAllTasksByKeywordEmptySuccess'))
+        : openNotificationWithIcon('success', t('message.getAllTasksByKeywordSuccess'));
+    },
+    [getAllTasksByKeyword.pending.type]: loaderHandler,
+    [getAllTasksByKeyword.rejected.type]: errorHandler,
   },
 });
 
