@@ -15,6 +15,8 @@ import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import { getTaskByColumn } from 'utils/API/get-tasks-by-column';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import { getUsers } from 'utils/API/get-users';
+import { signIn } from 'utils/API/sign-in';
+import { signUp } from 'utils/API/sign-up';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { updateTask } from 'utils/API/update-task';
 import { openNotificationWithIcon } from 'utils/Notification/Notification';
@@ -102,11 +104,17 @@ const errorHandler = (state: BoardType, action: PayloadAction<ErrorMessage>) => 
   if (action.payload.statusCode === 400) {
     descriptionError = t('message.badRequest');
   }
+  if (action.payload.statusCode === 401) {
+    descriptionError = 'message.authorizationError';
+  }
   if (action.payload.statusCode === 403) {
     descriptionError = t('message.invalidToken');
   }
   if (action.payload.statusCode === 404) {
     descriptionError = t('message.notFound');
+  }
+  if (action.payload.statusCode === 409) {
+    descriptionError = t('message.loginExist');
   }
   openNotificationWithIcon('error', action.payload.message, descriptionError);
 };
@@ -353,6 +361,18 @@ export const boardSlice = createSlice({
     },
     [getAllTasksByKeyword.pending.type]: loaderHandler,
     [getAllTasksByKeyword.rejected.type]: errorHandler,
+    [signIn.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.signInSuccess'));
+    },
+    [signIn.pending.type]: loaderHandler,
+    [signIn.rejected.type]: errorHandler,
+    [signUp.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.signUpSuccess'));
+    },
+    [signUp.pending.type]: loaderHandler,
+    [signUp.rejected.type]: errorHandler,
   },
 });
 

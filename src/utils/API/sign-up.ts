@@ -3,7 +3,6 @@ import { addLogin, addName, addUserId } from 'app/reducers/authSlice';
 import { t } from 'i18next';
 import { UserUp } from 'pages/SignUp/SignUp';
 import { AUTH_SIGNUP, BASE_URL } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 export const signUp = createAsyncThunk(
   'auth/signUp',
@@ -30,21 +29,20 @@ export const signUp = createAsyncThunk(
       dispatch(addLogin(data.login));
       dispatch(addName(data.name));
       dispatch(addUserId(data._id));
-      openNotificationWithIcon('success', t('message.signUpSuccess'));
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon('error', t('message.signUpError'), t('message.badRequest'));
-      } else if (statusCode === 409) {
-        openNotificationWithIcon('error', t('message.signUpError'), t('message.loginExist'));
-      } else {
-        openNotificationWithIcon('error', t('message.signUpError'), t('message.unexpectedError'));
-      }
-
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {
-          return rejectWithValue(error.message);
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.signUpError'),
+            messageForAuth: error.message,
+          });
         } else {
-          return rejectWithValue('An unexpected error occurred');
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.signUpError'),
+            messageForAuth: 'An unexpected error occurred',
+          });
         }
       }
     }

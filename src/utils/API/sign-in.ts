@@ -3,7 +3,6 @@ import { addLogin, addToken } from 'app/reducers/authSlice';
 import { t } from 'i18next';
 import { UserIn } from 'pages/SignIn/SignIn';
 import { AUTH_SIGNIN, BASE_URL } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 import { getUsers } from './get-users';
 
 export const signIn = createAsyncThunk(
@@ -33,25 +32,20 @@ export const signIn = createAsyncThunk(
       localStorage.setItem('login', login);
       localStorage.setItem('token', token);
       await dispatch(await getUsers());
-      openNotificationWithIcon('success', t('message.signInSuccess'));
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon('error', t('message.signInError'), t('message.badRequest'));
-      } else if (statusCode === 401) {
-        openNotificationWithIcon(
-          'error',
-          t('message.signInError'),
-          t('message.authorizationError')
-        );
-      } else {
-        openNotificationWithIcon('error', t('message.signInError'), t('message.unexpectedError'));
-      }
-
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {
-          return rejectWithValue(error.message);
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.signInError'),
+            messageForAuth: error.message,
+          });
         } else {
-          return rejectWithValue('An unexpected error occurred');
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.signInError'),
+            messageForAuth: 'An unexpected error occurred',
+          });
         }
       }
     }
