@@ -3,7 +3,6 @@ import { addAllUsers, setUser, signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, USERS } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 export const getUsers = createAsyncThunk(
   'auth/getUsers',
@@ -28,17 +27,19 @@ export const getUsers = createAsyncThunk(
       dispatch(setUser(await data));
       return data;
     } catch (error) {
-      if (statusCode === 403) {
-        openNotificationWithIcon('error', t('message.signInError'), t('message.invalidToken'));
-      } else {
-        openNotificationWithIcon('error', t('message.getUsersError'), t('message.unexpectedError'));
-      }
-
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {
-          return rejectWithValue(error.message);
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.getUsersError'),
+            messageForAuth: error.message,
+          });
         } else {
-          return rejectWithValue('An unexpected error occurred');
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.getUsersError'),
+            messageForAuth: 'An unexpected error occurred',
+          });
         }
       }
     }

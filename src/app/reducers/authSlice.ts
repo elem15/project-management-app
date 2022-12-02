@@ -22,6 +22,12 @@ export interface IAuthState {
   users: User[];
 }
 
+type ErrorMessage = {
+  statusCode: number;
+  message: string;
+  messageForAuth: string;
+};
+
 const initialState: IAuthState = {
   name: '',
   login: localStorage.getItem('login') || '',
@@ -55,7 +61,7 @@ export type IAction = PayloadAction<
 
 const errorHandler = (state: IAuthState, action: IAction) => {
   state.status = FAILED;
-  state.errorMessage = action.payload as string;
+  state.errorMessage = (action.payload as ErrorMessage).messageForAuth;
 };
 const loaderHandler = (state: IAuthState) => {
   state.status = LOADING;

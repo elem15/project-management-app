@@ -3,7 +3,6 @@ import { signOut } from 'app/reducers/authSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Boards = {
   _id: string;
@@ -43,16 +42,7 @@ export const getBoards = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      if (statusCode === 403) {
-        openNotificationWithIcon('error', t('message.getBoardsError'), t('message.invalidToken'));
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.getBoardsError'),
-          t('message.unexpectedError')
-        );
-      }
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({ statusCode: statusCode, message: t('message.getBoardsError') });
     }
   }
 );

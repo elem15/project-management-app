@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { t } from 'i18next';
 import { createBoard } from 'utils/API/create-board';
 import { createColumn } from 'utils/API/create-column';
 import { createTask } from 'utils/API/create-task';
@@ -13,6 +14,7 @@ import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import { getUsers } from 'utils/API/get-users';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { updateTask } from 'utils/API/update-task';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type User = {
   login: string;
@@ -46,6 +48,12 @@ export type Task = {
   users: string[];
 };
 
+type ErrorMessage = {
+  statusCode: number;
+  message: string;
+  messageForAuth: string;
+};
+
 type BoardType = {
   isLoadingBoardsPage: boolean;
   isLoadingBoardPage: boolean;
@@ -76,17 +84,25 @@ const initialState: BoardType = {
 
 const dataHandler = (state: BoardType) => {
   state.isLoading = false;
-  state.isError = '';
+  state.isError = initialState.isError;
 };
 
 const loaderHandler = (state: BoardType) => {
   state.isLoading = true;
-  state.isError = '';
+  state.isError = initialState.isError;
 };
 
-const errorHandler = (state: BoardType, action: PayloadAction<string>) => {
+const errorHandler = (state: BoardType, action: PayloadAction<ErrorMessage>) => {
+  let descriptionError = t('message.unexpectedError');
   state.isLoading = false;
-  state.isError = action.payload;
+  state.isError = '';
+  if (action.payload.statusCode === 400) {
+    descriptionError = t('message.badRequest');
+  }
+  if (action.payload.statusCode === 403) {
+    descriptionError = t('message.invalidToken');
+  }
+  openNotificationWithIcon('error', action.payload.message, descriptionError);
 };
 
 const addTasksToColumns = (columns: Column[], tasks: Task[]) => {
@@ -171,30 +187,28 @@ export const boardSlice = createSlice({
   },
   extraReducers: {
     [createBoard.fulfilled.type]: (state, action: PayloadAction<Board>) => {
-      state.isLoading = false;
-      state.isError = '';
       state.boards = [...state.boards, action.payload];
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.createBoardSuccess'));
     },
     [createBoard.pending.type]: loaderHandler,
     [createBoard.rejected.type]: errorHandler,
     [getUsers.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
-      state.isLoading = false;
-      state.isError = '';
       state.usersTeam = action.payload;
+      dataHandler(state);
     },
     [getUsers.pending.type]: loaderHandler,
     [getUsers.rejected.type]: errorHandler,
     [getBoards.fulfilled.type]: (state, action: PayloadAction<Board[]>) => {
       state.isLoadingBoardsPage = false;
-      state.isLoading = false;
-      state.isError = '';
       state.boards = action.payload;
+      dataHandler(state);
     },
     [getBoards.pending.type]: (state) => {
       state.isLoadingBoardsPage = true;
       loaderHandler(state);
     },
-    [getBoards.rejected.type]: (state, action: PayloadAction<string>) => {
+    [getBoards.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardsPage = false;
       errorHandler(state, action);
     },
@@ -207,7 +221,7 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = true;
       loaderHandler(state);
     },
-    [getBoardColumns.rejected.type]: (state, action: PayloadAction<string>) => {
+    [getBoardColumns.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardPage = false;
       errorHandler(state, action);
     },
@@ -234,7 +248,7 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = true;
       loaderHandler(state);
     },
-    [deleteBoardColumn.rejected.type]: (state, action: PayloadAction<string>) => {
+    [deleteBoardColumn.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardPage = false;
       errorHandler(state, action);
     },
@@ -250,7 +264,7 @@ export const boardSlice = createSlice({
       state.isLoadingBoardsPage = true;
       loaderHandler(state);
     },
-    [deleteBoard.rejected.type]: (state, action: PayloadAction<string>) => {
+    [deleteBoard.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardsPage = false;
       errorHandler(state, action);
     },
@@ -299,7 +313,7 @@ export const boardSlice = createSlice({
         return item._id == action.payload._id ? action.payload : item;
       });
       state.isLoading = false;
-      state.isError = '';
+      // state.isError = '';
       state.tasks = newStateTasksAfterUpdate;
     },
     [updateTask.pending.type]: loaderHandler,
