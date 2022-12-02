@@ -133,6 +133,7 @@ i18n
             task: 'task',
             column: 'column',
             board: 'board',
+            account: 'account',
           },
           boards: {
             header: 'Your Boards',
@@ -140,6 +141,7 @@ i18n
             modalTitle: 'Create Board',
             description: 'Board description',
             created: 'Created by',
+            required: 'Please input',
           },
           columns: {
             back: 'Back',
@@ -153,6 +155,7 @@ i18n
             description: 'Description',
             teammates: 'Choose teammates',
             descriptionRequired: 'Please input description!',
+            titleRequired: 'Please input task title!',
           },
         },
       },
@@ -277,6 +280,7 @@ i18n
             task: 'задачу',
             column: 'колонку',
             board: 'доску',
+            account: 'аккаунт',
           },
           boards: {
             header: 'Ваши доски',
@@ -284,6 +288,7 @@ i18n
             modalTitle: 'Создание доски',
             description: 'Описание',
             created: 'Создано пользователем',
+            required: 'Пожалуйста введите',
           },
           columns: {
             back: 'Назад',
@@ -296,6 +301,7 @@ i18n
             title: 'Заголовок задачи',
             description: 'Описание',
             teammates: 'Выбрать исполнителей',
+            titleRequired: 'Введине название задачи!',
             descriptionRequired: 'Введите описание!',
           },
         },

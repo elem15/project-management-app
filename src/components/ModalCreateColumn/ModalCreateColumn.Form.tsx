@@ -59,9 +59,9 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
           rules={[
             {
               required: true,
-              message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
-                1
-              )}!`,
+              message: `${t(
+                'boards.required'
+              )}  ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(1)}!`,
             },
           ]}
         >

@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './UserProfile.scss';
-import { Button, Form, Input, Modal, Row, Typography } from 'antd';
-import { ExclamationCircleFilled } from '@ant-design/icons';
+import { Button, Form, Input, Row, Typography } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import { updateUser } from 'utils/API/update-user';
-import { deleteUser } from 'utils/API/delete-user';
 import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 import { Preloader } from 'components/Preloader/Preloader';
 import { LOADING, FAILED } from 'utils/const/status';
 import { openNotificationWithIcon } from 'utils/Notification/Notification';
-const { confirm } = Modal;
+import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 
 export type UserUp = {
   name: string;
@@ -33,27 +31,14 @@ const UserProfile: React.FC = () => {
     await dispatch(updateUser(values));
     status !== FAILED && success();
   };
-  const [prevName] = useState(name);
-  const [prevLogin] = useState(login);
-  const showDeleteModal = () => {
-    confirm({
-      title: `${t('sign.question')}`,
-      icon: <ExclamationCircleFilled />,
-      okText: `${t('sign.ok')}`,
-      okType: 'danger',
-      cancelText: `${t('sign.cancel')}`,
-      async onOk() {
-        dispatch(deleteUser());
-      },
-    });
-  };
+
   useEffect(() => {
     const deleteSuccess = () => {
       openNotificationWithIcon('success', t('message.deleteUserSuccess'));
       navigate(ROUTES.WELCOME_PAGE);
     };
     !token && deleteSuccess();
-  }, [login, name, navigate, prevLogin, prevName, t, token]);
+  }, [login, name, navigate, t, token]);
   useEffect(() => {
     if (errorMessage) {
       setTimeout(() => {
@@ -115,7 +100,13 @@ const UserProfile: React.FC = () => {
           <br />
           <br />
           <Row justify="center">
-            <Button type="primary" danger onClick={() => showDeleteModal()}>
+            <Button
+              type="primary"
+              danger
+              onClick={(e) =>
+                showDeleteConfirm(e, dispatch, 'user', `${t('message.account')}`, '', t)
+              }
+            >
               {t('sign.delete')}
             </Button>
           </Row>

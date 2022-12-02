@@ -7,6 +7,7 @@ import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { TFunction } from 'i18next';
+import { deleteUser } from 'utils/API/delete-user';
 
 const { confirm } = Modal;
 
@@ -84,16 +85,26 @@ export const showDeleteConfirm = (
     okType: 'danger',
     cancelText: `${t('sign.cancel')}`,
     async onOk() {
-      if (item === 'board') {
-        await dispatch(deleteBoard(boardId));
-        dispatch(deleteBoardById(boardId));
-      }
-      if (item === 'column') {
-        await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
-      }
-      if (item === 'task') {
-        await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
-        dispatch(deleteTaskById(taskId));
+      switch (item) {
+        case 'board': {
+          await dispatch(deleteBoard(boardId));
+          dispatch(deleteBoardById(boardId));
+          break;
+        }
+        case 'column': {
+          await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
+          break;
+        }
+        case 'task': {
+          await dispatch(
+            deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId })
+          );
+          dispatch(deleteTaskById(taskId));
+          break;
+        }
+        case 'user': {
+          dispatch(deleteUser());
+        }
       }
     },
   });

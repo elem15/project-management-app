@@ -92,7 +92,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
         <Form.Item
           label={props.titleForm}
           name={props.objField}
-          rules={[{ required: true, message: 'Please input task title!' }]}
+          rules={[{ required: true, message: `${t('tasks.titleRequired')}` }]}
         >
           <Input />
         </Form.Item>
