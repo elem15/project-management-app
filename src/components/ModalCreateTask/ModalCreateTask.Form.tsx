@@ -3,6 +3,7 @@ import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createTask } from 'utils/API/create-task';
 import { addBoardId } from 'app/reducers/boardSlice';
+import { useTranslation } from 'react-i18next';
 
 type Values = {
   teammates: string[][];
@@ -32,6 +33,7 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const { usersTeam } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
@@ -86,19 +88,19 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
           <Input />
         </Form.Item>
         <Form.Item
-          label="Description"
+          label={t('tasks.description')}
           name="description"
-          rules={[{ required: true, message: 'Please input description!' }]}
+          rules={[{ required: true, message: `${t('tasks.descriptionRequired')}` }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Choose teammates" name="teammates">
+        <Form.Item label={t('tasks.teammates')} name="teammates">
           <Cascader options={options} multiple />
         </Form.Item>
         <Row justify="end">
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={props.loading}>
-              Submit
+              {t('sign.submit')}
             </Button>
           </Form.Item>
         </Row>

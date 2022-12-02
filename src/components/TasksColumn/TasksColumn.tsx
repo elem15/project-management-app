@@ -8,6 +8,7 @@ import { useAppDispatch } from 'app/hooks';
 import { AddModalCreateTask } from 'components/ModalCreateTask/ModalCreateTask.Window';
 import { Draggable } from 'react-beautiful-dnd';
 import TaskList from 'components/TaskList/TasksList';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   item: Column;
@@ -17,6 +18,7 @@ const TasksColumn = (props: IProps) => {
   const dispatch = useAppDispatch();
   const { item, index } = props;
   const { tasks } = item;
+  const { t } = useTranslation();
   return (
     <Draggable draggableId={item._id} index={index}>
       {(provided, snapshot) => (
@@ -38,16 +40,18 @@ const TasksColumn = (props: IProps) => {
               shape="circle"
               icon={<DeleteOutlined />}
               danger
-              onClick={(e) => showDeleteConfirm(e, dispatch, 'column', item.boardId, item._id)}
+              onClick={(e) =>
+                showDeleteConfirm(e, dispatch, `${t('message.column')}`, item.boardId, t, item._id)
+              }
             ></Button>
           </div>
           <TaskList tasks={tasks} columnId={item._id} boardId={item.boardId} />
           <div>
             <AddModalCreateTask
               typeButton={'primary'}
-              titleTextButton={'Add task'}
-              titleTextModal={'Add task'}
-              titleForm={'Task title'}
+              titleTextButton={t('tasks.add')}
+              titleTextModal={t('tasks.add')}
+              titleForm={t('tasks.title')}
               objField={'taskTitle'}
               boardId={item.boardId}
               columnId={item._id}

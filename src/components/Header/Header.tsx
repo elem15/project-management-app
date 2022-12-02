@@ -82,8 +82,8 @@ function Header() {
                 isMenu={true}
                 typeButton={'primary'}
                 titleTextButton={t('header.newBoard')}
-                titleTextModal={'Create Board'}
-                titleForm={'Board title'}
+                titleTextModal={t('boards.modalTitle')}
+                titleForm={t('boards.title')}
                 objField={'boardTitle'}
               />
             </li>

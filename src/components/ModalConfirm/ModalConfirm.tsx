@@ -6,6 +6,7 @@ import { deleteBoardById, deleteTaskById } from 'app/reducers/boardSlice';
 import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
+import { TFunction } from 'i18next';
 
 const { confirm } = Modal;
 
@@ -70,16 +71,17 @@ export const showDeleteConfirm = (
     Dispatch<AnyAction>,
   nameItem: string,
   boardId: string,
+  t: TFunction<'translation', undefined>,
   columnId = '',
   taskId = ''
 ) => {
   e.stopPropagation();
   confirm({
-    title: `Are you sure delete this ${nameItem}?`,
+    title: `${t('message.deleteConfirm')} ${nameItem}?`,
     icon: <ExclamationCircleFilled />,
-    okText: 'Yes',
+    okText: `${t('sign.ok')}`,
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: `${t('sign.cancel')}`,
     async onOk() {
       if (nameItem === 'board') {
         await dispatch(deleteBoard(boardId));

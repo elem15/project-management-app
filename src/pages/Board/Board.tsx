@@ -21,6 +21,7 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { Preloader } from 'components/Preloader/Preloader';
 import { updateTask } from 'utils/API/update-task';
+import { useTranslation } from 'react-i18next';
 
 export const JSONErrorHandler = (title: string, expect: string) => {
   try {
@@ -36,6 +37,7 @@ const Board: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const boardIdFromUrl =
     document.location.href.split('/')[document.location.href.split('/').length - 1];
@@ -127,12 +129,12 @@ const Board: React.FC = () => {
     <div className="columns-container">
       <h2 className="header">{title ? JSONErrorHandler(title, 'title') : ''}</h2>
       <h3>{title ? JSONErrorHandler(title, 'description') : '-'}</h3>
-      <Button onClick={() => router(-1)}>Back</Button>
+      <Button onClick={() => router(-1)}>{t('columns.back')}</Button>
       <AddModalCreateColumn
         typeButton={'primary'}
-        titleTextButton={'Add column'}
-        titleTextModal={'Add column'}
-        titleForm={'Column title'}
+        titleTextButton={t('columns.add')}
+        titleTextModal={t('columns.add')}
+        titleForm={t('columns.title')}
         objField={'columnTitle'}
         boardId={boardId}
       />
