@@ -6,20 +6,25 @@ function Footer() {
     <div className="footer">
       <footer className="footer__container">
         <a className="footer__logo" href="https://rs.school/" target="__blank"></a>
-        <ul className="nav">
+        <ul className="footer-nav">
           <a
-            className="nav__link"
+            className="footer-nav__link"
             target="_blank"
             href="https://github.com/elem15"
             rel="noreferrer"
           >
             elem15
           </a>
-          <a className="nav__link" target="_blank" href="https://github.com/dab10" rel="noreferrer">
+          <a
+            className="footer-nav__link"
+            target="_blank"
+            href="https://github.com/dab10"
+            rel="noreferrer"
+          >
             dab10
           </a>
           <a
-            className="nav__link"
+            className="footer-nav__link"
             target="_blank"
             href="https://github.com/labatsevich"
             rel="noreferrer"

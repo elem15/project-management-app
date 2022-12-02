@@ -6,6 +6,8 @@ import { deleteBoardById, deleteTaskById } from 'app/reducers/boardSlice';
 import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
+import { TFunction } from 'i18next';
+import { deleteUser } from 'utils/API/delete-user';
 
 const { confirm } = Modal;
 
@@ -68,29 +70,41 @@ export const showDeleteConfirm = (
   e: React.MouseEvent<HTMLElement, globalThis.MouseEvent>,
   dispatch: ThunkDispatch<{ auth: IAuthState; board: BoardType }, undefined, AnyAction> &
     Dispatch<AnyAction>,
+  item: string,
   nameItem: string,
   boardId: string,
+  t: TFunction<'translation', undefined>,
   columnId = '',
   taskId = ''
 ) => {
   e.stopPropagation();
   confirm({
-    title: `Are you sure delete this ${nameItem}?`,
+    title: `${t('message.deleteConfirm')} ${nameItem}?`,
     icon: <ExclamationCircleFilled />,
-    okText: 'Yes',
+    okText: `${t('sign.ok')}`,
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: `${t('sign.cancel')}`,
     async onOk() {
-      if (nameItem === 'board') {
-        await dispatch(deleteBoard(boardId));
-        dispatch(deleteBoardById(boardId));
-      }
-      if (nameItem === 'column') {
-        await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
-      }
-      if (nameItem === 'task') {
-        await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
-        dispatch(deleteTaskById(taskId));
+      switch (item) {
+        case 'board': {
+          await dispatch(deleteBoard(boardId));
+          dispatch(deleteBoardById(boardId));
+          break;
+        }
+        case 'column': {
+          await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
+          break;
+        }
+        case 'task': {
+          await dispatch(
+            deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId })
+          );
+          dispatch(deleteTaskById(taskId));
+          break;
+        }
+        case 'user': {
+          dispatch(deleteUser());
+        }
       }
     },
   });

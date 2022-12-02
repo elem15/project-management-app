@@ -53,11 +53,9 @@ export const EditColumnTitle = (props: Props) => {
   return (
     <>
       {!open && (
-        <>
-          <h3 className="text-cut-editable" onClick={handleOnClick}>
-            {title}
-          </h3>
-        </>
+        <h3 className="text-cut-editable" onClick={handleOnClick}>
+          {title}
+        </h3>
       )}
 
       {open && (

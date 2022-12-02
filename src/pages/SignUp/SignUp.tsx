@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './SignUp.scss';
 import { Button, Form, Input, Row, Typography } from 'antd';
 import { signUp } from 'utils/API/sign-up';
@@ -21,12 +21,13 @@ const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { name, token, errorMessage, status } = useAppSelector((state) => state.auth);
+  const [fixedName] = useState(name);
   const onFinish = (values: UserUp) => {
     dispatch(signUp(values));
   };
   useEffect(() => {
-    name && navigate(ROUTES.SIGN_IN_PAGE);
-  }, [navigate, name]);
+    name !== fixedName && navigate(ROUTES.SIGN_IN_PAGE);
+  }, [navigate, name, fixedName]);
   useEffect(() => {
     token && navigate(ROUTES.HOME_PAGE);
   }, [navigate, token]);
@@ -42,7 +43,7 @@ const SignUp: React.FC = () => {
       {status === LOADING && <Preloader />}
       <Row justify="center">
         <Form name="basic" onFinish={onFinish} autoComplete="off">
-          <Typography.Title level={2}>Sign up</Typography.Title>
+          <Typography.Title level={2}>{t('header.signUp')}</Typography.Title>
           <Form.Item
             label={t('sign.name')}
             name="name"

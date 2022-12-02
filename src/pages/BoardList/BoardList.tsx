@@ -8,12 +8,15 @@ import { getBoards } from 'utils/API/get-boards';
 import { ROUTES } from 'utils/const/routes';
 import './BoardList.scss';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
+import { JSONErrorHandler } from 'pages/Board/Board';
+import { useTranslation } from 'react-i18next';
 
 const BoardList = () => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const { boards } = useAppSelector((state) => state.board);
   const { token } = useAppSelector((state) => state.auth);
+  const { t } = useTranslation();
 
   useEffect(() => {
     !token && router(ROUTES.WELCOME_PAGE);
@@ -32,25 +35,31 @@ const BoardList = () => {
     }
   };
 
-  const boardList = boards.map((item) => (
-    <div key={item._id}>
-      <div className="card-item" onClick={() => handleClickOpen(item._id)}>
+  const boardList = boards.map(({ _id, title, owner }) => (
+    <div key={_id}>
+      <div className="card-item" onClick={() => handleClickOpen(_id)}>
         <div>
-          <h3>Board title:</h3>
-          <div className="text-cut">{JSON.parse(item.title).title}</div>
-          <h3>Board description:</h3>
+          <h3>{t('boards.title')}</h3>
+          <div className="text-cut">{title ? JSONErrorHandler(title, 'title') : ''}</div>
+          <h3>{t('boards.description')}</h3>
           <div className="text-cut">
-            {JSON.parse(item.title).description ? JSON.parse(item.title).description : '-'}
+            {title
+              ? JSONErrorHandler(title, 'description')
+                ? JSONErrorHandler(title, 'description')
+                : '-'
+              : '-'}
           </div>
-          <h3>Created by:</h3>
-          <div>{item.owner}</div>
+          <h3>{t('boards.created')}</h3>
+          <div>{owner}</div>
         </div>
         <div>
           <Button
             shape="circle"
             icon={<DeleteOutlined />}
             danger
-            onClick={(e) => showDeleteConfirm(e, dispatch, 'board', item._id)}
+            onClick={(e) =>
+              showDeleteConfirm(e, dispatch, 'board', `${t('message.board')}`, _id, t)
+            }
           ></Button>
         </div>
       </div>
@@ -59,7 +68,7 @@ const BoardList = () => {
 
   return (
     <>
-      <h2 className="header">Your Boards</h2>
+      <h2 className="header">{t('boards.header')}</h2>
       <div className="list">{boardList}</div>
     </>
   );

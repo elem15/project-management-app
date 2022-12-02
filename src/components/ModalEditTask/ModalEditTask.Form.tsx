@@ -3,6 +3,7 @@ import { Button, Cascader, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { addBoardId } from 'app/reducers/boardSlice';
 import { updateTask } from 'utils/API/update-task';
+import { useTranslation } from 'react-i18next';
 
 type Values = {
   teammates: string[][];
@@ -36,6 +37,7 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const { userId } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const { usersTeam } = useAppSelector((state) => state.board);
   const usersTeamFilter = usersTeam.map((item) => {
@@ -90,26 +92,26 @@ export const AddModalEditTaskForm = (props: PropsCreateBoardForm) => {
         <Form.Item
           label={props.titleForm}
           name={props.objField}
-          rules={[{ required: true, message: 'Please input task title!' }]}
+          rules={[{ required: true, message: `${t('tasks.titleRequired')}` }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          label="Description"
+          label={t('tasks.description')}
           name="description"
-          rules={[{ required: true, message: 'Please input description!' }]}
+          rules={[{ required: true, message: `${t('tasks.descriptionRequired')}` }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Choose teammates" name="teammates">
+        <Form.Item label={t('tasks.teammates')} name="teammates">
           <Cascader options={options} multiple />
         </Form.Item>
-        <Row justify="center">
+        <Row justify="end">
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={props.loading}>
-              Submit
+              {t('sign.submit')}
             </Button>
-            <Button onClick={props.onCancel}>Cancel</Button>
+            <Button onClick={props.onCancel}>{t('sign.cancel')}</Button>
           </Form.Item>
         </Row>
       </Form>

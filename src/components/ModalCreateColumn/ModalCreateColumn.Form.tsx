@@ -3,6 +3,7 @@ import { Button, Form, Input, Row } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createColumn } from 'utils/API/create-column';
 import { addBoardId } from 'app/reducers/boardSlice';
+import { useTranslation } from 'react-i18next';
 
 type Values = {
   usersTeam: string[];
@@ -21,6 +22,7 @@ type PropsCreateColumnForm = {
 
 export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
   const [form] = Form.useForm();
+  const { t } = useTranslation();
   const [componentDisabled, setComponentDisabled] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { columns } = useAppSelector((state) => state.board);
@@ -57,9 +59,9 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
           rules={[
             {
               required: true,
-              message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
-                1
-              )}!`,
+              message: `${t(
+                'boards.required'
+              )}  ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(1)}!`,
             },
           ]}
         >
@@ -68,7 +70,7 @@ export const AddModalFormColumn = (props: PropsCreateColumnForm) => {
         <Row justify="center">
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={props.loading}>
-              Submit
+              {t('sign.submit')}
             </Button>
           </Form.Item>
         </Row>

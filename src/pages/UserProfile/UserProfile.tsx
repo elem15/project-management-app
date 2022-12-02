@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './UserProfile.scss';
-import { Button, Form, Input, Modal, Row, Typography } from 'antd';
+import { Button, Form, Input, Row, Typography } from 'antd';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import { updateUser } from 'utils/API/update-user';
-import { deleteUser } from 'utils/API/delete-user';
 import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 import { Preloader } from 'components/Preloader/Preloader';
-import { LOADING } from 'utils/const/status';
+import { LOADING, FAILED } from 'utils/const/status';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
+import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 
 export type UserUp = {
   name: string;
@@ -22,18 +23,22 @@ const UserProfile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { name, login, errorMessage, token, status } = useAppSelector((state) => state.auth);
-  const onFinish = (values: UserUp) => {
-    dispatch(updateUser(values));
+  const success = () => {
+    openNotificationWithIcon('success', t('message.updateUserSuccess'));
+    navigate(ROUTES.HOME_PAGE);
   };
-  const [prevName] = useState(name);
-  const [prevLogin] = useState(login);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const onFinish = async (values: UserUp) => {
+    await dispatch(updateUser(values));
+    status !== FAILED && success();
+  };
+
   useEffect(() => {
-    !token && navigate(ROUTES.WELCOME_PAGE);
-  }, [token, navigate]);
-  useEffect(() => {
-    (name !== prevName || login !== prevLogin) && navigate(ROUTES.HOME_PAGE);
-  }, [name, navigate, prevName, login, prevLogin]);
+    const deleteSuccess = () => {
+      openNotificationWithIcon('success', t('message.deleteUserSuccess'));
+      navigate(ROUTES.WELCOME_PAGE);
+    };
+    !token && deleteSuccess();
+  }, [login, name, navigate, t, token]);
   useEffect(() => {
     if (errorMessage) {
       setTimeout(() => {
@@ -92,27 +97,20 @@ const UserProfile: React.FC = () => {
               </Button>
             </Form.Item>
           </Row>
+          <br />
+          <br />
           <Row justify="center">
-            <Button type="primary" danger onClick={() => setDeleteModal(true)}>
+            <Button
+              type="primary"
+              danger
+              onClick={(e) =>
+                showDeleteConfirm(e, dispatch, 'user', `${t('message.account')}`, '', t)
+              }
+            >
               {t('sign.delete')}
             </Button>
           </Row>
         </Form>
-        <Modal
-          title={t('sign.danger')}
-          open={deleteModal}
-          footer={null}
-          onCancel={() => setDeleteModal(false)}
-          maskClosable={true}
-        >
-          <p>{t('sign.question')}</p>
-          <Row justify="end">
-            <Button onClick={() => setDeleteModal(false)}>{t('sign.cancel')}</Button>
-            <Button type="primary" danger onClick={() => dispatch(deleteUser())}>
-              {t('sign.ok')}
-            </Button>
-          </Row>
-        </Modal>
       </Row>
     </main>
   );
