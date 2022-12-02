@@ -106,7 +106,7 @@ const errorHandler = (state: BoardType, action: PayloadAction<ErrorMessage>) => 
     descriptionError = t('message.badRequest');
   }
   if (action.payload.statusCode === 401) {
-    descriptionError = 'message.authorizationError';
+    descriptionError = t('message.authorizationError');
   }
   if (action.payload.statusCode === 403) {
     descriptionError = t('message.invalidToken');
