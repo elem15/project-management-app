@@ -50,8 +50,13 @@ const UserProfile: React.FC = () => {
       openNotificationWithIcon('success', t('message.updateUserSuccess'));
       navigate(ROUTES.HOME_PAGE);
     };
-    (name !== prevName || login !== prevLogin) && success();
-  }, [login, name, navigate, prevLogin, prevName, t]);
+    const deleteSuccess = () => {
+      openNotificationWithIcon('success', t('message.deleteUserSuccess'));
+      navigate(ROUTES.WELCOME_PAGE);
+    };
+    token && (name !== prevName || login !== prevLogin) && success();
+    !token && deleteSuccess();
+  }, [login, name, navigate, prevLogin, prevName, t, token]);
   useEffect(() => {
     if (errorMessage) {
       setTimeout(() => {

@@ -139,6 +139,7 @@ const Board: React.FC = () => {
         boardId={boardId}
       />
       {isLoading && <Preloader />}
+      <br />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={boardIdCurrent} direction="horizontal" type="column">
           {(provided, snapshot) => (
