@@ -10,7 +10,7 @@ import { deleteUser } from 'utils/API/delete-user';
 import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 import { Preloader } from 'components/Preloader/Preloader';
-import { LOADING } from 'utils/const/status';
+import { LOADING, FAILED } from 'utils/const/status';
 import { openNotificationWithIcon } from 'utils/Notification/Notification';
 const { confirm } = Modal;
 
@@ -25,8 +25,13 @@ const UserProfile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { name, login, errorMessage, token, status } = useAppSelector((state) => state.auth);
-  const onFinish = (values: UserUp) => {
-    dispatch(updateUser(values));
+  const success = () => {
+    openNotificationWithIcon('success', t('message.updateUserSuccess'));
+    navigate(ROUTES.HOME_PAGE);
+  };
+  const onFinish = async (values: UserUp) => {
+    await dispatch(updateUser(values));
+    status !== FAILED && success();
   };
   const [prevName] = useState(name);
   const [prevLogin] = useState(login);
@@ -43,18 +48,10 @@ const UserProfile: React.FC = () => {
     });
   };
   useEffect(() => {
-    !token && navigate(ROUTES.WELCOME_PAGE);
-  }, [token, navigate]);
-  useEffect(() => {
-    const success = () => {
-      openNotificationWithIcon('success', t('message.updateUserSuccess'));
-      navigate(ROUTES.HOME_PAGE);
-    };
     const deleteSuccess = () => {
       openNotificationWithIcon('success', t('message.deleteUserSuccess'));
       navigate(ROUTES.WELCOME_PAGE);
     };
-    token && (name !== prevName || login !== prevLogin) && success();
     !token && deleteSuccess();
   }, [login, name, navigate, prevLogin, prevName, t, token]);
   useEffect(() => {
