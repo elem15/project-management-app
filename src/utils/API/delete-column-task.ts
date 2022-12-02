@@ -3,7 +3,6 @@ import { deleteTaskInColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   taskId: string;
@@ -19,6 +18,7 @@ type TaskError = {
 export const deleteColumnTask = createAsyncThunk(
   'board/deleteColumnTask',
   async (task: Task, { rejectWithValue, getState, dispatch }) => {
+    let statusCode;
     const { taskId, columnId, boardId } = task;
     const state = getState() as RootState;
     try {
@@ -34,6 +34,7 @@ export const deleteColumnTask = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -41,10 +42,8 @@ export const deleteColumnTask = createAsyncThunk(
         );
       }
       dispatch(deleteTaskInColumn({ columnId, taskId }));
-      openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
     } catch (error) {
-      openNotificationWithIcon('error', t('message.deleteTaskError'), t('message.unexpectedError'));
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({ statusCode: statusCode, message: t('message.deleteTaskError') });
     }
   }
 );

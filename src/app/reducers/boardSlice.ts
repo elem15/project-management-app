@@ -6,6 +6,7 @@ import { createTask } from 'utils/API/create-task';
 import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
+import { deleteUser } from 'utils/API/delete-user';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
@@ -243,6 +244,7 @@ export const boardSlice = createSlice({
       state.columns = newStateColumnsAfterDelete;
       state.tasks = newStateTasksAfterDelete;
       dataHandler(state);
+      openNotificationWithIcon('success', t('message.deleteColumnSuccess'));
     },
     [deleteBoardColumn.pending.type]: (state) => {
       state.isLoadingBoardPage = true;
@@ -259,6 +261,7 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = false;
       state.boards = newStateBoardsAfterDelete;
       dataHandler(state);
+      openNotificationWithIcon('success', t('message.deleteBoardSuccess'));
     },
     [deleteBoard.pending.type]: (state) => {
       state.isLoadingBoardsPage = true;
@@ -305,7 +308,10 @@ export const boardSlice = createSlice({
       state.tasks = newStateTasksAfterDelete;
       dataHandler(state);
     },
-    [deleteColumnTask.pending.type]: loaderHandler,
+    [deleteColumnTask.pending.type]: (state) => {
+      loaderHandler(state);
+      openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
+    },
     [deleteColumnTask.rejected.type]: errorHandler,
     [getTaskByColumn.fulfilled.type]: dataHandler,
     [getTaskByColumn.pending.type]: loaderHandler,
@@ -315,11 +321,17 @@ export const boardSlice = createSlice({
         return item._id == action.payload._id ? action.payload : item;
       });
       state.isLoading = false;
-      // state.isError = '';
+      state.isError = '';
       state.tasks = newStateTasksAfterUpdate;
     },
     [updateTask.pending.type]: loaderHandler,
     [updateTask.rejected.type]: errorHandler,
+    [deleteUser.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.deleteUserSuccess'));
+    },
+    [deleteUser.pending.type]: loaderHandler,
+    [deleteUser.rejected.type]: errorHandler,
   },
 });
 
