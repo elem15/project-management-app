@@ -22,6 +22,14 @@ import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { Preloader } from 'components/Preloader/Preloader';
 import { updateTask } from 'utils/API/update-task';
 
+export const JSONErrorHandler = (title: string, expect: string) => {
+  try {
+    const obj = JSON.parse(title);
+    return obj[expect];
+  } catch {
+    return '';
+  }
+};
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
   const { columns, boardId, title, isLoading } = useAppSelector((state) => state.board);
@@ -117,8 +125,8 @@ const Board: React.FC = () => {
   }
   return (
     <div className="columns-container">
-      <h2 className="header">{title ? JSON.parse(title).title : ''}</h2>
-      <h3>{title ? JSON.parse(title).description : ''}</h3>
+      <h2 className="header">{title ? JSONErrorHandler(title, 'title') : ''}</h2>
+      <h3>{title ? JSONErrorHandler(title, 'description') : '-'}</h3>
       <Button onClick={() => router(-1)}>Back</Button>
       <AddModalCreateColumn
         typeButton={'primary'}

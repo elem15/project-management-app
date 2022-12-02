@@ -8,6 +8,7 @@ import { getBoards } from 'utils/API/get-boards';
 import { ROUTES } from 'utils/const/routes';
 import './BoardList.scss';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
+import { JSONErrorHandler } from 'pages/Board/Board';
 
 const BoardList = () => {
   const dispatch = useAppDispatch();
@@ -32,25 +33,29 @@ const BoardList = () => {
     }
   };
 
-  const boardList = boards.map((item) => (
-    <div key={item._id}>
-      <div className="card-item" onClick={() => handleClickOpen(item._id)}>
+  const boardList = boards.map(({ _id, title, owner }) => (
+    <div key={_id}>
+      <div className="card-item" onClick={() => handleClickOpen(_id)}>
         <div>
           <h3>Board title:</h3>
-          <div className="text-cut">{JSON.parse(item.title).title}</div>
+          <div className="text-cut">{title ? JSONErrorHandler(title, 'title') : ''}</div>
           <h3>Board description:</h3>
           <div className="text-cut">
-            {JSON.parse(item.title).description ? JSON.parse(item.title).description : '-'}
+            {title
+              ? JSONErrorHandler(title, 'description')
+                ? JSONErrorHandler(title, 'description')
+                : '-'
+              : '-'}
           </div>
           <h3>Created by:</h3>
-          <div>{item.owner}</div>
+          <div>{owner}</div>
         </div>
         <div>
           <Button
             shape="circle"
             icon={<DeleteOutlined />}
             danger
-            onClick={(e) => showDeleteConfirm(e, dispatch, 'board', item._id)}
+            onClick={(e) => showDeleteConfirm(e, dispatch, 'board', _id)}
           ></Button>
         </div>
       </div>
