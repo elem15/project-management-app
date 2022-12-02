@@ -3,7 +3,6 @@ import { updateTaskInColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS, TASKS } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   title: string;
@@ -58,22 +57,12 @@ export const updateTask = createAsyncThunk(
       }
       const task = data as Task;
       dispatch(updateTaskInColumn({ columnId, task }));
-      if (!isSwap) {
-        openNotificationWithIcon('success', t('message.updateTaskSuccess'));
-      }
-      return data;
+      return { data: data, isSwap: isSwap };
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon('error', t('message.updateTaskError'), t('message.badRequest'));
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.updateTaskError'),
-          t('message.unexpectedError')
-        );
-      }
-
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.updateTaskError'),
+      });
     }
   }
 );

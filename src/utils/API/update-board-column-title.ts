@@ -3,7 +3,6 @@ import { updateColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Column = {
   title: string;
@@ -50,25 +49,12 @@ export const updateBoardColumnTitle = createAsyncThunk(
         );
       }
       dispatch(updateColumn({ ...column, _id: columnId }));
-      if (!isSwap) {
-        openNotificationWithIcon('success', t('message.updateColumnTitleSuccess'));
-      }
+      return isSwap;
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon(
-          'error',
-          t('message.updateColumnTitleError'),
-          t('message.badRequest')
-        );
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.updateColumnTitleError'),
-          t('message.unexpectedError')
-        );
-      }
-
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.updateColumnTitleError'),
+      });
     }
   }
 );

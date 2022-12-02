@@ -4,7 +4,6 @@ import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { UserUp } from 'pages/SignUp/SignUp';
 import { BASE_URL, USERS } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 import { getUsers } from './get-users';
 
 export const updateUser = createAsyncThunk(
@@ -15,7 +14,7 @@ export const updateUser = createAsyncThunk(
     const { userId, token } = state.auth;
     const { name, login, password } = user;
     try {
-      const response = await fetch(BASE_URL + USERS + userId, {
+      const response: Response = await fetch(BASE_URL + USERS + userId, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -37,25 +36,20 @@ export const updateUser = createAsyncThunk(
       dispatch(addName(data.name));
       dispatch(addUserId(data._id));
       dispatch(getUsers());
-      openNotificationWithIcon('success', t('message.updateUserSuccess'));
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon('error', t('message.updateUserError'), t('message.badRequest'));
-      } else if (statusCode === 409) {
-        openNotificationWithIcon('error', t('message.updateUserError'), t('message.loginExist'));
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.updateUserError'),
-          t('message.unexpectedError')
-        );
-      }
-
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {
-          return rejectWithValue(error.message);
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.updateUserError'),
+            messageForAuth: error.message,
+          });
         } else {
-          return rejectWithValue('An unexpected error occurred');
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.updateUserError'),
+            messageForAuth: 'An unexpected error occurred',
+          });
         }
       }
     }

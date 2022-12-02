@@ -19,6 +19,7 @@ import { signIn } from 'utils/API/sign-in';
 import { signUp } from 'utils/API/sign-up';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { updateTask } from 'utils/API/update-task';
+import { updateUser } from 'utils/API/update-user';
 import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type User = {
@@ -310,7 +311,12 @@ export const boardSlice = createSlice({
     },
     [getTasksByBoardId.pending.type]: loaderHandler,
     [getTasksByBoardId.rejected.type]: errorHandler,
-    [updateBoardColumnTitle.fulfilled.type]: dataHandler,
+    [updateBoardColumnTitle.fulfilled.type]: (state, action: PayloadAction<boolean>) => {
+      dataHandler(state);
+      if (!action.payload) {
+        openNotificationWithIcon('success', t('message.updateColumnTitleSuccess'));
+      }
+    },
     [updateBoardColumnTitle.pending.type]: loaderHandler,
     [updateBoardColumnTitle.rejected.type]: errorHandler,
     [deleteColumnTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
@@ -320,22 +326,26 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = false;
       state.tasks = newStateTasksAfterDelete;
       dataHandler(state);
-    },
-    [deleteColumnTask.pending.type]: (state) => {
-      loaderHandler(state);
       openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
     },
+    [deleteColumnTask.pending.type]: loaderHandler,
     [deleteColumnTask.rejected.type]: errorHandler,
     [getTaskByColumn.fulfilled.type]: dataHandler,
     [getTaskByColumn.pending.type]: loaderHandler,
     [getTaskByColumn.rejected.type]: errorHandler,
-    [updateTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
+    [updateTask.fulfilled.type]: (
+      state,
+      action: PayloadAction<{ data: Task; isSwap: boolean }>
+    ) => {
       const newStateTasksAfterUpdate = state.tasks.map(function (item) {
-        return item._id == action.payload._id ? action.payload : item;
+        return item._id == action.payload.data._id ? action.payload.data : item;
       });
       state.isLoading = false;
       state.isError = '';
       state.tasks = newStateTasksAfterUpdate;
+      if (!action.payload.isSwap) {
+        openNotificationWithIcon('success', t('message.updateTaskSuccess'));
+      }
     },
     [updateTask.pending.type]: loaderHandler,
     [updateTask.rejected.type]: errorHandler,
@@ -373,6 +383,12 @@ export const boardSlice = createSlice({
     },
     [signUp.pending.type]: loaderHandler,
     [signUp.rejected.type]: errorHandler,
+    [updateUser.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.updateUserSuccess'));
+    },
+    [updateUser.pending.type]: loaderHandler,
+    [updateUser.rejected.type]: errorHandler,
   },
 });
 
