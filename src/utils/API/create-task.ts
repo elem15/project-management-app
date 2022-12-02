@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
 import { t } from 'i18next';
 import { BOARDS, BASE_URL, COLUMNS, TASKS } from 'utils/const/urls';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type Task = {
   title: string;
@@ -52,19 +51,10 @@ export const createTask = createAsyncThunk(
           }`
         );
       }
-      openNotificationWithIcon('success', t('message.createTaskSuccess'));
+
       return data;
     } catch (error) {
-      if (statusCode === 400) {
-        openNotificationWithIcon('error', t('message.createTaskError'), t('message.badRequest'));
-      } else {
-        openNotificationWithIcon(
-          'error',
-          t('message.createTaskError'),
-          t('message.unexpectedError')
-        );
-      }
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({ statusCode: statusCode, message: t('message.createTaskError') });
     }
   }
 );

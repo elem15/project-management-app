@@ -274,6 +274,7 @@ export const boardSlice = createSlice({
       const task = action.payload;
       const column = state.columns.find((column) => column._id === task.columnId) as Column;
       column.tasks = [...column.tasks, task];
+      openNotificationWithIcon('success', t('message.createTaskSuccess'));
     },
     [createTask.pending.type]: loaderHandler,
     [createTask.rejected.type]: errorHandler,
@@ -283,6 +284,7 @@ export const boardSlice = createSlice({
       state.isError = '';
       const column = { ...action.payload, tasks: [] };
       state.columns = [...state.columns, column];
+      openNotificationWithIcon('success', t('message.createColumnSuccess'));
     },
     [createColumn.pending.type]: loaderHandler,
     [createColumn.rejected.type]: errorHandler,
