@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './UserProfile.scss';
 import { Button, Form, Input, Modal, Row, Typography } from 'antd';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
@@ -10,6 +11,8 @@ import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 import { Preloader } from 'components/Preloader/Preloader';
 import { LOADING } from 'utils/const/status';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
+const { confirm } = Modal;
 
 export type UserUp = {
   name: string;
@@ -27,13 +30,28 @@ const UserProfile: React.FC = () => {
   };
   const [prevName] = useState(name);
   const [prevLogin] = useState(login);
-  const [deleteModal, setDeleteModal] = useState(false);
+  const showDeleteModal = () => {
+    confirm({
+      title: `${t('sign.question')}`,
+      icon: <ExclamationCircleFilled />,
+      okText: `${t('sign.ok')}`,
+      okType: 'danger',
+      cancelText: `${t('sign.cancel')}`,
+      async onOk() {
+        dispatch(deleteUser());
+      },
+    });
+  };
   useEffect(() => {
     !token && navigate(ROUTES.WELCOME_PAGE);
   }, [token, navigate]);
   useEffect(() => {
-    (name !== prevName || login !== prevLogin) && navigate(ROUTES.HOME_PAGE);
-  }, [name, navigate, prevName, login, prevLogin]);
+    const success = () => {
+      openNotificationWithIcon('success', t('message.updateUserSuccess'));
+      navigate(ROUTES.HOME_PAGE);
+    };
+    (name !== prevName || login !== prevLogin) && success();
+  }, [login, name, navigate, prevLogin, prevName, t]);
   useEffect(() => {
     if (errorMessage) {
       setTimeout(() => {
@@ -93,26 +111,11 @@ const UserProfile: React.FC = () => {
             </Form.Item>
           </Row>
           <Row justify="center">
-            <Button type="primary" danger onClick={() => setDeleteModal(true)}>
+            <Button type="primary" danger onClick={() => showDeleteModal()}>
               {t('sign.delete')}
             </Button>
           </Row>
         </Form>
-        <Modal
-          title={t('sign.danger')}
-          open={deleteModal}
-          footer={null}
-          onCancel={() => setDeleteModal(false)}
-          maskClosable={true}
-        >
-          <p>{t('sign.question')}</p>
-          <Row justify="end">
-            <Button onClick={() => setDeleteModal(false)}>{t('sign.cancel')}</Button>
-            <Button type="primary" danger onClick={() => dispatch(deleteUser())}>
-              {t('sign.ok')}
-            </Button>
-          </Row>
-        </Modal>
       </Row>
     </main>
   );
