@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { createBoard } from 'utils/API/create-board';
 import { ROUTES } from 'utils/const/routes';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 type Values = {
   boardTitle: string;
@@ -24,6 +25,7 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
   const { login } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const onFinish = async (values: Values) => {
     props.setLoading(true);
@@ -58,21 +60,21 @@ export const AddModalFormBoard = (props: PropsCreateBoardForm) => {
           rules={[
             {
               required: true,
-              message: `Please input ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(
-                1
-              )}!`,
+              message: `${t(
+                'boards.required'
+              )} ${props.titleForm[0].toLowerCase()}${props.titleForm.slice(1)}!`,
             },
           ]}
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Description" name="description">
+        <Form.Item label={t('boards.description')} name="description">
           <Input />
         </Form.Item>
         <Row justify="center">
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={props.loading}>
-              Submit
+              {t('sign.submit')}
             </Button>
           </Form.Item>
         </Row>

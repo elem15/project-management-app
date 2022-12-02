@@ -1,24 +1,35 @@
 .task-container {
   display: flex;
   justify-content: center;
-  height: 100%;
-  max-height: calc(70vh - 200px);
+  max-height: calc(72vh - 150px);
   min-height: 50px;
-  overflow-y: auto;  
+  overflow-y: auto;
 }
-@media (max-height: 768px) {
+
+@media (max-height: 895px) {
   .task-container {
-    max-height: calc(70vh - 250px);;
+    max-height: calc(70vh - 180px);
+    ;
   }
 }
-@media (max-height: 612px) {
+
+@media (max-height: 735px) {
   .task-container {
-    max-height: calc(70vh - 250px);;
+    max-height: calc(60vh - 150px);
+    ;
   }
 }
-@media (max-height: 450px) {
+
+@media (max-height: 625px) {
   .task-container {
-    max-height: calc(70vh - 200px);;
+    max-height: calc(60vh - 200px);
+    ;
+  }
+}
+@media (max-height: 500px) {
+  .task-container {
+    max-height: calc(70vh - 200px);
+    ;
   }
 }
 
@@ -29,7 +40,7 @@
 .task-container::-webkit-scrollbar-track {
   background-color: #1890ff;
   border-radius: 20px;
-  border: 2px solid rgba(255,255,255,0.7);
+  border: 2px solid rgba(255, 255, 255, 0.7);
 }
 
 .task-container::-webkit-scrollbar-thumb {
@@ -42,7 +53,7 @@
   padding: 10px;
   min-width: 280px;
   justify-content: center;
-  border:#018186 0.1px solid;
+  border: #018186 0.1px solid;
   border-radius: 4px;
   margin-bottom: 10px;
   background-color: #8af2f6;

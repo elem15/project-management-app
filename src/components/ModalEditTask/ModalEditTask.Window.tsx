@@ -35,7 +35,7 @@ export const AddModalEditTask = (props: PropsModal) => {
       </Button>
       <Modal
         destroyOnClose={true}
-        title={props.titleTextModal}
+        title={props.titleTextModal + ' - id: ' + props.taskId}
         open={open}
         onOk={hideModal}
         onCancel={hideModal}

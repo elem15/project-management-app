@@ -21,13 +21,23 @@ import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { Preloader } from 'components/Preloader/Preloader';
 import { updateTask } from 'utils/API/update-task';
+import { useTranslation } from 'react-i18next';
 
+export const JSONErrorHandler = (title: string, expect: string) => {
+  try {
+    const obj = JSON.parse(title);
+    return obj[expect];
+  } catch {
+    return '';
+  }
+};
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
   const { columns, boardId, title, isLoading } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const boardIdFromUrl =
     document.location.href.split('/')[document.location.href.split('/').length - 1];
@@ -126,18 +136,19 @@ const Board: React.FC = () => {
   }
   return (
     <div className="columns-container">
-      <h2 className="header">{title ? JSON.parse(title).title : ''}</h2>
-      <h3>{title ? JSON.parse(title).description : ''}</h3>
-      <Button onClick={() => router(-1)}>Back</Button>
+      <h2 className="header">{title ? JSONErrorHandler(title, 'title') : ''}</h2>
+      <h3>{title ? JSONErrorHandler(title, 'description') : '-'}</h3>
+      <Button onClick={() => router(-1)}>{t('columns.back')}</Button>
       <AddModalCreateColumn
         typeButton={'primary'}
-        titleTextButton={'Add column'}
-        titleTextModal={'Add column'}
-        titleForm={'Column title'}
+        titleTextButton={t('columns.add')}
+        titleTextModal={t('columns.add')}
+        titleForm={t('columns.title')}
         objField={'columnTitle'}
         boardId={boardId}
       />
       {isLoading && <Preloader />}
+      <br />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={boardIdCurrent} direction="horizontal" type="column">
           {(provided, snapshot) => (
@@ -149,7 +160,7 @@ const Board: React.FC = () => {
               {columns.map((item, index) => (
                 <TasksColumn key={item._id} item={item} index={index} />
               ))}
-              <div>{provided.placeholder}</div>
+              <div className="placeholder">{provided.placeholder}</div>
             </div>
           )}
         </Droppable>

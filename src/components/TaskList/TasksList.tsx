@@ -6,6 +6,7 @@ import './TaskList.scss';
 import { AddModalEditTask } from 'components/ModalEditTask/ModalEditTask.Window';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import { Draggable, Droppable, DroppableProvided } from 'react-beautiful-dnd';
+import { useTranslation } from 'react-i18next';
 
 type Task = {
   _id: string;
@@ -23,8 +24,9 @@ type TaskListProps = {
   columnId: string;
   boardId: string;
 };
-function TaskList(props: TaskListProps) {
+const TaskList = (props: TaskListProps) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const createTaskList = (provided: DroppableProvided) => {
     const tasksList = props.tasks.map((task, index) => {
       return (
@@ -38,8 +40,8 @@ function TaskList(props: TaskListProps) {
             >
               <AddModalEditTask
                 titleTextButton={task.title}
-                titleTextModal={'Task'}
-                titleForm={'Task title'}
+                titleTextModal={t('tasks.task')}
+                titleForm={t('tasks.title')}
                 objField={'taskTitle'}
                 boardId={task.boardId}
                 columnId={task.columnId}
@@ -52,7 +54,16 @@ function TaskList(props: TaskListProps) {
                 className="button-delete-task"
                 icon={<DeleteOutlined />}
                 onClick={(e) =>
-                  showDeleteConfirm(e, dispatch, 'task', props.boardId, props.columnId, task._id)
+                  showDeleteConfirm(
+                    e,
+                    dispatch,
+                    'task',
+                    `${t('message.task')}`,
+                    props.boardId,
+                    t,
+                    props.columnId,
+                    task._id
+                  )
                 }
                 danger
               ></Button>
@@ -79,6 +90,6 @@ function TaskList(props: TaskListProps) {
       )}
     </Droppable>
   );
-}
+};
 
 export default TaskList;

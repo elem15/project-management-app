@@ -29,12 +29,10 @@ export const AddModalCreateBoard = (props: PropsModal) => {
 
   return (
     <>
-      <>
-        <img className="icon" src={newBoard} alt="boards list" onClick={showModal} />
-        <span className="menu-item-title" onClick={showModal}>
-          {props.titleTextButton}
-        </span>
-      </>
+      <img className="icon" src={newBoard} alt="boards list" onClick={showModal} />
+      <span className="menu-item-title" onClick={showModal}>
+        {props.titleTextButton}
+      </span>
       <Modal
         destroyOnClose={true}
         title={props.titleTextModal}
