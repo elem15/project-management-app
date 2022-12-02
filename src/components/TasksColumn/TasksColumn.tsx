@@ -41,7 +41,15 @@ const TasksColumn = (props: IProps) => {
               icon={<DeleteOutlined />}
               danger
               onClick={(e) =>
-                showDeleteConfirm(e, dispatch, `${t('message.column')}`, item.boardId, t, item._id)
+                showDeleteConfirm(
+                  e,
+                  dispatch,
+                  'column',
+                  `${t('message.column')}`,
+                  item.boardId,
+                  t,
+                  item._id
+                )
               }
             ></Button>
           </div>

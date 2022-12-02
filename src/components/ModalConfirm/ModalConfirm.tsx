@@ -69,6 +69,7 @@ export const showDeleteConfirm = (
   e: React.MouseEvent<HTMLElement, globalThis.MouseEvent>,
   dispatch: ThunkDispatch<{ auth: IAuthState; board: BoardType }, undefined, AnyAction> &
     Dispatch<AnyAction>,
+  item: string,
   nameItem: string,
   boardId: string,
   t: TFunction<'translation', undefined>,
@@ -83,14 +84,14 @@ export const showDeleteConfirm = (
     okType: 'danger',
     cancelText: `${t('sign.cancel')}`,
     async onOk() {
-      if (nameItem === 'board') {
+      if (item === 'board') {
         await dispatch(deleteBoard(boardId));
         dispatch(deleteBoardById(boardId));
       }
-      if (nameItem === 'column') {
+      if (item === 'column') {
         await dispatch(deleteBoardColumn({ columnId: columnId, boardId: boardId }));
       }
-      if (nameItem === 'task') {
+      if (item === 'task') {
         await dispatch(deleteColumnTask({ taskId: taskId, columnId: columnId, boardId: boardId }));
         dispatch(deleteTaskById(taskId));
       }

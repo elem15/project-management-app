@@ -57,7 +57,9 @@ const BoardList = () => {
             shape="circle"
             icon={<DeleteOutlined />}
             danger
-            onClick={(e) => showDeleteConfirm(e, dispatch, `${t('message.board')}`, _id, t)}
+            onClick={(e) =>
+              showDeleteConfirm(e, dispatch, 'board', `${t('message.board')}`, _id, t)
+            }
           ></Button>
         </div>
       </div>

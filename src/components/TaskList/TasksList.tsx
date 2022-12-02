@@ -57,6 +57,7 @@ const TaskList = (props: TaskListProps) => {
                   showDeleteConfirm(
                     e,
                     dispatch,
+                    'task',
                     `${t('message.task')}`,
                     props.boardId,
                     t,
