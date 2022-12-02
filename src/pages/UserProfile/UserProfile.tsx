@@ -110,6 +110,8 @@ const UserProfile: React.FC = () => {
               </Button>
             </Form.Item>
           </Row>
+          <br />
+          <br />
           <Row justify="center">
             <Button type="primary" danger onClick={() => showDeleteModal()}>
               {t('sign.delete')}
