@@ -95,7 +95,7 @@ export const AddModalFormCreateTask = (props: PropsCreateBoardForm) => {
         <Form.Item label="Choose teammates" name="teammates">
           <Cascader options={options} multiple />
         </Form.Item>
-        <Row justify="center">
+        <Row justify="end">
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={props.loading}>
               Submit
