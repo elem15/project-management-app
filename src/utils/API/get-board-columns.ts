@@ -39,7 +39,10 @@ export const getBoardColumns = createAsyncThunk(
       columns = data as Column[];
       columns.map((col) => (col.tasks = []));
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getBoardColumnError'),
+      });
     }
     try {
       const response: Response = await fetch(BASE_URL + TASKS_SET + `${boardId}/`, {
@@ -50,6 +53,7 @@ export const getBoardColumns = createAsyncThunk(
       });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -69,7 +73,7 @@ export const getBoardColumns = createAsyncThunk(
     } catch (error) {
       return rejectWithValue({
         statusCode: statusCode,
-        message: t('message.getBoardColumnError'),
+        message: t('message.getTasksByColumnError'),
       });
     }
   }
