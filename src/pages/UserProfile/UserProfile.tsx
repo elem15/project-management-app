@@ -25,7 +25,7 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     setNameRequired(`${t('formRules.nameRequired')}`);
     console.log(nameRequired);
-  }, [setNameRequired, t, t('formRules.nameRequired')]);
+  }, [nameRequired, setNameRequired, t]);
   const success = () => {
     navigate(ROUTES.HOME_PAGE);
   };
