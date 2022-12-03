@@ -43,7 +43,9 @@ const UserProfile: React.FC = () => {
   const RenderForm = ({ nameRequired }: { nameRequired: string }) => {
     return (
       <Form name="basic" onFinish={onFinish} autoComplete="off">
-        <Typography.Title level={2}>{t('sign.editProfile')}</Typography.Title>
+        <Row justify="center">
+          <Typography.Title level={2}>{t('sign.editProfile')}</Typography.Title>
+        </Row>
         <Form.Item
           label={t('sign.name')}
           name="name"
