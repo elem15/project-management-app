@@ -21,11 +21,6 @@ const UserProfile: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { name, login, token, status } = useAppSelector((state) => state.auth);
-  const [nameRequired, setNameRequired] = useState(`${t('formRules.nameRequired')}`);
-  useEffect(() => {
-    setNameRequired(`${t('formRules.nameRequired')}`);
-    console.log(nameRequired);
-  }, [nameRequired, setNameRequired, t]);
   const success = () => {
     navigate(ROUTES.HOME_PAGE);
   };
@@ -33,13 +28,16 @@ const UserProfile: React.FC = () => {
     await dispatch(updateUser(values));
     status !== FAILED && success();
   };
-
   useEffect(() => {
     const deleteSuccess = () => {
       navigate(ROUTES.WELCOME_PAGE);
     };
     !token && deleteSuccess();
   }, [login, name, navigate, t, token]);
+  const [nameRequired, setNameRequired] = useState(`${t('formRules.nameRequired')}`);
+  useEffect(() => {
+    setNameRequired(`${t('formRules.nameRequired')}`);
+  }, [nameRequired, setNameRequired, t]);
   const RenderForm = ({ nameRequired }: { nameRequired: string }) => {
     return (
       <Form name="basic" onFinish={onFinish} autoComplete="off">
