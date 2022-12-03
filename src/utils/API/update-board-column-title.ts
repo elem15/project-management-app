@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { updateColumn } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
 
 type Column = {
@@ -8,6 +9,7 @@ type Column = {
   order: number;
   columnId: string;
   boardId: string;
+  isSwap: boolean;
 };
 
 type ColumnError = {
@@ -18,9 +20,10 @@ type ColumnError = {
 export const updateBoardColumnTitle = createAsyncThunk(
   'board/updateBoardColumnTitle',
   async (column: Column, { rejectWithValue, getState, dispatch }) => {
-    const { title, order, columnId, boardId } = column;
+    let statusCode;
+    const { title, order, columnId, boardId, isSwap } = column;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
+
     try {
       const response: Response = await fetch(
         BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/`,
@@ -38,6 +41,7 @@ export const updateBoardColumnTitle = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
+        statusCode = data.statusCode;
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${
             (data as ColumnError).message
@@ -45,8 +49,12 @@ export const updateBoardColumnTitle = createAsyncThunk(
         );
       }
       dispatch(updateColumn({ ...column, _id: columnId }));
+      return isSwap;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.updateColumnTitleError'),
+      });
     }
   }
 );

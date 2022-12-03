@@ -30,6 +30,7 @@ export const EditColumnTitle = (props: Props) => {
         order: props.order,
         columnId: props.columnId,
         boardId: props.boardId,
+        isSwap: false,
       })
     );
     setTitle(values.title);

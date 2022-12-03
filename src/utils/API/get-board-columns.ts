@@ -1,21 +1,24 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addColumns, Column, Task } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS, TASKS_SET } from 'utils/const/urls';
 
 type ColumnError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
+
 type TaskError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
+
 export const getBoardColumns = createAsyncThunk(
   'board/getBoardColumns',
   async (boardId: string, { rejectWithValue, getState, dispatch }) => {
+    let statusCode;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
     let columns = [] as Column[];
     try {
       const response: Response = await fetch(BASE_URL + BOARDS + `${boardId}/` + COLUMNS, {
@@ -26,6 +29,7 @@ export const getBoardColumns = createAsyncThunk(
       });
       const data: Column[] | ColumnError = await response.json();
       if (!response.ok) {
+        statusCode = (data as ColumnError).statusCode;
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${
             (data as ColumnError).message
@@ -35,7 +39,10 @@ export const getBoardColumns = createAsyncThunk(
       columns = data as Column[];
       columns.map((col) => (col.tasks = []));
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getBoardColumnError'),
+      });
     }
     try {
       const response: Response = await fetch(BASE_URL + TASKS_SET + `${boardId}/`, {
@@ -46,6 +53,7 @@ export const getBoardColumns = createAsyncThunk(
       });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -63,7 +71,10 @@ export const getBoardColumns = createAsyncThunk(
       });
       dispatch(addColumns(columns));
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getTasksByColumnError'),
+      });
     }
   }
 );

@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
 import { BOARDS, BASE_URL } from 'utils/const/urls';
+import { t } from 'i18next';
 
 type Board = {
   title: string;
@@ -11,6 +12,7 @@ type Board = {
 export const createBoard = createAsyncThunk(
   'board/createBoard',
   async (board: Board, { rejectWithValue, getState }) => {
+    let statusCode;
     const { title, owner, users } = board;
     const state = getState() as RootState;
     try {
@@ -28,11 +30,12 @@ export const createBoard = createAsyncThunk(
       });
       const data = await response.json();
       if (!response.ok) {
+        statusCode = data.statusCode;
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
       return data;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({ statusCode: statusCode, message: t('message.createBoardError') });
     }
   }
 );

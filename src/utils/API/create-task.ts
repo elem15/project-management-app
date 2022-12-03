@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BOARDS, BASE_URL, COLUMNS, TASKS } from 'utils/const/urls';
 
 type Task = {
@@ -13,13 +14,14 @@ type Task = {
 };
 
 type TaskError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const createTask = createAsyncThunk(
   'board/createTask',
   async (task: Task, { rejectWithValue, getState }) => {
+    let statusCode;
     const { title, order, description, userId, users, boardId, columnId } = task;
     const state = getState() as RootState;
     try {
@@ -42,15 +44,17 @@ export const createTask = createAsyncThunk(
       );
       const data: Task | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
           }`
         );
       }
+
       return data;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({ statusCode: statusCode, message: t('message.createTaskError') });
     }
   }
 );

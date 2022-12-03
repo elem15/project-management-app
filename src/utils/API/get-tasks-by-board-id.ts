@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addTasks } from 'app/reducers/boardSlice';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, TASKS_SET } from 'utils/const/urls';
 
 type Task = {
@@ -15,15 +16,16 @@ type Task = {
 };
 
 type TaskError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getTasksByBoardId = createAsyncThunk(
   'board/getTasksByBoardId',
   async (boardId: string, { rejectWithValue, getState, dispatch }) => {
+    let statusCode;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
+
     try {
       const response: Response = await fetch(BASE_URL + TASKS_SET + `${boardId}/`, {
         headers: {
@@ -33,6 +35,7 @@ export const getTasksByBoardId = createAsyncThunk(
       });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -42,7 +45,10 @@ export const getTasksByBoardId = createAsyncThunk(
       const tasks = data as Task[];
       dispatch(addTasks(tasks));
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getTasksByBoardIdError'),
+      });
     }
   }
 );

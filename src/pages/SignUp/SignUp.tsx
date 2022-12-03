@@ -5,7 +5,6 @@ import { signUp } from 'utils/API/sign-up';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
-import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 import { LOADING } from 'utils/const/status';
 import { Preloader } from 'components/Preloader/Preloader';
@@ -20,7 +19,7 @@ const SignUp: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, token, errorMessage, status } = useAppSelector((state) => state.auth);
+  const { name, token, status } = useAppSelector((state) => state.auth);
   const [fixedName] = useState(name);
   const onFinish = (values: UserUp) => {
     dispatch(signUp(values));
@@ -31,13 +30,6 @@ const SignUp: React.FC = () => {
   useEffect(() => {
     token && navigate(ROUTES.HOME_PAGE);
   }, [navigate, token]);
-  useEffect(() => {
-    if (errorMessage) {
-      setTimeout(() => {
-        dispatch(clearErrors());
-      }, 3000);
-    }
-  }, [errorMessage, dispatch]);
   return (
     <main>
       {status === LOADING && <Preloader />}
@@ -65,10 +57,6 @@ const SignUp: React.FC = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            {...(errorMessage && {
-              help: errorMessage,
-              validateStatus: 'error',
-            })}
             label={t('sign.password')}
             name="password"
             rules={[

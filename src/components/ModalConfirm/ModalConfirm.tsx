@@ -2,12 +2,12 @@ import { Modal } from 'antd';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import React from 'react';
 import { deleteBoard } from 'utils/API/delete-board';
-import { deleteBoardById, deleteTaskById } from 'app/reducers/boardSlice';
 import { AnyAction, Dispatch, ThunkDispatch } from '@reduxjs/toolkit';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
 import { TFunction } from 'i18next';
 import { deleteUser } from 'utils/API/delete-user';
+import { deleteBoardById, deleteTaskById } from 'app/reducers/boardSlice';
 
 const { confirm } = Modal;
 

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addLogin, addToken } from 'app/reducers/authSlice';
+import { t } from 'i18next';
 import { UserIn } from 'pages/SignIn/SignIn';
 import { AUTH_SIGNIN, BASE_URL } from 'utils/const/urls';
 import { getUsers } from './get-users';
@@ -7,6 +8,7 @@ import { getUsers } from './get-users';
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async (user: UserIn, { rejectWithValue, dispatch }) => {
+    let statusCode;
     const { login, password } = user;
     try {
       const response = await fetch(BASE_URL + AUTH_SIGNIN, {
@@ -20,6 +22,7 @@ export const signIn = createAsyncThunk(
         }),
       });
       const data = await response.json();
+      statusCode = data.statusCode;
       if (!response.ok) {
         throw new Error(`Error! Status: ${data.statusCode}. Message: ${data.message}`);
       }
@@ -32,9 +35,17 @@ export const signIn = createAsyncThunk(
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.startsWith('Error!')) {
-          return rejectWithValue(error.message);
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.signInError'),
+            messageForAuth: error.message,
+          });
         } else {
-          return rejectWithValue('An unexpected error occurred');
+          return rejectWithValue({
+            statusCode: statusCode,
+            message: t('message.signInError'),
+            messageForAuth: 'An unexpected error occurred',
+          });
         }
       }
     }

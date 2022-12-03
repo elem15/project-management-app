@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS } from 'utils/const/urls';
 
 type Board = {
@@ -10,15 +11,16 @@ type Board = {
 };
 
 type BoardError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getTitleByBoardId = createAsyncThunk(
   'board/getTitleByBoardId',
   async (boardId: string, { rejectWithValue, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
+
     try {
       const response: Response = await fetch(BASE_URL + BOARDS + `${boardId}`, {
         headers: {
@@ -28,6 +30,7 @@ export const getTitleByBoardId = createAsyncThunk(
       });
       const data: Board | BoardError = await response.json();
       if (!response.ok) {
+        statusCode = (data as BoardError).statusCode;
         throw new Error(
           `Error! Status: ${(data as BoardError).statusCode}. Message: ${
             (data as BoardError).message
@@ -36,7 +39,10 @@ export const getTitleByBoardId = createAsyncThunk(
       }
       return (data as Board).title;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getTitleByBoardIdError'),
+      });
     }
   }
 );

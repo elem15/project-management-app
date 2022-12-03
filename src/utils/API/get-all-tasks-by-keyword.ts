@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, SEARCH } from 'utils/const/urls';
 
 type Task = {
@@ -14,15 +15,15 @@ type Task = {
 };
 
 type TaskError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const getAllTasksByKeyword = createAsyncThunk(
   'board/getAllTasksByKeyword',
   async (keyword: string, { rejectWithValue, getState }) => {
+    let statusCode;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
 
     try {
       const response: Response = await fetch(BASE_URL + SEARCH + `${String(keyword)}`, {
@@ -33,6 +34,7 @@ export const getAllTasksByKeyword = createAsyncThunk(
       });
       const data: Task[] | TaskError = await response.json();
       if (!response.ok) {
+        statusCode = (data as TaskError).statusCode;
         throw new Error(
           `Error! Status: ${(data as TaskError).statusCode}. Message: ${
             (data as TaskError).message
@@ -41,7 +43,10 @@ export const getAllTasksByKeyword = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({
+        statusCode: statusCode,
+        message: t('message.getAllTasksByKeywordError'),
+      });
     }
   }
 );

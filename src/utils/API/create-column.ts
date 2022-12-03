@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BOARDS, BASE_URL, COLUMNS } from 'utils/const/urls';
 
 type Column = {
@@ -9,13 +10,14 @@ type Column = {
 };
 
 type ColumnError = {
-  statusCode: string;
+  statusCode: number;
   message: string;
 };
 
 export const createColumn = createAsyncThunk(
   'board/createColumn',
   async (column: Column, { rejectWithValue, getState }) => {
+    let statusCode;
     const { title, order, boardId } = column;
     const state = getState() as RootState;
     try {
@@ -33,6 +35,7 @@ export const createColumn = createAsyncThunk(
 
       const data: Column | ColumnError = await response.json();
       if (!response.ok) {
+        statusCode = (data as ColumnError).statusCode;
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${
             (data as ColumnError).message
@@ -41,7 +44,7 @@ export const createColumn = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({ statusCode: statusCode, message: t('message.createColumnError') });
     }
   }
 );

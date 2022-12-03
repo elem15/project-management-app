@@ -1,18 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { t } from 'i18next';
 import { createBoard } from 'utils/API/create-board';
 import { createColumn } from 'utils/API/create-column';
 import { createTask } from 'utils/API/create-task';
 import { deleteBoard } from 'utils/API/delete-board';
 import { deleteBoardColumn } from 'utils/API/delete-board-column';
 import { deleteColumnTask } from 'utils/API/delete-column-task';
+import { deleteUser } from 'utils/API/delete-user';
+import { getAllTasksByIds } from 'utils/API/get-all-tasks-by-ids';
+import { getAllTasksByKeyword } from 'utils/API/get-all-tasks-by-keyword';
 import { getBoardColumns } from 'utils/API/get-board-columns';
 import { getBoards } from 'utils/API/get-boards';
 import { getTasksByBoardId } from 'utils/API/get-tasks-by-board-id';
 import { getTaskByColumn } from 'utils/API/get-tasks-by-column';
 import { getTitleByBoardId } from 'utils/API/get-title-by-board-id';
 import { getUsers } from 'utils/API/get-users';
+import { signIn } from 'utils/API/sign-in';
+import { signUp } from 'utils/API/sign-up';
 import { updateBoardColumnTitle } from 'utils/API/update-board-column-title';
 import { updateTask } from 'utils/API/update-task';
+import { updateUser } from 'utils/API/update-user';
+import { openNotificationWithIcon } from 'utils/Notification/Notification';
 
 type User = {
   login: string;
@@ -46,6 +54,12 @@ export type Task = {
   users: string[];
 };
 
+type ErrorMessage = {
+  statusCode: number;
+  message: string;
+  messageForAuth: string;
+};
+
 type BoardType = {
   isLoadingBoardsPage: boolean;
   isLoadingBoardPage: boolean;
@@ -76,17 +90,34 @@ const initialState: BoardType = {
 
 const dataHandler = (state: BoardType) => {
   state.isLoading = false;
-  state.isError = '';
+  state.isError = initialState.isError;
 };
 
 const loaderHandler = (state: BoardType) => {
   state.isLoading = true;
-  state.isError = '';
+  state.isError = initialState.isError;
 };
 
-const errorHandler = (state: BoardType, action: PayloadAction<string>) => {
+const errorHandler = (state: BoardType, action: PayloadAction<ErrorMessage>) => {
+  let descriptionError = t('message.unexpectedError');
   state.isLoading = false;
-  state.isError = action.payload;
+  state.isError = '';
+  if (action.payload.statusCode === 400) {
+    descriptionError = t('message.badRequest');
+  }
+  if (action.payload.statusCode === 401) {
+    descriptionError = t('message.authorizationError');
+  }
+  if (action.payload.statusCode === 403) {
+    descriptionError = t('message.invalidToken');
+  }
+  if (action.payload.statusCode === 404) {
+    descriptionError = t('message.notFound');
+  }
+  if (action.payload.statusCode === 409) {
+    descriptionError = t('message.loginExist');
+  }
+  openNotificationWithIcon('error', action.payload.message, descriptionError);
 };
 
 const addTasksToColumns = (columns: Column[], tasks: Task[]) => {
@@ -171,30 +202,28 @@ export const boardSlice = createSlice({
   },
   extraReducers: {
     [createBoard.fulfilled.type]: (state, action: PayloadAction<Board>) => {
-      state.isLoading = false;
-      state.isError = '';
       state.boards = [...state.boards, action.payload];
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.createBoardSuccess'));
     },
     [createBoard.pending.type]: loaderHandler,
     [createBoard.rejected.type]: errorHandler,
     [getUsers.fulfilled.type]: (state, action: PayloadAction<User[]>) => {
-      state.isLoading = false;
-      state.isError = '';
       state.usersTeam = action.payload;
+      dataHandler(state);
     },
     [getUsers.pending.type]: loaderHandler,
     [getUsers.rejected.type]: errorHandler,
     [getBoards.fulfilled.type]: (state, action: PayloadAction<Board[]>) => {
       state.isLoadingBoardsPage = false;
-      state.isLoading = false;
-      state.isError = '';
       state.boards = action.payload;
+      dataHandler(state);
     },
     [getBoards.pending.type]: (state) => {
       state.isLoadingBoardsPage = true;
       loaderHandler(state);
     },
-    [getBoards.rejected.type]: (state, action: PayloadAction<string>) => {
+    [getBoards.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardsPage = false;
       errorHandler(state, action);
     },
@@ -207,7 +236,7 @@ export const boardSlice = createSlice({
       state.isLoadingBoardPage = true;
       loaderHandler(state);
     },
-    [getBoardColumns.rejected.type]: (state, action: PayloadAction<string>) => {
+    [getBoardColumns.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardPage = false;
       errorHandler(state, action);
     },
@@ -229,24 +258,30 @@ export const boardSlice = createSlice({
       state.columns = newStateColumnsAfterDelete;
       state.tasks = newStateTasksAfterDelete;
       dataHandler(state);
+      openNotificationWithIcon('success', t('message.deleteColumnSuccess'));
     },
     [deleteBoardColumn.pending.type]: (state) => {
       state.isLoadingBoardPage = true;
       loaderHandler(state);
     },
-    [deleteBoardColumn.rejected.type]: (state, action: PayloadAction<string>) => {
+    [deleteBoardColumn.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardPage = false;
       errorHandler(state, action);
     },
-    [deleteBoard.fulfilled.type]: (state) => {
-      state.isLoadingBoardsPage = false;
+    [deleteBoard.fulfilled.type]: (state, action: PayloadAction<Board>) => {
+      const newStateBoardsAfterDelete = state.boards.filter(
+        (item) => item._id !== action.payload._id
+      );
+      state.isLoadingBoardPage = false;
+      state.boards = newStateBoardsAfterDelete;
       dataHandler(state);
+      openNotificationWithIcon('success', t('message.deleteBoardSuccess'));
     },
     [deleteBoard.pending.type]: (state) => {
       state.isLoadingBoardsPage = true;
       loaderHandler(state);
     },
-    [deleteBoard.rejected.type]: (state, action: PayloadAction<string>) => {
+    [deleteBoard.rejected.type]: (state, action: PayloadAction<ErrorMessage>) => {
       state.isLoadingBoardsPage = false;
       errorHandler(state, action);
     },
@@ -256,6 +291,7 @@ export const boardSlice = createSlice({
       const task = action.payload;
       const column = state.columns.find((column) => column._id === task.columnId) as Column;
       column.tasks = [...column.tasks, task];
+      openNotificationWithIcon('success', t('message.createTaskSuccess'));
     },
     [createTask.pending.type]: loaderHandler,
     [createTask.rejected.type]: errorHandler,
@@ -265,6 +301,7 @@ export const boardSlice = createSlice({
       state.isError = '';
       const column = { ...action.payload, tasks: [] };
       state.columns = [...state.columns, column];
+      openNotificationWithIcon('success', t('message.createColumnSuccess'));
     },
     [createColumn.pending.type]: loaderHandler,
     [createColumn.rejected.type]: errorHandler,
@@ -274,25 +311,84 @@ export const boardSlice = createSlice({
     },
     [getTasksByBoardId.pending.type]: loaderHandler,
     [getTasksByBoardId.rejected.type]: errorHandler,
-    [updateBoardColumnTitle.fulfilled.type]: dataHandler,
+    [updateBoardColumnTitle.fulfilled.type]: (state, action: PayloadAction<boolean>) => {
+      dataHandler(state);
+      if (!action.payload) {
+        openNotificationWithIcon('success', t('message.updateColumnTitleSuccess'));
+      }
+    },
     [updateBoardColumnTitle.pending.type]: loaderHandler,
     [updateBoardColumnTitle.rejected.type]: errorHandler,
-    [deleteColumnTask.fulfilled.type]: dataHandler,
+    [deleteColumnTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
+      const newStateTasksAfterDelete = state.tasks.filter(
+        (item) => item._id !== action.payload._id
+      );
+      state.isLoadingBoardPage = false;
+      state.tasks = newStateTasksAfterDelete;
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.deleteTaskSuccess'));
+    },
     [deleteColumnTask.pending.type]: loaderHandler,
     [deleteColumnTask.rejected.type]: errorHandler,
     [getTaskByColumn.fulfilled.type]: dataHandler,
     [getTaskByColumn.pending.type]: loaderHandler,
     [getTaskByColumn.rejected.type]: errorHandler,
-    [updateTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
+    [updateTask.fulfilled.type]: (
+      state,
+      action: PayloadAction<{ data: Task; isSwap: boolean }>
+    ) => {
       const newStateTasksAfterUpdate = state.tasks.map(function (item) {
-        return item._id == action.payload._id ? action.payload : item;
+        return item._id == action.payload.data._id ? action.payload.data : item;
       });
       state.isLoading = false;
       state.isError = '';
       state.tasks = newStateTasksAfterUpdate;
+      if (!action.payload.isSwap) {
+        openNotificationWithIcon('success', t('message.updateTaskSuccess'));
+      }
     },
     [updateTask.pending.type]: loaderHandler,
     [updateTask.rejected.type]: errorHandler,
+    [deleteUser.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.deleteUserSuccess'));
+    },
+    [deleteUser.pending.type]: loaderHandler,
+    [deleteUser.rejected.type]: errorHandler,
+    [getAllTasksByIds.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+      dataHandler(state);
+      action.payload.length === 0
+        ? openNotificationWithIcon('success', t('message.getAllTasksByIdsEmptySuccess'))
+        : openNotificationWithIcon('success', t('message.getAllTasksByIdsSuccess'));
+    },
+    [getAllTasksByIds.pending.type]: loaderHandler,
+    [getAllTasksByIds.rejected.type]: errorHandler,
+    [getAllTasksByKeyword.fulfilled.type]: (state, action: PayloadAction<Task[]>) => {
+      dataHandler(state);
+      action.payload.length === 0
+        ? openNotificationWithIcon('success', t('message.getAllTasksByKeywordEmptySuccess'))
+        : openNotificationWithIcon('success', t('message.getAllTasksByKeywordSuccess'));
+    },
+    [getAllTasksByKeyword.pending.type]: loaderHandler,
+    [getAllTasksByKeyword.rejected.type]: errorHandler,
+    [signIn.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.signInSuccess'));
+    },
+    [signIn.pending.type]: loaderHandler,
+    [signIn.rejected.type]: errorHandler,
+    [signUp.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.signUpSuccess'));
+    },
+    [signUp.pending.type]: loaderHandler,
+    [signUp.rejected.type]: errorHandler,
+    [updateUser.fulfilled.type]: (state) => {
+      dataHandler(state);
+      openNotificationWithIcon('success', t('message.updateUserSuccess'));
+    },
+    [updateUser.pending.type]: loaderHandler,
+    [updateUser.rejected.type]: errorHandler,
   },
 });
 

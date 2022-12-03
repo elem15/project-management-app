@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { signIn } from 'utils/API/sign-in';
 import { ROUTES } from 'utils/const/routes';
 import { Link, useNavigate } from 'react-router-dom';
-import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 import { LOADING } from 'utils/const/status';
 import { Preloader } from 'components/Preloader/Preloader';
@@ -19,20 +18,13 @@ const SignIn: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { token, errorMessage, status } = useAppSelector((state) => state.auth);
+  const { token, status } = useAppSelector((state) => state.auth);
   const onFinish = async (values: UserIn) => {
     await dispatch(signIn(values));
   };
   useEffect(() => {
     token && navigate(ROUTES.HOME_PAGE);
   }, [navigate, token]);
-  useEffect(() => {
-    if (errorMessage) {
-      setTimeout(() => {
-        dispatch(clearErrors());
-      }, 3000);
-    }
-  }, [errorMessage, dispatch]);
   return (
     <main>
       {status === LOADING && <Preloader />}
@@ -50,10 +42,6 @@ const SignIn: React.FC = () => {
             <Input />
           </Form.Item>
           <Form.Item
-            {...(errorMessage && {
-              help: errorMessage,
-              validateStatus: 'error',
-            })}
             label={t('sign.password')}
             name="password"
             rules={[

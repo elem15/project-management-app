@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
+import { t } from 'i18next';
 import { BASE_URL, BOARDS, COLUMNS } from 'utils/const/urls';
 
 type Column = {
@@ -17,9 +18,9 @@ type ColumnError = {
 export const deleteBoardColumn = createAsyncThunk(
   'board/deleteBoardColumn',
   async (column: Column, { rejectWithValue, getState }) => {
+    let statusCode;
     const { columnId, boardId } = column;
     const state = getState() as RootState;
-    if (!state.auth.token) return;
     try {
       const response: Response = await fetch(
         BASE_URL + BOARDS + `${boardId}/` + COLUMNS + `${columnId}/`,
@@ -33,6 +34,7 @@ export const deleteBoardColumn = createAsyncThunk(
       );
       const data = await response.json();
       if (!response.ok) {
+        statusCode = (data as ColumnError).statusCode;
         throw new Error(
           `Error! Status: ${(data as ColumnError).statusCode}. Message: ${
             (data as ColumnError).message
@@ -41,7 +43,7 @@ export const deleteBoardColumn = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue({ statusCode: statusCode, message: t('message.deleteColumnError') });
     }
   }
 );
