@@ -5,11 +5,9 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'utils/const/routes';
 import { updateUser } from 'utils/API/update-user';
-import { clearErrors } from 'app/reducers/authSlice';
 import { useTranslation } from 'react-i18next';
 import { Preloader } from 'components/Preloader/Preloader';
 import { LOADING, FAILED } from 'utils/const/status';
-import { openNotificationWithIcon } from 'utils/Notification/Notification';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 
 export type UserUp = {
@@ -22,9 +20,8 @@ const UserProfile: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { name, login, errorMessage, token, status } = useAppSelector((state) => state.auth);
+  const { name, login, token, status } = useAppSelector((state) => state.auth);
   const success = () => {
-    openNotificationWithIcon('success', t('message.updateUserSuccess'));
     navigate(ROUTES.HOME_PAGE);
   };
   const onFinish = async (values: UserUp) => {
@@ -34,18 +31,10 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     const deleteSuccess = () => {
-      openNotificationWithIcon('success', t('message.deleteUserSuccess'));
       navigate(ROUTES.WELCOME_PAGE);
     };
     !token && deleteSuccess();
   }, [login, name, navigate, t, token]);
-  useEffect(() => {
-    if (errorMessage) {
-      setTimeout(() => {
-        dispatch(clearErrors());
-      }, 3000);
-    }
-  }, [errorMessage, dispatch]);
   return (
     <main>
       {status === LOADING && <Preloader />}
@@ -73,10 +62,6 @@ const UserProfile: React.FC = () => {
             <Input placeholder={login} />
           </Form.Item>
           <Form.Item
-            {...(errorMessage && {
-              help: errorMessage,
-              validateStatus: 'error',
-            })}
             label={t('sign.password')}
             name="password"
             rules={[
