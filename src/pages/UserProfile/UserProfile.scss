@@ -61,3 +61,11 @@
 .hidden {
   opacity: 0;
 }
+
+.ant-form-item-label {
+  width: 180px;
+}
+.ant-form-item-control {
+  width: 250px;
+  max-width: 400px;
+}

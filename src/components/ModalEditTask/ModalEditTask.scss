@@ -12,3 +12,12 @@
 .button-delete-task>span {
   font-size: 27px;
 }
+
+.ant-modal-body {
+  & .ant-form-item-label {
+    width: auto;
+  }
+  & .ant-form-item-control {
+      width: auto;
+    }
+}

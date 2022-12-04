@@ -78,64 +78,67 @@ const Search = () => {
       </div>
     </div>
   ));
+  const [nameRequired, setNameRequired] = useState(`${t('search.searchByIdErrInput')}`);
+  useEffect(() => {
+    setNameRequired(`${t('search.searchByIdErrInput')}`);
+  }, [nameRequired, setNameRequired, t]);
 
-  return (
-    <>
-      <Row justify="center">
-        <h2>{t('search.searchTitle')}</h2>
-      </Row>
-      <Row justify="center">
-        <Form
-          form={form}
-          name="basic"
-          initialValues={{
-            select: 'text',
-          }}
-          onFinish={onFinish}
-          autoComplete="off"
-          disabled={componentDisabled}
-          className="form-search"
-        >
-          <Form.Item label={t('search.searchLabel')} name="select">
-            <Select onChange={handleChange}>
-              <Select.Option value="text">{t('search.searchByKeyword')}</Select.Option>
-              <Select.Option value="id">{t('search.searchById')}</Select.Option>
-            </Select>
+  const RenderForm = ({ nameRequired }: { nameRequired: string }) => {
+    return (
+      <Form
+        form={form}
+        name="basic"
+        initialValues={{
+          select: 'text',
+        }}
+        onFinish={onFinish}
+        autoComplete="off"
+        disabled={componentDisabled}
+        className="form-search"
+      >
+        <Form.Item label={t('search.searchLabel')} name="select">
+          <Select onChange={handleChange}>
+            <Select.Option value="text">{t('search.searchByKeyword')}</Select.Option>
+            <Select.Option value="id">{t('search.searchById')}</Select.Option>
+          </Select>
+        </Form.Item>
+        {!isSearchById && (
+          <Form.Item
+            label={t('search.searchByKeywordPlaceholder')}
+            name="keyword"
+            rules={[{ required: true, message: `${t('search.searchByKeywordErr')}` }]}
+          >
+            <Input
+              prefix={<SearchOutlined />}
+              placeholder={`${t('search.searchByKeywordPlaceholder')}`}
+            />
           </Form.Item>
-          {!isSearchById && (
+        )}
+        {isSearchById && (
+          <>
             <Form.Item
-              name="keyword"
-              rules={[{ required: true, message: `${t('search.searchByKeywordErr')}` }]}
+              label={t('search.searchByIdPlaceholder')}
+              name="id"
+              rules={[
+                { required: true, message: nameRequired },
+                {
+                  type: 'string',
+                  min: 24,
+                  max: 24,
+                  message: `${t('search.searchByIdErrLength')}`,
+                },
+                {
+                  message: `${t('search.searchByIdErrType')}`,
+                  pattern: /^[A-Za-z0-9_]+$/,
+                },
+              ]}
             >
               <Input
                 prefix={<SearchOutlined />}
-                placeholder={`${t('search.searchByKeywordPlaceholder')}`}
+                placeholder={`${t('search.searchByIdPlaceholder')}`}
               />
             </Form.Item>
-          )}
-          {isSearchById && (
-            <>
-              <Form.Item
-                name="id"
-                rules={[
-                  { required: true, message: `${t('search.searchByIdErrInput')}` },
-                  {
-                    type: 'string',
-                    min: 24,
-                    max: 24,
-                    message: `${t('search.searchByIdErrLength')}`,
-                  },
-                  {
-                    message: `${t('search.searchByIdErrType')}`,
-                    pattern: /^[A-Za-z0-9_]+$/,
-                  },
-                ]}
-              >
-                <Input
-                  prefix={<SearchOutlined />}
-                  placeholder={`${t('search.searchByIdPlaceholder')}`}
-                />
-              </Form.Item>
+            <div style={{ marginLeft: '10vw' }}>
               <Form.List name="ids">
                 {(fields, { add, remove }) => (
                   <>
@@ -178,16 +181,26 @@ const Search = () => {
                   </>
                 )}
               </Form.List>
-            </>
-          )}
-          <Row justify="center">
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                {t('search.searchButton')}
-              </Button>
-            </Form.Item>
-          </Row>
-        </Form>
+            </div>
+          </>
+        )}
+        <Row justify="center">
+          <Form.Item>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              {t('search.searchButton')}
+            </Button>
+          </Form.Item>
+        </Row>
+      </Form>
+    );
+  };
+  return (
+    <>
+      <Row justify="center">
+        <h2>{t('search.searchTitle')}</h2>
+      </Row>
+      <Row justify="center">
+        <RenderForm nameRequired={nameRequired} />
       </Row>
       {tasksList.length !== 0 && <div className="list">{tasksList}</div>}
       {tasksList.length === 0 && <div className="list">{t('search.searchMessage')}</div>}
