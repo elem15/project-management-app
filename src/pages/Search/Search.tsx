@@ -138,44 +138,50 @@ const Search = () => {
                 placeholder={`${t('search.searchByIdPlaceholder')}`}
               />
             </Form.Item>
-            <Form.List name="ids">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                    <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-                      <Form.Item
-                        {...restField}
-                        name={[name, 'idItem']}
-                        rules={[
-                          { required: true, message: `${t('search.searchByIdErrInput')}` },
-                          {
-                            type: 'string',
-                            min: 24,
-                            max: 24,
-                            message: `${t('search.searchByIdErrLength')}`,
-                          },
-                          {
-                            message: `${t('search.searchByIdErrType')}`,
-                            pattern: /^[A-Za-z0-9_]+$/,
-                          },
-                        ]}
+            <div style={{ marginLeft: '10vw' }}>
+              <Form.List name="ids">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{ display: 'flex', marginBottom: 8 }}
+                        align="baseline"
                       >
-                        <Input
-                          prefix={<SearchOutlined />}
-                          placeholder={`${t('search.searchByIdPlaceholder')}`}
-                        />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                      {t('search.searchByIdAddButton')}
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'idItem']}
+                          rules={[
+                            { required: true, message: `${t('search.searchByIdErrInput')}` },
+                            {
+                              type: 'string',
+                              min: 24,
+                              max: 24,
+                              message: `${t('search.searchByIdErrLength')}`,
+                            },
+                            {
+                              message: `${t('search.searchByIdErrType')}`,
+                              pattern: /^[A-Za-z0-9_]+$/,
+                            },
+                          ]}
+                        >
+                          <Input
+                            prefix={<SearchOutlined />}
+                            placeholder={`${t('search.searchByIdPlaceholder')}`}
+                          />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                        {t('search.searchByIdAddButton')}
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </div>
           </>
         )}
         <Row justify="center">
