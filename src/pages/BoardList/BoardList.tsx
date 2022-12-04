@@ -10,11 +10,12 @@ import './BoardList.scss';
 import { showDeleteConfirm } from 'components/ModalConfirm/ModalConfirm';
 import { JSONErrorHandler } from 'pages/Board/Board';
 import { useTranslation } from 'react-i18next';
+import { Preloader } from 'components/Preloader/Preloader';
 
 const BoardList = () => {
   const dispatch = useAppDispatch();
   const router = useNavigate();
-  const { boards } = useAppSelector((state) => state.board);
+  const { boards, isLoading } = useAppSelector((state) => state.board);
   const { token } = useAppSelector((state) => state.auth);
   const { t } = useTranslation();
 
@@ -68,6 +69,7 @@ const BoardList = () => {
 
   return (
     <>
+      {isLoading && <Preloader />}
       <h2 className="header">{t('boards.header')}</h2>
       <div className="list">{boardList}</div>
     </>

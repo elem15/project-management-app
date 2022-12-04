@@ -33,7 +33,9 @@ export const JSONErrorHandler = (title: string, expect: string) => {
 };
 const Board: React.FC = () => {
   const { token } = useAppSelector((state) => state.auth);
-  const { columns, boardId, title, isLoading } = useAppSelector((state) => state.board);
+  const { columns, boardId, title, isLoading, isLoadingBoardPage } = useAppSelector(
+    (state) => state.board
+  );
   const dispatch = useAppDispatch();
   const router = useNavigate();
   const location = useLocation();
@@ -136,6 +138,7 @@ const Board: React.FC = () => {
   }
   return (
     <div className="columns-container">
+      {isLoading && <Preloader />}
       <h2 className="header">{title ? JSONErrorHandler(title, 'title') : ''}</h2>
       <h3>{title ? JSONErrorHandler(title, 'description') : '-'}</h3>
       <Button onClick={() => router(-1)}>{t('columns.back')}</Button>
@@ -147,7 +150,7 @@ const Board: React.FC = () => {
         objField={'columnTitle'}
         boardId={boardId}
       />
-      {isLoading && <Preloader />}
+      {(isLoading || isLoadingBoardPage) && <Preloader />}
       <br />
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId={boardIdCurrent} direction="horizontal" type="column">
