@@ -119,7 +119,7 @@ const Board: React.FC = () => {
 
   useEffect(() => {
     (token && boardIdFromUrl.length !== boardIdLength && router(ROUTES.NOT_FOUND_PAGE)) ||
-      (!token && router(ROUTES.NOT_FOUND_PAGE));
+      (!token && router(ROUTES.WELCOME_PAGE));
   }, [boardIdFromUrl.length, router, token]);
 
   useEffect(() => {

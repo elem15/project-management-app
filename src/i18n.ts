@@ -29,7 +29,7 @@ i18n
             signOut: 'Sign out',
             profile: 'Edit profile',
             toggleLng: 'Toggle language',
-            welcome: 'Welcome page',
+            welcome: 'Home',
           },
           sign: {
             login: 'login',
@@ -65,6 +65,9 @@ i18n
             api: 'Interaction with api',
             auth: 'Registration/login',
             main: 'Main page',
+            localize: 'Application localization',
+            drag: 'Drag and drop',
+            redux: 'Redux',
           },
           search: {
             searchTitle: 'Search tasks',
@@ -175,7 +178,7 @@ i18n
             signOut: 'Выйти',
             profile: 'Редактировать профиль',
             toggleLng: 'Переключить язык',
-            welcome: 'Страница приветствия',
+            welcome: 'Домашняя',
           },
           sign: {
             login: 'логин',
@@ -211,6 +214,9 @@ i18n
             api: 'Взаимодействие с api',
             auth: 'Регистрация/авторизация',
             main: 'Главная страница',
+            localize: 'Локализация приложения',
+            drag: 'Перетаскивание задач',
+            redux: 'Редакс',
           },
           search: {
             searchTitle: 'Найти задания',
@@ -225,7 +231,7 @@ i18n
             searchByIdErrInput: 'Пожалуйста, введите идентификатор!',
             searchByIdErrLength: 'Идентификатор состоит из 24 символов!',
             searchByIdErrType: 'Только числа и буквы!',
-            searchByIdPlaceholder: 'Введите полный идентификатор',
+            searchByIdPlaceholder: 'Введите идентификатор',
             searchByIdAddButton: 'Добавить поле',
             searchButton: 'Поиск',
             searchMessage: 'Пока ничего не найдено. Попробуйте еще раз.',

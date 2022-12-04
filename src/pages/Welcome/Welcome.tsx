@@ -64,6 +64,8 @@ function Welcome() {
             <ul>
               <li>{t('welcome.appTitle')}</li>
               <li>{t('welcome.api')}</li>
+              <li>{t('welcome.redux')}</li>
+              <li>{t('welcome.localize')}</li>
             </ul>
           </div>
           <div className="teammates__item">
@@ -78,6 +80,8 @@ function Welcome() {
             <ul>
               <li>{t('welcome.auth')}</li>
               <li>{t('welcome.api')}</li>
+              <li>{t('welcome.drag')}</li>
+              <li>{t('welcome.localize')}</li>
             </ul>
           </div>
           <div className="teammates__item">

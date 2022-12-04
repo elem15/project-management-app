@@ -104,6 +104,7 @@ const Search = () => {
         </Form.Item>
         {!isSearchById && (
           <Form.Item
+            label={t('search.searchByKeywordPlaceholder')}
             name="keyword"
             rules={[{ required: true, message: `${t('search.searchByKeywordErr')}` }]}
           >
@@ -116,6 +117,7 @@ const Search = () => {
         {isSearchById && (
           <>
             <Form.Item
+              label={t('search.searchByIdPlaceholder')}
               name="id"
               rules={[
                 { required: true, message: nameRequired },

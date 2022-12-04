@@ -12,6 +12,7 @@ import signIn from '../../media/sign-in.svg';
 import signUp from '../../media/sign-up.png';
 import none from '../../media/none.png';
 import search from '../../media/search.svg';
+import board from '../../media/board-icon.svg';
 import Localize from 'components/Localize/Localize';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
@@ -64,6 +65,7 @@ function Header() {
     >
       <div className="page-name-container">
         <Link to={ROUTES.WELCOME_PAGE} className="nav__link">
+          <img className="icon" src={board} alt="user profile" /> &nbsp;
           {t('header.welcome')}
         </Link>
         {token ? (

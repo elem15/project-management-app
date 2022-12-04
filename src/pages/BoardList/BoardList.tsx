@@ -42,7 +42,7 @@ const BoardList = () => {
           <h3>{t('boards.title')}</h3>
           <div className="text-cut">{title ? JSONErrorHandler(title, 'title') : ''}</div>
           <h3>{t('boards.description')}</h3>
-          <div className="text-cut">
+          <div className="text-cut text-cut-description">
             {title
               ? JSONErrorHandler(title, 'description')
                 ? JSONErrorHandler(title, 'description')
