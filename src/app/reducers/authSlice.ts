@@ -127,8 +127,8 @@ export const authSlice = createSlice({
     [updateUser.rejected.type]: errorHandler,
     [getUsers.fulfilled.type]: dataHandler,
     [getUsers.pending.type]: loaderHandler,
-    [getUsers.rejected.type]: (state) => {
-      errorHandler;
+    [getUsers.rejected.type]: (state, action: IAction) => {
+      errorHandler(state, action);
       state.token = '';
     },
   },
