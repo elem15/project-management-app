@@ -90,16 +90,19 @@ const initialState: BoardType = {
 
 const dataHandler = (state: BoardType) => {
   state.isLoading = false;
+  state.isLoadingBoardPage = false;
   state.isError = initialState.isError;
 };
 
 const loaderHandler = (state: BoardType) => {
   state.isLoading = true;
+  state.isLoadingBoardPage = true;
   state.isError = initialState.isError;
 };
 
 const errorHandler = (state: BoardType, action: PayloadAction<ErrorMessage>) => {
   let descriptionError = t('message.unexpectedError');
+  state.isLoadingBoardPage = false;
   state.isLoading = false;
   state.isError = '';
   if (action.payload.statusCode === 400) {
@@ -241,7 +244,7 @@ export const boardSlice = createSlice({
       errorHandler(state, action);
     },
     [getTitleByBoardId.fulfilled.type]: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
+      state.isLoadingBoardPage = false;
       state.isError = '';
       state.title = action.payload;
     },
@@ -287,6 +290,7 @@ export const boardSlice = createSlice({
     },
     [createTask.fulfilled.type]: (state, action: PayloadAction<Task>) => {
       state.isLoading = false;
+      state.isLoadingBoardPage = false;
       state.isError = '';
       const task = action.payload;
       const column = state.columns.find((column) => column._id === task.columnId) as Column;
@@ -341,6 +345,7 @@ export const boardSlice = createSlice({
         return item._id == action.payload.data._id ? action.payload.data : item;
       });
       state.isLoading = false;
+      state.isLoadingBoardPage = false;
       state.isError = '';
       state.tasks = newStateTasksAfterUpdate;
       if (!action.payload.isSwap) {

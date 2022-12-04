@@ -4,8 +4,9 @@ import './preloader.scss';
 
 export const Preloader: React.FC = () => {
   return (
-    <Space size="middle" className="preloader">
-      <Spin size="default" />
+    <Space size="large" className="preloader">
+      <Spin size="large" className="reloader1" />
+      <div className="preloader-container"></div>
     </Space>
   );
 };
