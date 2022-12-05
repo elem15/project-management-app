@@ -159,6 +159,11 @@ i18n
             descriptionRequired: 'Please input description!',
             titleRequired: 'Please input task title!',
           },
+          notFound: {
+            op: 'Ooops!',
+            home: 'Homepage',
+            message: "That page doesn't exist or is unavailable",
+          },
         },
       },
       ru: {
@@ -307,6 +312,11 @@ i18n
             teammates: 'Выбрать исполнителей',
             titleRequired: 'Введине название задачи!',
             descriptionRequired: 'Введите описание!',
+          },
+          notFound: {
+            op: 'Ну и дела!',
+            home: 'Домашняя',
+            message: 'Страница не найдена или не существует',
           },
         },
       },
