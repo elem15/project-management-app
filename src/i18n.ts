@@ -47,9 +47,9 @@ i18n
           },
           formRules: {
             nameRequired: 'Please input your name!',
-            nameLength: 'Name must be at least 3 characters',
+            nameLength: 'Name must be at least 3 characters, maximum 20',
             loginRequired: 'Please input your login!',
-            loginLength: 'Login must be at least 3 characters',
+            loginLength: 'Login must be at least 3 characters, maximum 20',
             passwordRequired: 'Please input your password!',
             passwordLength: 'Password must be at least 8 characters',
             passwordPattern: 'Only numbers and english characters without space can be entered',
@@ -201,9 +201,9 @@ i18n
           },
           formRules: {
             nameRequired: 'Введите имя!',
-            nameLength: 'Минимум 3 символа',
+            nameLength: 'Минимум 3, максимум 20 символов',
             loginRequired: 'Введите логин!',
-            loginLength: 'Минимум 3 символа',
+            loginLength: 'Минимум 3, максимум 20 символов',
             passwordRequired: 'Введите пароль!',
             passwordLength: 'Минимум 8 символов',
             passwordPattern: 'Только цифры и латинские буквы без пробелов',

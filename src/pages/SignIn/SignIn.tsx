@@ -41,7 +41,7 @@ const SignIn: React.FC = () => {
           name="login"
           rules={[
             { required: true, message: nameRequired },
-            { type: 'string', min: 3, message: `${t('formRules.loginLength')}` },
+            { type: 'string', min: 3, max: 20, message: `${t('formRules.loginLength')}` },
           ]}
         >
           <Input />

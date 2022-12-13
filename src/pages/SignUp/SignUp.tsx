@@ -46,7 +46,7 @@ const SignUp: React.FC = () => {
           name="name"
           rules={[
             { required: true, message: `${t('formRules.nameRequired')}` },
-            { type: 'string', min: 3, message: `${t('formRules.nameLength')}` },
+            { type: 'string', min: 3, max: 20, message: `${t('formRules.nameLength')}` },
           ]}
         >
           <Input />
@@ -56,7 +56,7 @@ const SignUp: React.FC = () => {
           name="login"
           rules={[
             { required: true, message: nameRequired },
-            { type: 'string', min: 3, message: `${t('formRules.loginLength')}` },
+            { type: 'string', min: 3, max: 20, message: `${t('formRules.loginLength')}` },
           ]}
         >
           <Input />
