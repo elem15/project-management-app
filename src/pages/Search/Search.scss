@@ -1,0 +1,26 @@
+.form-search {
+  min-width: 300px;
+}
+
+.ant-input-affix-wrapper {
+  min-width: 270px
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin: 20px auto 0;
+  padding-bottom: 140px;
+  max-width: 1024px;
+}
+
+.text-cut {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5em;
+}
+
