@@ -1,0 +1,102 @@
+.columns-container {
+  padding: 0px 10px 0px 10px;
+  height: calc(100vh - 150px);
+
+  overflow-x: scroll;
+  max-width: 100vw;
+
+  &::-webkit-scrollbar {
+    height: 10px;
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #a9d5ff;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #1890ff;
+    border-radius: 20px;
+  }
+}
+@media screen and (max-height: 500px) {
+  .columns-container {
+      height: calc(100vh - 80px);
+  }
+}
+
+.column-list {
+  display: inline-flex;
+  padding-top: 10px;
+  gap: 20px;
+  padding-bottom: 10px;
+  min-width: 300px;
+}
+
+.droppable {
+  background-color: gainsboro;
+  width: fit-content;
+}
+
+.column-item {
+  display: flex;
+  flex-direction: column;
+  flex-basis: content;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+  min-width: 310px;
+  height: min-content;
+  max-height: 80vh;
+  background-color: rgb(201, 239, 240);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 15px 15px rgba(0, 0, 0, 0.20);
+}
+
+.draggable {
+  background-color: rgb(32, 196, 203);
+}
+
+.column-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(32, 196, 203);
+  padding: 4px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}
+
+.task-item {
+  max-width: 300px;
+}
+
+.text-cut {
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0.5em;
+  min-height: 27px;
+  font-size: x-large;
+  
+  &-editable {
+    width: 245px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.5em 0;
+    cursor: pointer;
+    background-color: azure;
+    padding: 2px 10px;
+    border-radius: 3px;
+    min-height: 30px;
+  }
+  &-description {
+      font-size: large;
+  }
+}
+.ant-form-item {
+  margin: 25px 10px;
+}

@@ -1,0 +1,23 @@
+.button-edit-task {
+  max-width: 240px;
+}
+
+.button-edit-task>span {
+  width: 150px;
+  white-space: wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button-delete-task>span {
+  font-size: 27px;
+}
+
+.ant-modal-body {
+  & .ant-form-item-label {
+    width: auto;
+  }
+  & .ant-form-item-control {
+      width: auto;
+    }
+}

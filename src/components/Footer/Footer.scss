@@ -1,0 +1,89 @@
+.footer {
+  font-size: medium;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding: 1rem;
+  display: flex;
+  flex: 0 0 auto;
+  height: 4rem;
+  justify-content: space-around;
+  background-color: rgb(0, 86, 216);
+  width: 100%;
+
+  &__container {
+    max-width: 1920px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  &__logo {
+    display: block;
+    background: url('../../media/rss_logo.svg') no-repeat;
+    background-size: contain;
+    width: 100px;
+    max-height: 100px;
+    height: 100%;
+  }
+}
+
+.footer__year {
+  color: white;
+}
+
+.footer__github {
+  text-decoration: none;
+  color: white;
+  transition: 0.5s;
+
+  &:hover {
+    color: darkcyan
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .footer {
+    visibility: collapse;
+  }
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 15px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+
+  &__link {
+    color: whitesmoke;
+    font-weight: 500;
+
+    &:hover .icon {
+      transform: translateY(-1px);
+      box-shadow: 0px 3px 3px brown;
+    }
+
+    &:hover .menu-item-title {
+      color: #40a9ff;
+    }
+
+    &:active .icon {
+      transform: translateY(3px);
+    }
+
+    &_user {
+      color: violet;
+    }
+  }
+}
+
+@media (max-width: 390px) {
+  .footer-nav {
+    display: none;
+  }
+}
