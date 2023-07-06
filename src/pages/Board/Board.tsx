@@ -137,38 +137,41 @@ const Board: React.FC = () => {
     dispatch(addBoardId(boardIdCurrent));
   }
   return (
-    <div className="columns-container">
+    <>
       {isLoading && <Preloader />}
-      <h2 className="header">{title ? JSONErrorHandler(title, 'title') : ''}</h2>
-      <h3>{title ? JSONErrorHandler(title, 'description') : '-'}</h3>
-      <Button onClick={() => router(-1)}>{t('columns.back')}</Button>
-      <AddModalCreateColumn
-        typeButton={'primary'}
-        titleTextButton={t('columns.add')}
-        titleTextModal={t('columns.add')}
-        titleForm={t('columns.title')}
-        objField={'columnTitle'}
-        boardId={boardId}
-      />
-      {(isLoading || isLoadingBoardPage) && <Preloader />}
-      <br />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId={boardIdCurrent} direction="horizontal" type="column">
-          {(provided, snapshot) => (
-            <div
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              className={snapshot.isDraggingOver ? `column-list droppable` : `column-list`}
-            >
-              {columns.map((item, index) => (
-                <TasksColumn key={item._id} item={item} index={index} />
-              ))}
-              <div className="placeholder">{provided.placeholder}</div>
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-    </div>
+      <div className="columns-container">
+        <h2 className="header">{title ? JSONErrorHandler(title, 'title') : ''}</h2>
+        <h3>{title ? JSONErrorHandler(title, 'description') : '-'}</h3>
+        <Button onClick={() => router(-1)}>{t('columns.back')}</Button>
+
+        <AddModalCreateColumn
+          typeButton={'primary'}
+          titleTextButton={t('columns.add')}
+          titleTextModal={t('columns.add')}
+          titleForm={t('columns.title')}
+          objField={'columnTitle'}
+          boardId={boardId}
+        />
+        {(isLoading || isLoadingBoardPage) && <Preloader />}
+        <br />
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId={boardIdCurrent} direction="horizontal" type="column">
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className={snapshot.isDraggingOver ? `column-list droppable` : `column-list`}
+              >
+                {columns.map((item, index) => (
+                  <TasksColumn key={item._id} item={item} index={index} />
+                ))}
+                <div className="placeholder">{provided.placeholder}</div>
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
+    </>
   );
 };
 

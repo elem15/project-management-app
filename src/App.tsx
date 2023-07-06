@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { ROUTES } from 'utils/const/routes';
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
@@ -12,8 +12,12 @@ import BoardList from 'pages/BoardList/BoardList';
 import Welcome from 'pages/Welcome/Welcome';
 import UserProfile from 'pages/UserProfile/UserProfile';
 import Search from 'pages/Search/Search';
+import { BASE_URL } from 'utils/const/urls';
 
 function App() {
+  useEffect(() => {
+    fetch(BASE_URL);
+  }, []);
   return (
     <BrowserRouter>
       <Routes>

@@ -16,6 +16,7 @@ import board from '../../media/board-icon.svg';
 import Localize from 'components/Localize/Localize';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from 'antd';
+import { LOADING } from 'utils/const/status';
 
 type StickyType = {
   sticky: boolean;
@@ -25,7 +26,7 @@ type StickyType = {
 function Header() {
   const { t } = useTranslation();
 
-  const { name, token } = useAppSelector((state) => state.auth);
+  const { name, token, status } = useAppSelector((state) => state.auth);
   const headerRef = useRef(null);
   const [sticky, setSticky] = useState<StickyType>({ sticky: false, offset: 0 });
   const appDispatch = useAppDispatch();
@@ -36,7 +37,7 @@ function Header() {
   };
 
   const handleScroll = (elTopOffset: number, elHeight: number) => {
-    if (window.pageYOffset > elTopOffset + elHeight) {
+    if (window.scrollY > elTopOffset + elHeight) {
       setSticky({ sticky: true, offset: elHeight });
     } else {
       setSticky({ sticky: false, offset: 0 });
@@ -96,17 +97,20 @@ function Header() {
                 </Tooltip>
               </Link>
             </li>
-            <li>
-              <Link to={ROUTES.PROFILE} className="page-name">
-                <Tooltip
-                  mouseEnterDelay={0.2}
-                  placement="bottomRight"
-                  title={name + ' - ' + t('header.profile')}
-                >
-                  <img className="icon" src={user} alt="user profile" />
-                </Tooltip>
-              </Link>
-            </li>
+            {status !== LOADING && (
+              <li>
+                <Link to={ROUTES.PROFILE} className="page-name">
+                  <Tooltip
+                    mouseEnterDelay={0.2}
+                    placement="bottomRight"
+                    title={name + ' - ' + t('header.profile')}
+                  >
+                    <img className="icon" src={user} alt="user profile" />
+                  </Tooltip>
+                </Link>
+              </li>
+            )}
+
             <li>
               <Tooltip mouseEnterDelay={0.2} placement="bottomRight" title={t('header.signOut')}>
                 <img className="icon" onClick={handleSignOut} src={logout} alt="logout" />
